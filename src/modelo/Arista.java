@@ -1,6 +1,6 @@
 package modelo;
 
-public class Arista {
+public class Arista implements Comparable<Arista> {
 
     private final Vertice origen;
     private final Vertice destino;
@@ -36,7 +36,10 @@ public class Arista {
 //    	 if (this.peso > otra.peso) return 1;
 //    	 return 0;
 //    }
-
+    @Override
+    public int compareTo(Arista otra) {
+        return Double.compare(this.peso, otra.peso);
+    }
     @Override
     public String toString() {
         return origen + " -- " + destino + " (" + peso + ")";

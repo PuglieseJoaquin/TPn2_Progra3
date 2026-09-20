@@ -59,11 +59,37 @@ public class MainModelo {
 	        } catch (IllegalArgumentException e) {
 	            System.out.println("arista duplicada rechazada " + e.getMessage());
 	        }
-	        
-	        
-	        
+	           
 	        System.out.println("Todas las aristas: " + grafo.getTodasLasAristas());
-	    }
-	    
+	        
+	        // 7) Probar Kruskal 
+	        Kruskal kruskal = new Kruskal();
 
+	        // El grafo actual no es conexo (Salta-Jujuy quedan aparte), entonces lanza excepcion
+	        try {
+	            kruskal.arbolGeneradorMinimo(grafo);
+	            System.out.println("excepción");
+	        } catch (IllegalArgumentException e) {
+	            System.out.println("grafo no conexo rechazado: " + e.getMessage());
+	        }
+
+	        // Conectamos el grafo agregando aristas
+	        grafo.agregarArista(cordoba, santaFe, 7);
+	        grafo.agregarArista(cordoba, Salta, 15);
+	        grafo.agregarArista(santaFe, Salta, 20);
+	        grafo.agregarArista(cordoba, jujuy, 18);
+
+	        List<Arista> agm = kruskal.arbolGeneradorMinimo(grafo);
+	        System.out.println("Arbol generador minimo:");
+	        double pesoTotal = 0;
+	        for (Arista a : agm) {
+	            System.out.println("  " + a);
+	            pesoTotal += a.getPeso();
+	        }
+	        System.out.println("Cantidad de aristas (debe ser " + (grafo.cantidadVertices() - 1) + "): " + agm.size()); // Aristas = n - 1
+	        System.out.println("Peso total: " + pesoTotal);
+	
+	        // 8) Probar Dividir Arbol
+	        //DivisorDeArbol divisor = new DivisorDeArbol();
+	}
 }

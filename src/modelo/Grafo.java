@@ -32,6 +32,19 @@ public class Grafo {
     	 		mapaDeListaDeVecinos.get(destino).add(arista);
     	 	}
     }
+    public boolean contieneVertice(Vertice v) {
+        return mapaDeListaDeVecinos.containsKey(v);
+    }
+    
+    public void eliminarVertice(Vertice v) {
+        if (!mapaDeListaDeVecinos.containsKey(v))
+            throw new IllegalArgumentException("El vertice no pertenece al grafo");
+
+        for (Arista arista : new ArrayList<>(mapaDeListaDeVecinos.get(v))) {
+            mapaDeListaDeVecinos.get(arista.getOpuesto(v)).remove(arista);
+        }
+        mapaDeListaDeVecinos.remove(v);
+    }
     
     public Vertice getVertice(String nombre) {
         for (Vertice v : mapaDeListaDeVecinos.keySet()) {
@@ -116,7 +129,7 @@ public class Grafo {
     
     public List<Arista> getAristasOrdenadasMayorAMenor() {
         List<Arista> ordenadas = new ArrayList<>(getTodasLasAristas());
-        Collections.sort(ordenadas);
+        Collections.sort(ordenadas, Collections.reverseOrder());
         return ordenadas;
     }
     

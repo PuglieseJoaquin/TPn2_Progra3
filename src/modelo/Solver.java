@@ -6,47 +6,72 @@ import java.util.List;
 import java.util.Set;
 
 public class Solver {
-    private List<Arista> aristasMinimasConexas;
-    private Grafo agm;
+    private Set<Vertice> vertices;
+    private List<Arista> aristasAGM;         // el AGM completo: nunca se modifica
+    private List<Arista> aristasDeRegiones;  // el AGM sin las (k-1) aristas más pesadas
     private List<Set<Vertice>> regiones;
 
     public void calcularAGM(Grafo grafoOriginal) {
         Kruskal kruskal = new Kruskal();
-        this.aristasMinimasConexas = kruskal.arbolGeneradorMinimo(grafoOriginal);
-        this.agm = new Grafo();
-        
-        crearGrafoDesdeAristasMinimas(grafoOriginal, aristasMinimasConexas);
+        this.aristasAGM = kruskal.arbolGeneradorMinimo(grafoOriginal);
+        this.vertices = grafoOriginal.getVertices();
+        this.aristasDeRegiones = null;
+        this.regiones = null;
     }
 
-    private void crearGrafoDesdeAristasMinimas(Grafo grafoOriginal, List<Arista> aristasMinimasConexas) {
-    	
-        for (Vertice v : grafoOriginal.getVertices()) {
-            agm.agregarVertice(v);
-        }
-        for (Arista a : aristasMinimasConexas) {
-        		agm.agregarArista(a.getOrigen(), a.getDestino(), a.getPeso());
-        }
-	}
-
+    // Se puede llamar varias veces con distinto k sin volver a calcular el AGM
     public void dividirEnRegiones(int cantidadPartes) {
-    	
-        if (agm == null) throw new IllegalStateException("AGM no calculado");
+        if (aristasAGM == null) throw new IllegalStateException("AGM no calculado");
+        validarCantidadPartes(cantidadPartes);
 
-        List<Arista> ordenadas = new ArrayList<>(agm.getAristasOrdenadasMayorAMenor());
-        
-        for (int i = 0; i < cantidadPartes-1; i++) {
+        Grafo arbol = crearGrafoDesdeAristas(aristasAGM);
+        List<Arista> ordenadas = arbol.getAristasOrdenadasMayorAMenor();
+
+        for (int i = 0; i < cantidadPartes - 1; i++) {
             Arista masPesada = ordenadas.get(i);
-            agm.eliminarArista(masPesada.getOrigen(), masPesada.getDestino());
+            arbol.eliminarArista(masPesada.getOrigen(), masPesada.getDestino());
         }
-          
-        regiones = BFS.obtenerSeccionesConexas(agm);
+
+        regiones = BFS.obtenerSeccionesConexas(arbol);
+        aristasDeRegiones = arbol.getTodasLasAristas();
     }
-    
+
+    private void validarCantidadPartes(int cantidadPartes) {
+        if (cantidadPartes < 1 || cantidadPartes > vertices.size())
+            throw new IllegalArgumentException(
+                    "La cantidad de regiones debe estar entre 1 y " + vertices.size() + ".");
+    }
+
+    private Grafo crearGrafoDesdeAristas(List<Arista> aristas) {
+        Grafo grafo = new Grafo();
+        for (Vertice v : vertices) {
+            grafo.agregarVertice(v);
+        }
+        for (Arista a : aristas) {
+            grafo.agregarArista(a.getOrigen(), a.getDestino(), a.getPeso());
+        }
+        return grafo;
+    }
+
+    public List<Set<Vertice>> getRegiones() {
+        if (regiones == null) throw new IllegalStateException("Las regiones no fueron calculadas");
+
+        List<Set<Vertice>> copia = new ArrayList<>();
+        for (Set<Vertice> region : regiones) {
+            copia.add(new HashSet<>(region));
+        }
+        return copia;
+    }
+
+    public List<Arista> getAristasDeRegiones() {
+        if (aristasDeRegiones == null) throw new IllegalStateException("Las regiones no fueron calculadas");
+        return new ArrayList<>(aristasDeRegiones);
+    }
+
     public String resultadoEnString() {
         if (regiones == null) {
             return "No se han calculado las regiones todavía.";
         }
-
         return BFS.componentesToString(regiones);
     }
 }

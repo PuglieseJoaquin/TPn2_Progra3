@@ -1,7 +1,9 @@
-package modelo;
+package test;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
+
+import modelo.UnionFind;
 
 public class UnionFindTest 
 {
@@ -12,12 +14,12 @@ public class UnionFindTest
 
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void rootIndiceNegativoTest() {
-		new UnionFind(5).root(-1);
+		new UnionFind(5).raiz(-1);
 	}
 
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void rootIndiceFueraDeRangoTest() {
-		new UnionFind(5).root(5);
+		new UnionFind(5).raiz(5);
 	}
 
 	@Test
@@ -29,7 +31,7 @@ public class UnionFindTest
 	public void unionRootUnVerticeTest() {
 		UnionFind uf = new UnionFind(1);
 		assertEquals(1, uf.cantidadComponentes());
-		assertEquals(0, uf.root(0));
+		assertEquals(0, uf.raiz(0));
 	}
 
 	@Test

@@ -2,6 +2,8 @@ package vista;
 
 import java.awt.Color;
 import java.awt.Font;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -11,31 +13,36 @@ public class PantallaInicio extends JFrame {
     
     private GestorPantallas gestorPantallas;
     private JPanel panelFondo;
-    private JLabel lblTitulo;
+    private JButton btnCargarDatos;
+    private JButton btnCargarArchivo;
 
     public PantallaInicio(GestorPantallas gestorPantallas) {
         this.gestorPantallas = gestorPantallas;
         configurarPantalla();
-        crearComponentes();
+        crearBotones();
     }
-    
+
     private void configurarPantalla() {
-        setTitle("Pantalla de Inicio");
+        setTitle("Bienvenida");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 600, 400); 
+        setBounds(100, 100, 600, 400);
         setLocationRelativeTo(null);
         setResizable(false);
 
         panelFondo = new JPanel();
-        panelFondo.setBackground(Color.WHITE);
-        setContentPane(panelFondo);
         panelFondo.setLayout(null);
+        setContentPane(panelFondo);
     }
-    
-    private void crearComponentes() {
-        lblTitulo = new JLabel("TP N°2: Diseñando Regiones", SwingConstants.CENTER);
-        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        lblTitulo.setBounds(100, 150, 400, 40);
-        panelFondo.add(lblTitulo);
+
+    private void crearBotones() {
+        btnCargarDatos = new JButton("CARGAR DATOS");
+        btnCargarDatos.setBounds(200, 120, 200, 40);
+        btnCargarDatos.addActionListener(e -> gestorPantallas.crearPantallaCargaDatos());
+        panelFondo.add(btnCargarDatos);
+
+        btnCargarArchivo = new JButton("CARGAR DESDE ARCHIVO");
+        btnCargarArchivo.setBounds(200, 180, 200, 40);
+        btnCargarArchivo.addActionListener(e -> gestorPantallas.crearPantallaCargaArchivo());
+        panelFondo.add(btnCargarArchivo);
     }
 }

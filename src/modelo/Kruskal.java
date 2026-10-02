@@ -14,17 +14,19 @@ public class Kruskal {
 	*/
 
 	public List<Arista> arbolGeneradorMinimo(Grafo grafo) {
+		
         validarNoNulo(grafo);
 
-        List<Vertice> vertices = new ArrayList<>(grafo.getVertices());
-        Map<Vertice, Integer> indice = indexar(vertices);
-        List<Arista> aristas = aristasOrdenadasPorPeso(grafo);
+        List<Vertice> listaDeVertices = new ArrayList<>(grafo.getVertices());
+        Map<Vertice, Integer> mapaVerticePosicion = indexar(listaDeVertices);
+        List<Arista> listaDeAristas = aristasOrdenadasPorPeso(grafo);
 
-        UnionFind uf = new UnionFind(vertices.size());
-        List<Arista> resultado = elegirAristas(aristas, indice, uf);
+        UnionFind uf = new UnionFind(listaDeVertices.size());
+        
+        List<Arista> resultadoAristasMinimas = elegirAristas(listaDeAristas, mapaVerticePosicion, uf);
 
-        validarConexo(uf);
-        return resultado;
+        validarConexo(uf); //esto creo que no tiene sentido aca
+        return resultadoAristasMinimas;
     }
 
     private void validarNoNulo(Grafo grafo) {
@@ -50,12 +52,13 @@ public class Kruskal {
     }
 
     // Se detiene cuando queda una sola componente (n-1 aristas) o se acaban las aristas
-    private List<Arista> elegirAristas(List<Arista> aristas, Map<Vertice, Integer> indice, UnionFind uf) {
+    private List<Arista> elegirAristas(List<Arista> listaDeAristas, Map<Vertice, Integer> mapaVerticePosicion, UnionFind uf) {
+    	
         List<Arista> resultado = new ArrayList<>();
         int i = 0;
-        while (i < aristas.size() && uf.cantidadComponentes() > 1) {
-            Arista arista = aristas.get(i);
-            if (uneComponentes(arista, indice, uf)) {
+        while (i < listaDeAristas.size() && uf.cantidadComponentes() > 1) {
+            Arista arista = listaDeAristas.get(i);
+            if (puedeUnirComponentes(arista, mapaVerticePosicion, uf)) {
                 resultado.add(arista);
             }
             i++;
@@ -64,7 +67,7 @@ public class Kruskal {
     }
 
     // true si la arista conecta dos componentes distintas (no forma ciclo)
-    private boolean uneComponentes(Arista arista, Map<Vertice, Integer> indice, UnionFind uf) {
+    private boolean puedeUnirComponentes(Arista arista, Map<Vertice, Integer> indice, UnionFind uf) {
         int origen = indice.get(arista.getOrigen());
         int destino = indice.get(arista.getDestino());
         return uf.union(origen, destino);

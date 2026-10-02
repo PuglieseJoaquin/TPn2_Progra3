@@ -18,8 +18,8 @@ public class UnionFind {
     
     // Une las componentes de i y j. Devuelve false si ya estaban unidas = hay ciclo
     public boolean union(int i, int j) {
-        int ri = root(i);
-        int rj = root(j);
+        int ri = raiz(i);
+        int rj = raiz(j);
         if (ri == rj) return false;
 
         // el arbol más chico cuelga del más grande
@@ -31,11 +31,12 @@ public class UnionFind {
         padre[rj] = ri;
         tamaño[ri] += tamaño[rj];
         cantidadComponentes--;
+        
         return true;
     }
 
     // Encuentra la raíz
-    public int root(int i) {
+    public int raiz(int i) {
         validar(i);
         while (padre[i] != i) {
             padre[i] = padre[padre[i]]; // cada nodo apunta a su padre
@@ -45,7 +46,7 @@ public class UnionFind {
     }
 
     public boolean find(int i, int j) {
-        return root(i) == root(j);
+        return raiz(i) == raiz(j);
     }
 
     

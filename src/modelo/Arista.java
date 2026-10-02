@@ -30,20 +30,12 @@ public class Arista implements Comparable<Arista> {
     	 throw new IllegalArgumentException("El vértice no pertenece a esta arista");
     	}
 
-//    @Override
-//    public int compareTo(Arista otra) {
-//    	 if (this.peso < otra.peso) return -1;
-//    	 if (this.peso > otra.peso) return 1;
-//    	 return 0;
-//    }
     @Override
     public int compareTo(Arista otra) {
-        return Double.compare(this.peso, otra.peso);
+        return Double.compare(otra.peso, this.peso);
     }
     @Override
     public String toString() {
         return origen + " -- " + destino + " (" + peso + ")";
-    }
-    
-    
+    }  
 }

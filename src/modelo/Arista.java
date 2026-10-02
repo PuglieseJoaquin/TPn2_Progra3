@@ -32,7 +32,7 @@ public class Arista implements Comparable<Arista> {
 
     @Override
     public int compareTo(Arista otra) {
-        return Double.compare(otra.peso, this.peso);
+        return Double.compare(this.peso, otra.peso);
     }
     @Override
     public String toString() {

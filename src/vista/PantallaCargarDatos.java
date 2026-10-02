@@ -60,6 +60,7 @@ public class PantallaCargarDatos extends JFrame implements CargarDatosVista {
 	private JSpinner spinnerRegiones;
 	private JButton btnCalcular;
 	private JButton btnVolverAlMenu;
+	private JButton btnSalir;
 
 	public PantallaCargarDatos(GestorPantallas gestorPantallas) {
 		cargarDatosPresentador = new CargarDatosPresentador(this, gestorPantallas);
@@ -85,6 +86,7 @@ public class PantallaCargarDatos extends JFrame implements CargarDatosVista {
 		crearSpinnerRegiones();
 		crearBtnVolverAlMenu();
 		crearBtnCalcular();
+		crearBtnSalir();
 	}
 
 	private void configurarPantalla() {
@@ -401,6 +403,30 @@ public class PantallaCargarDatos extends JFrame implements CargarDatosVista {
 		boton.setBorderPainted(false);
 		boton.setOpaque(true);
 		boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	}
+	
+	private void crearBtnSalir() {
+	    btnSalir = new JButton("Salir");
+	    btnSalir.setFont(new Font("Segoe UI", Font.BOLD, 14));
+	    btnSalir.setForeground(Color.WHITE);
+	    btnSalir.setBackground(new Color(239, 68, 68)); // rojo
+	    btnSalir.setFocusPainted(false);
+	    btnSalir.setBorderPainted(false);
+	    btnSalir.setOpaque(true);
+	    btnSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	    btnSalir.setBounds(360, 515, 180, 40); // centrado abajo
+
+	    agregarListenerBtnSalir();
+
+	    panelFondo.add(btnSalir);
+	}
+
+	private void agregarListenerBtnSalir() {
+		btnSalir.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	            System.exit(0);
+	        }
+	    });
 	}
 
 	// ------------------- MÉTODOS QUE LLAMA EL PRESENTADOR -------------------

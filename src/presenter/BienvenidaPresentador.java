@@ -17,4 +17,12 @@ public class BienvenidaPresentador {
 	public void manejarClickBotonCargaAutomatica() {
 		// TODO: 
 	}
+
+	public void manejarClickBotonCargaMapa() {
+		// TODO Auto-generated method stub
+	}
+	
+	public void manejarClickBotonSalir() {
+	    System.exit(0);
+	}
 }

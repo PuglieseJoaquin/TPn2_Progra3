@@ -25,6 +25,8 @@ public class PantallaInicio extends JFrame {
 	private JLabel lblImagen;
 	private JButton btnCargaManual;
 	private JButton btnCargaAutomatica;
+	private JButton btnCargaMapa;
+	private JButton btnSalir;
 
 	public PantallaInicio(GestorPantallas gestorPantallas) {
 		bienvenidaPresentador = new BienvenidaPresentador(gestorPantallas);
@@ -34,7 +36,9 @@ public class PantallaInicio extends JFrame {
 		crearLblSubtitulo();
 		crearBtnCargaManual();
 		crearBtnCargaAutomatica();
-		crearImagenFondo(); 
+		crearBtnCargaMapa();
+		crearBtnSalir();		
+		crearImagenFondo();
 	}
 
 	private void configurarPantalla() {
@@ -61,7 +65,7 @@ public class PantallaInicio extends JFrame {
 	private void crearLblSubtitulo() {
 		lblSubtitulo = new JLabel("¿Cómo querés cargar los datos?", SwingConstants.CENTER);
 		lblSubtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		lblSubtitulo.setForeground(new Color(241, 245, 249));
+		lblSubtitulo.setForeground(new Color(222, 233, 221));
 		lblSubtitulo.setBounds(100, 180, 700, 30);
 		panelFondo.add(lblSubtitulo);
 	}
@@ -110,6 +114,52 @@ public class PantallaInicio extends JFrame {
 				bienvenidaPresentador.manejarClickBotonCargaAutomatica();
 			}
 		});
+	}
+	
+	private void crearBtnCargaMapa() {
+	    btnSalir = new JButton("Salir");
+	    btnSalir.setFont(new Font("Segoe UI", Font.BOLD, 16));
+	    btnSalir.setForeground(Color.WHITE);
+	    btnSalir.setBackground(new Color(239, 68, 68)); // rojo
+	    btnSalir.setFocusPainted(false);
+	    btnSalir.setBorderPainted(false);
+	    btnSalir.setOpaque(true);
+	    btnSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	    btnSalir.setBounds(300, 460, 300, 50);
+
+	    agregarListenerBtnCargaMapa();
+	    panelFondo.add(btnSalir);
+	}
+
+	private void agregarListenerBtnCargaMapa() {
+		btnSalir.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	            System.exit(0);
+	        }
+	    });
+	}
+	
+	private void crearBtnSalir() {
+	    btnCargaMapa = new JButton("Carga desde mapa");
+	    btnCargaMapa.setFont(new Font("Segoe UI", Font.BOLD, 16));
+	    btnCargaMapa.setForeground(Color.WHITE);
+	    btnCargaMapa.setBackground(new Color(255, 165, 0)); // naranja, distinto color
+	    btnCargaMapa.setFocusPainted(false);
+	    btnCargaMapa.setBorderPainted(false);
+	    btnCargaMapa.setOpaque(true);
+	    btnCargaMapa.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	    btnCargaMapa.setBounds(300, 390, 300, 50);
+
+	    agregarListenerBtnSalir();
+	    panelFondo.add(btnCargaMapa);
+	}
+
+	private void agregarListenerBtnSalir() {
+		btnCargaMapa.addActionListener(new ActionListener() {
+	        public void actionPerformed(ActionEvent e) {
+	            bienvenidaPresentador.manejarClickBotonCargaMapa();
+	        }
+	    });
 	}
 
 	private void crearImagenFondo() {

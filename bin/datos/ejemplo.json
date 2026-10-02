@@ -1,0 +1,12 @@
+{
+  "cantidadRegiones": 2,
+  "vertices": ["A", "B", "C", "D", "E"],
+  "aristas": [
+    { "origen": "A", "destino": "B", "peso": 1 },
+    { "origen": "B", "destino": "C", "peso": 2 },
+    { "origen": "C", "destino": "D", "peso": 10 },
+    { "origen": "D", "destino": "E", "peso": 1 },
+    { "origen": "A", "destino": "E", "peso": 20 },
+    { "origen": "B", "destino": "D", "peso": 15 }
+  ]
+}

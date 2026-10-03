@@ -1,6 +1,6 @@
 package modelo;
 
-public class CapitalesArgentinas {
+public class CiudadSeleccionada {
     private String nombre;
     private double lat;
     private double lon;

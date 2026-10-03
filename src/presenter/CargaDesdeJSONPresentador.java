@@ -1,7 +1,7 @@
 package presenter;
 
 import datos.JsonLoader;
-import modelo.CapitalesArgentinas;
+import modelo.CiudadSeleccionada;
 import vista.GestorPantallas;
 import vista.PantallaCargaDesdeJSON;
 
@@ -11,7 +11,7 @@ import java.util.List;
 public class CargaDesdeJSONPresentador {
 	private GestorPantallas gestorPantallas;
     private PantallaCargaDesdeJSON vista;
-    private List<CapitalesArgentinas> capitales;
+    private List<CiudadSeleccionada> capitales;
 
     public CargaDesdeJSONPresentador(PantallaCargaDesdeJSON vista, GestorPantallas gestorPantallas) {
     	this.gestorPantallas=gestorPantallas;
@@ -29,20 +29,20 @@ public class CargaDesdeJSONPresentador {
     }
 
     // 👉 Este método se llama cuando el usuario aprieta "Agregar conexión"
-    public void manejarAgregarConexion(String origen, String destino, int peso) {
-    		CapitalesArgentinas capOrigen = buscarCapital(origen);
-    		CapitalesArgentinas capDestino = buscarCapital(destino);
+    public void manejarAgregarConexion(String origen, String destino) {
+    		CiudadSeleccionada capOrigen = buscarCapital(origen);
+    		CiudadSeleccionada capDestino = buscarCapital(destino);
 
         if (capOrigen != null && capDestino != null) {
             // Acá recién se crean los vértices y la arista
-            vista.dibujarConexion(capOrigen, capDestino, peso);
+            vista.dibujarConexion(capOrigen, capDestino);
         } else {
             vista.mostrarError("No se encontraron las capitales seleccionadas.");
         }
     }
 
-    private CapitalesArgentinas buscarCapital(String nombre) {
-        for (CapitalesArgentinas c : capitales) {
+    private CiudadSeleccionada buscarCapital(String nombre) {
+        for (CiudadSeleccionada c : capitales) {
             if (c.getNombre().equals(nombre)) {
                 return c;
             }

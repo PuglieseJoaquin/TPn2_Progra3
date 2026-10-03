@@ -1,5 +1,7 @@
 package presenter;
  
+import org.openstreetmap.gui.jmapviewer.Coordinate;
+
 import modelo.Arista;
 import modelo.Grafo;
 import modelo.Vertice;
@@ -45,6 +47,21 @@ public class CargarDatosPresentador {
 		vista.agregarVertice(nombreLimpio);
 		vista.limpiarCampoVertice();
 	}
+	
+	public void manejarClickAgregarVertice(String nombre, double lat, double lon) {
+		String nombreLimpio = nombre.trim();
+		if (nombreLimpio.isEmpty()) {
+		    throw new IllegalArgumentException("El nombre del vértice no puede estar vacío.");
+		}
+
+		if (existeNombre(nombreLimpio)) {
+		    throw new IllegalArgumentException("Ya existe un vértice llamado \"" + nombreLimpio + "\".");
+		}
+ 
+		grafo.agregarVertice(new Vertice(nombreLimpio, lat, lon));
+		vista.agregarVertice(nombreLimpio);
+		vista.limpiarCampoVertice();
+	}
  
 	public void manejarClickAgregarArista(String origen, String destino, String peso) {
 		if (origen == null || destino == null) {
@@ -84,6 +101,8 @@ public class CargarDatosPresentador {
 		grafo.eliminarVertice(vertice);
 		vista.eliminarVertice(nombre);
 	}
+	
+	
  
 	public void manejarClickCalcular(int cantidadRegiones) {
 		
@@ -138,5 +157,17 @@ public class CargarDatosPresentador {
 		} catch (NumberFormatException e) {
 			return null;
 		}
+	}
+	
+	public Coordinate getCoordenadaDeVertice(String nombre) {
+	    Vertice v = grafo.getVertice(nombre);
+	    if (v != null) {
+	        return new Coordinate(v.getLat(), v.getLon());
+	    }
+	    return null;
+	}
+
+	public void manejarClickBtnSalir() {
+		System.exit(0);
 	}
 }

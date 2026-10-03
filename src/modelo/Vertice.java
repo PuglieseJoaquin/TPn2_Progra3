@@ -5,14 +5,30 @@ import java.util.Objects;
 public class Vertice {
 
     private final String nombre;
+	private double lat;
+	private double lon;
 
     public Vertice(String nombre) {
         this.nombre = nombre;
+    }
+    
+    public Vertice(String nombre, double lat, double lon) {
+        this.nombre = nombre;
+        this.lat = lat;
+        this.lon = lon;
     }
 
     public String getNombre() {
         return nombre;
     }
+    
+	public double getLat() {
+		return this.lat;
+	}
+
+	public double getLon() {
+		return this.lon;
+	}
 
     @Override
 	public boolean equals(Object obj) {

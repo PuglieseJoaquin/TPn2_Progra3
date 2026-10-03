@@ -19,6 +19,7 @@ public class BienvenidaPresentador {
 	}
 
 	public void manejarClickBotonCargaMapa() {
+		gestorPantallas.crearPantallaCargaDesdeMapa();
 	}
 	
 	public void manejarClickBotonSalir() {

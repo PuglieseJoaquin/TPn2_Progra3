@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;
-import modelo.CapitalesArgentinas;
+import modelo.CiudadSeleccionada;
 
 public class JsonLoader {
 
-    public static List<CapitalesArgentinas> cargarCapitales(String ruta) {
+    public static List<CiudadSeleccionada> cargarCapitales(String ruta) {
         Gson gson = new Gson();
         try (Reader reader = new InputStreamReader(
                 JsonLoader.class.getResourceAsStream(ruta))) {
@@ -23,9 +23,9 @@ public class JsonLoader {
 
     // Clase interna para mapear el JSON
     private static class CapitalesWrapper {
-        private List<CapitalesArgentinas> vertices;
+        private List<CiudadSeleccionada> vertices;
 
-        public List<CapitalesArgentinas> getVertices() {
+        public List<CiudadSeleccionada> getVertices() {
             return vertices;
         }
     }

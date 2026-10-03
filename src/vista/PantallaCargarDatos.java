@@ -245,7 +245,7 @@ public class PantallaCargarDatos extends JFrame implements CargarDatosVista {
 	}
 
 	private void crearTablaAristas() {
-		modeloAristas = crearModeloNoEditable(new String[] { "Origen", "Destino", "Peso", "" });
+		modeloAristas = crearModeloNoEditable(new String[]{ "Origen", "Destino", "Peso", "" });
 		tablaAristas = new JTable(modeloAristas);
 		estiloTabla(tablaAristas);
 		configurarColumnaEliminar(tablaAristas);

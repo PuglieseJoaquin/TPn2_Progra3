@@ -8,4 +8,6 @@ public interface GestorInterfaz {
 	void crearPantallaCargaDatos();
 
 	PantallaResultado crearPantallaResultado();
+	
+	void crearPantallaCargaDesdeMapa();
 }

@@ -1,6 +1,6 @@
 package vista;
 
-import modelo.CapitalesArgentinas;
+import modelo.CiudadSeleccionada;
 import presenter.CargaDesdeJSONPresentador;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
@@ -171,7 +171,7 @@ public class PantallaCargaDesdeJSON extends JFrame {
 
 				try {
 					int peso = Integer.parseInt(txtPeso.getText().trim());
-					cargaDesdeJSONPresentador.manejarAgregarConexion(origen, destino, peso);
+					cargaDesdeJSONPresentador.manejarAgregarConexion(origen, destino);
 					modeloAristas.addRow(new Object[] { origen, destino, peso });
 				} catch (NumberFormatException ex) {
 					mostrarError("El peso debe ser un numero.");
@@ -277,8 +277,8 @@ public class PantallaCargaDesdeJSON extends JFrame {
 	}
 
     // 👉 Método que el presentador usa para cargar capitales
-    public void cargarCapitales(List<CapitalesArgentinas> capitales) {
-        for (CapitalesArgentinas c : capitales) {
+    public void cargarCapitales(List<CiudadSeleccionada> capitales) {
+        for (CiudadSeleccionada c : capitales) {
             comboOrigen.addItem(c.getNombre());
             comboDestino.addItem(c.getNombre());
 
@@ -289,7 +289,7 @@ public class PantallaCargaDesdeJSON extends JFrame {
     }
 
     // 👉 Dibujar la línea en el mapa
-    public void dibujarConexion(CapitalesArgentinas origen, CapitalesArgentinas destino, int peso) {
+    public void dibujarConexion(CiudadSeleccionada origen, CiudadSeleccionada destino) {
         java.util.List<Coordinate> coords = Arrays.asList(
                 new Coordinate(origen.getLat(), origen.getLon()),
                 new Coordinate(destino.getLat(), destino.getLon()),

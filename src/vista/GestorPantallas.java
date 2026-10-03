@@ -9,9 +9,10 @@ public class GestorPantallas implements GestorInterfaz {
 
 	private PantallaInicio pantallaInicio;
 	private PantallaCargarDatos pantallaCargaDatos;
-	private PantallaResultado pantallaResultado;
 	private PantallaCargaDesdeJSON pantallaCargaDesdeJSON;
-
+	private PantallaCargaDesdeMapa PantallaCargaDesdeMapa;
+	private PantallaResultado pantallaResultado;
+	
 	public void crearPantallaInicio() {
 		pantallaInicio = new PantallaInicio(this);
 		mostrarPantalla(pantallaInicio);
@@ -22,6 +23,10 @@ public class GestorPantallas implements GestorInterfaz {
 		mostrarPantalla(pantallaCargaDatos);
 	}
 
+	public void crearPantallaCargaDesdeMapa() {
+		PantallaCargaDesdeMapa = new PantallaCargaDesdeMapa(this);
+		mostrarPantalla(PantallaCargaDesdeMapa);	
+	}
 	
 	public PantallaResultado crearPantallaResultado() {
 	    PantallaResultado pantalla = new PantallaResultado(this);

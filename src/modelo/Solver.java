@@ -7,8 +7,8 @@ import java.util.Set;
 
 public class Solver {
     private Set<Vertice> vertices;
-    private List<Arista> aristasAGM;         // el AGM completo: nunca se modifica
-    private List<Arista> aristasDeRegiones;  // el AGM sin las (k-1) aristas más pesadas
+    private List<Arista> aristasAGM;
+    private List<Arista> aristasDeRegiones;
     private List<Set<Vertice>> regiones;
 
     public void calcularAGM(Grafo grafoOriginal) {

@@ -18,7 +18,6 @@ import javax.swing.JTextArea;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 
-import modelo.Grafo;
 import presenter.ResultadoPresentador;
 
 public class PantallaResultado extends JFrame implements ResultadoVista {
@@ -33,8 +32,7 @@ public class PantallaResultado extends JFrame implements ResultadoVista {
 	private JButton btnVolverAlMenu;
 	private JButton btnSalir;
 
-	public PantallaResultado(GestorPantallas gestorPantallas, Grafo grafo, int cantidadRegiones) {
-		resultadoPresentador = new ResultadoPresentador(this, gestorPantallas, grafo, cantidadRegiones);
+	public PantallaResultado(GestorPantallas gestorPantallas) {
 
 		configurarPantalla();
 		crearLblTitulo();
@@ -45,9 +43,12 @@ public class PantallaResultado extends JFrame implements ResultadoVista {
 		crearBtnVolverAlMenu();
 		crearBtnSalir();
 
-		resultadoPresentador.actualizarVista();
 	}
 
+	public void setPresentador(ResultadoPresentador resultadoPresentador) {
+		this.resultadoPresentador = resultadoPresentador;
+	}
+	
 	private void configurarPantalla() {
 		setTitle("Diseñando regiones — Resultado");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -148,12 +149,12 @@ public class PantallaResultado extends JFrame implements ResultadoVista {
 	    btnSalir = new JButton("Salir");
 	    btnSalir.setFont(new Font("Segoe UI", Font.BOLD, 14));
 	    btnSalir.setForeground(Color.WHITE);
-	    btnSalir.setBackground(new Color(239, 68, 68)); // rojo
+	    btnSalir.setBackground(new Color(239, 68, 68));
 	    btnSalir.setFocusPainted(false);
 	    btnSalir.setBorderPainted(false);
 	    btnSalir.setOpaque(true);
 	    btnSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
-	    btnSalir.setBounds(550, 492, 100, 40); // centrado abajo
+	    btnSalir.setBounds(550, 492, 100, 40);
 
 	    agregarListenerBtnSalir();
 

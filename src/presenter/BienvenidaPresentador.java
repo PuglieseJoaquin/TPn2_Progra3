@@ -15,11 +15,10 @@ public class BienvenidaPresentador {
 	}
  
 	public void manejarClickBotonCargaAutomatica() {
-		// TODO: 
+		gestorPantallas.crearPantallaCargaDesdeJSON();
 	}
 
 	public void manejarClickBotonCargaMapa() {
-		// TODO Auto-generated method stub
 	}
 	
 	public void manejarClickBotonSalir() {

@@ -409,12 +409,12 @@ public class PantallaCargarDatos extends JFrame implements CargarDatosVista {
 	    btnSalir = new JButton("Salir");
 	    btnSalir.setFont(new Font("Segoe UI", Font.BOLD, 14));
 	    btnSalir.setForeground(Color.WHITE);
-	    btnSalir.setBackground(new Color(239, 68, 68)); // rojo
+	    btnSalir.setBackground(new Color(239, 68, 68));
 	    btnSalir.setFocusPainted(false);
 	    btnSalir.setBorderPainted(false);
 	    btnSalir.setOpaque(true);
 	    btnSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
-	    btnSalir.setBounds(360, 515, 180, 40); // centrado abajo
+	    btnSalir.setBounds(360, 515, 180, 40);
 
 	    agregarListenerBtnSalir();
 

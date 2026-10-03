@@ -7,5 +7,5 @@ public interface GestorInterfaz {
 
 	void crearPantallaCargaDatos();
 
-	void crearPantallaResultado(Grafo grafo, int cantidadRegiones);
+	PantallaResultado crearPantallaResultado();
 }

@@ -120,7 +120,7 @@ public class PantallaInicio extends JFrame {
 	    btnSalir = new JButton("Salir");
 	    btnSalir.setFont(new Font("Segoe UI", Font.BOLD, 16));
 	    btnSalir.setForeground(Color.WHITE);
-	    btnSalir.setBackground(new Color(239, 68, 68)); // rojo
+	    btnSalir.setBackground(new Color(239, 68, 68));
 	    btnSalir.setFocusPainted(false);
 	    btnSalir.setBorderPainted(false);
 	    btnSalir.setOpaque(true);
@@ -143,7 +143,7 @@ public class PantallaInicio extends JFrame {
 	    btnCargaMapa = new JButton("Carga desde mapa");
 	    btnCargaMapa.setFont(new Font("Segoe UI", Font.BOLD, 16));
 	    btnCargaMapa.setForeground(Color.WHITE);
-	    btnCargaMapa.setBackground(new Color(255, 165, 0)); // naranja, distinto color
+	    btnCargaMapa.setBackground(new Color(255, 165, 0));
 	    btnCargaMapa.setFocusPainted(false);
 	    btnCargaMapa.setBorderPainted(false);
 	    btnCargaMapa.setOpaque(true);

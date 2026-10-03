@@ -5,19 +5,30 @@ import modelo.Grafo;
 import modelo.Vertice;
 import vista.CargarDatosVista;
 import vista.GestorPantallas;
+import vista.PantallaResultado;
  
 public class CargarDatosPresentador {
  
 	private CargarDatosVista vista;
 	private GestorPantallas gestorPantallas;
 	private Grafo grafo;
+	private int cantidadRegiones;
  
 	public CargarDatosPresentador(CargarDatosVista vista, GestorPantallas gestorPantallas) {
 		this.vista = vista;
 		this.gestorPantallas = gestorPantallas;
 		this.grafo = new Grafo();
+		this.cantidadRegiones = 0;
 	}
  
+	public int getCantidadRegiones() {
+		return cantidadRegiones;
+	}
+
+	public Grafo getGrafo() {
+		return grafo;
+	}
+
 	public void manejarClickAgregarVertice(String nombre) {
 		String nombreLimpio = nombre.trim();
 		if (nombreLimpio.isEmpty()) {
@@ -50,7 +61,7 @@ public class CargarDatosPresentador {
 		try {
 			grafo.agregarArista(grafo.getVertice(origen), grafo.getVertice(destino), pesoNumerico);
 		} catch (IllegalArgumentException e) {
-			vista.mostrarMensajeError(e.getMessage()); // origen = destino, arista repetida, etc.
+			vista.mostrarMensajeError(e.getMessage());
 			return;
 		}
  
@@ -66,16 +77,18 @@ public class CargarDatosPresentador {
 	public void manejarClickEliminarVertice(String nombre) {
 		Vertice vertice = grafo.getVertice(nombre);
  
-		// Primero se sacan de la vista las aristas que tocan a este vértice...
 		for (Arista arista : grafo.getAristasDe(vertice)) {
 			vista.eliminarArista(arista.getOrigen().getNombre(), arista.getDestino().getNombre());
 		}
-		// ...y después el vértice, tanto del modelo como de la vista.
+
 		grafo.eliminarVertice(vertice);
 		vista.eliminarVertice(nombre);
 	}
  
 	public void manejarClickCalcular(int cantidadRegiones) {
+		
+		this.cantidadRegiones = cantidadRegiones;
+		
 		int cantidadVertices = grafo.cantidadVertices();
  
 		if (cantidadVertices == 0) {
@@ -92,14 +105,23 @@ public class CargarDatosPresentador {
 			return;
 		}
  
-		gestorPantallas.crearPantallaResultado(grafo, cantidadRegiones);
+		visualizarSolucion();
+
 	}
  
+	private void visualizarSolucion() {
+		PantallaResultado pantallaResultado = gestorPantallas.crearPantallaResultado();
+		ResultadoPresentador resultadoPresentador = new ResultadoPresentador(pantallaResultado, gestorPantallas, grafo, cantidadRegiones);
+		
+		pantallaResultado.setPresentador(resultadoPresentador);
+		resultadoPresentador.calcularSolucion();
+		
+	}
+
 	public void manejarClickVolverAlMenu() {
 		gestorPantallas.crearPantallaInicio();
 	}
  
-	// ignora mayusculas en los vertices
 	private boolean existeNombre(String nombre) {
 		for (Vertice existente : grafo.getVertices()) {
 			if (existente.getNombre().equalsIgnoreCase(nombre)) {

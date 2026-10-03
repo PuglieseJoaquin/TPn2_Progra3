@@ -7,30 +7,29 @@ import vista.ResultadoVista;
 
 public class ResultadoPresentador {
 
-	private ResultadoVista vista;
+	private ResultadoVista resultadoVista;
 	private GestorPantallas gestorPantallas;
 	private Grafo grafo;
 	private Solver solver;
 	private int cantidadRegionesActual;
 
-	public ResultadoPresentador(ResultadoVista vista, GestorPantallas gestorPantallas, Grafo grafo,
-			int cantidadRegiones) {
-		this.vista = vista;
+	public ResultadoPresentador(ResultadoVista resultadoVista, GestorPantallas gestorPantallas, Grafo grafo, int cantidadRegiones) {
 		this.gestorPantallas = gestorPantallas;
+		this.resultadoVista = resultadoVista;
 		this.grafo = grafo;
-		this.solver = new Solver();
 		this.cantidadRegionesActual = cantidadRegiones;
+		this.solver = new Solver();
 	}
 
-	/** La pantalla lo llama cuando termina de construirse. */
-	public void actualizarVista() {
+	public void calcularSolucion() {
 		try {
 			solver.calcularAGM(grafo);
 		} catch (IllegalArgumentException e) {
-			vista.mostrarMensajeError(e.getMessage());
+			resultadoVista.mostrarMensajeError(e.getMessage());
 			return;
 		}
-		vista.setCantidadRegiones(cantidadRegionesActual);
+		
+		resultadoVista.setCantidadRegiones(cantidadRegionesActual);
 		dividirYMostrar(cantidadRegionesActual);
 	}
 
@@ -46,12 +45,12 @@ public class ResultadoPresentador {
 		try {
 			solver.dividirEnRegiones(cantidad);
 		} catch (IllegalArgumentException e) {
-			vista.mostrarMensajeError(e.getMessage());
-			vista.setCantidadRegiones(cantidadRegionesActual); // vuelve al último valor válido
+			resultadoVista.mostrarMensajeError(e.getMessage());
+			resultadoVista.setCantidadRegiones(cantidadRegionesActual);
 			return;
 		}
 
 		cantidadRegionesActual = cantidad;
-		vista.mostrarResultado(solver.resultadoEnString());
+		resultadoVista.mostrarResultado(solver.resultadoEnString());
 	}
 }

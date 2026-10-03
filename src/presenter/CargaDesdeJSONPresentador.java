@@ -9,11 +9,12 @@ import java.io.IOException;
 import java.util.List;
 
 public class CargaDesdeJSONPresentador {
-
+	private GestorPantallas gestorPantallas;
     private PantallaCargaDesdeJSON vista;
     private List<CapitalesArgentinas> capitales;
 
     public CargaDesdeJSONPresentador(PantallaCargaDesdeJSON vista, GestorPantallas gestorPantallas) {
+    	this.gestorPantallas=gestorPantallas;
         this.vista = vista;
         inicializar();
     }
@@ -48,5 +49,8 @@ public class CargaDesdeJSONPresentador {
         }
         return null;
     }
+    public void manejarClickVolverAlMenu() {
+		gestorPantallas.crearPantallaInicio();
+	}
 }
 

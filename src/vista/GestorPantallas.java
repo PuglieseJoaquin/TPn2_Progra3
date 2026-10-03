@@ -42,7 +42,7 @@ public class GestorPantallas implements GestorInterfaz {
 	}
 		
 	public void ocultarPantallas(JFrame pantallaActual) {
-		JFrame[] todasLasPantallas = { pantallaInicio, pantallaCargaDatos, pantallaResultado };
+		JFrame[] todasLasPantallas = { pantallaInicio, pantallaCargaDatos, pantallaResultado,pantallaCargaDesdeJSON };
 
 		for (JFrame pantalla : todasLasPantallas) {
 			if (pantalla != pantallaActual && pantalla != null) {

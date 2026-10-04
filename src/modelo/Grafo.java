@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -52,7 +51,7 @@ public class Grafo {
                 return v;
             }
         }
-        throw new IllegalArgumentException("No existe vértice con nombre: " + nombre);
+        return null;
     }
     
     private boolean validarArista(Vertice origen, Vertice destino) {
@@ -75,10 +74,11 @@ public class Grafo {
 
     public List<Arista> getAristasDe(Vertice v) {
     	
-		if (!mapaDeListaDeVecinos.containsKey(v)) 
-            throw new IllegalArgumentException("El vertice no pertenece al grafo");
-        
-    		return new ArrayList<>(mapaDeListaDeVecinos.get(v));
+		if (mapaDeListaDeVecinos.containsKey(v)) {
+			return new ArrayList<>(mapaDeListaDeVecinos.get(v));
+		} else {
+			return Collections.emptyList();
+		}
     }
      
     public List<Arista> getTodasLasAristas() {

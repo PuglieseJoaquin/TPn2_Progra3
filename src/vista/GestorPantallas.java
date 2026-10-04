@@ -2,15 +2,14 @@ package vista;
 
 import javax.swing.JFrame;
 
-import presenter.CargaDesdeJSONPresentador;
 import presenter.ResultadoPresentador;
 
 public class GestorPantallas implements GestorInterfaz {
 
 	private PantallaInicio pantallaInicio;
-	private PantallaCargarDatos pantallaCargaDatos;
-	private PantallaCargaDesdeJSON pantallaCargaDesdeJSON;
-	private PantallaCargaDesdeMapa PantallaCargaDesdeMapa;
+	private PantallaCargarDatosManual pantallaCargaDatos;
+	private PantallaCargarDatosDesdeJSON pantallaCargaDesdeJSON;
+	private PantallaCargarDatosDesdeMapa PantallaCargaDesdeMapa;
 	private PantallaResultado pantallaResultado;
 	
 	public void crearPantallaInicio() {
@@ -19,12 +18,12 @@ public class GestorPantallas implements GestorInterfaz {
 	}
 
 	public void crearPantallaCargaDatos() {
-		pantallaCargaDatos = new PantallaCargarDatos(this);
+		pantallaCargaDatos = new PantallaCargarDatosManual(this);
 		mostrarPantalla(pantallaCargaDatos);
 	}
 
 	public void crearPantallaCargaDesdeMapa() {
-		PantallaCargaDesdeMapa = new PantallaCargaDesdeMapa(this);
+		PantallaCargaDesdeMapa = new PantallaCargarDatosDesdeMapa(this);
 		mostrarPantalla(PantallaCargaDesdeMapa);	
 	}
 	
@@ -35,8 +34,7 @@ public class GestorPantallas implements GestorInterfaz {
 	}
 
 	public void crearPantallaCargaDesdeJSON() {
-	    pantallaCargaDesdeJSON = new PantallaCargaDesdeJSON(this);
-//	    CargaDesdeJSONPresentador presentador = new CargaDesdeJSONPresentador(pantalla);
+	    pantallaCargaDesdeJSON = new PantallaCargarDatosDesdeJSON(this);
 	    mostrarPantalla(pantallaCargaDesdeJSON);
 	}
 	

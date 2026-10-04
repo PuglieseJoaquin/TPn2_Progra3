@@ -1,8 +1,15 @@
 package presenter;
  
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
+import datos.JsonLoader;
 import modelo.Arista;
+import modelo.CiudadSeleccionada;
 import modelo.Grafo;
 import modelo.Vertice;
 import vista.CargarDatosVista;
@@ -15,6 +22,7 @@ public class CargarDatosPresentador {
 	private GestorPantallas gestorPantallas;
 	private Grafo grafo;
 	private int cantidadRegiones;
+    private List<CiudadSeleccionada> capitales;
  
 	public CargarDatosPresentador(CargarDatosVista vista, GestorPantallas gestorPantallas) {
 		this.vista = vista;
@@ -64,12 +72,13 @@ public class CargarDatosPresentador {
 	}
  
 	public void manejarClickAgregarArista(String origen, String destino, String peso) {
+		Double pesoNumerico = convertirPeso(peso);
+		
 		if (origen == null || destino == null) {
 			vista.mostrarMensajeError("Agregá al menos dos vértices antes de crear una conexión.");
 			return;
 		}
- 
-		Double pesoNumerico = convertirPeso(peso);
+		
 		if (pesoNumerico == null) {
 			vista.mostrarMensajeError("El peso debe ser un número (por ejemplo 3 o 2.5).");
 			return;
@@ -77,6 +86,41 @@ public class CargarDatosPresentador {
  
 		try {
 			grafo.agregarArista(grafo.getVertice(origen), grafo.getVertice(destino), pesoNumerico);
+			vista.dibujarConexion(origen, destino);
+		} catch (IllegalArgumentException e) {
+			vista.mostrarMensajeError(e.getMessage());
+			return;
+		}
+ 
+		vista.agregarArista(origen, destino, FormatoPesoArista.aTexto(pesoNumerico));
+		vista.limpiarCampoPeso();
+	}
+	
+	public void manejarClickAgregarArista(String origen, String destino, String peso, Coordinate coordOrigen,
+			Coordinate coordDestino) {
+		Double pesoNumerico = convertirPeso(peso);
+		
+		if (pesoNumerico == null) {
+			vista.mostrarMensajeError("El peso debe ser un número (por ejemplo 3 o 2.5).");
+			return;
+		}
+		
+	    if (grafo.getVertice(origen) == null) {
+	    	double lat = coordOrigen.getLat();
+	    	double lon = coordOrigen.getLon();
+	    	grafo.agregarVertice(new Vertice(origen, lat, lon));
+	    	
+	    }
+	    
+	    if (grafo.getVertice(destino) == null) {
+	    	double lat = coordDestino.getLat();
+	    	double lon = coordDestino.getLon();
+	    	grafo.agregarVertice(new Vertice(destino, lat, lon));
+	    }
+
+		try {
+			grafo.agregarArista(grafo.getVertice(origen), grafo.getVertice(destino), pesoNumerico);
+			vista.dibujarConexion(origen, destino);
 		} catch (IllegalArgumentException e) {
 			vista.mostrarMensajeError(e.getMessage());
 			return;
@@ -90,6 +134,19 @@ public class CargarDatosPresentador {
 		grafo.eliminarArista(grafo.getVertice(origen), grafo.getVertice(destino));
 		vista.eliminarArista(origen, destino);
 	}
+	
+	public void chequearSiBorrarVertices(String origen, String destino) {
+	    Vertice vOrigen = grafo.getVertice(origen);
+	    Vertice vDestino = grafo.getVertice(destino);
+
+	    if (grafo.getAristasDe(vOrigen).isEmpty()) {
+	        grafo.eliminarVertice(vOrigen);
+	    }
+
+	    if (grafo.getAristasDe(vDestino).isEmpty()) {
+	        grafo.eliminarVertice(vDestino);
+	    }
+	}
  
 	public void manejarClickEliminarVertice(String nombre) {
 		Vertice vertice = grafo.getVertice(nombre);
@@ -101,8 +158,6 @@ public class CargarDatosPresentador {
 		grafo.eliminarVertice(vertice);
 		vista.eliminarVertice(nombre);
 	}
-	
-	
  
 	public void manejarClickCalcular(int cantidadRegiones) {
 		
@@ -169,5 +224,24 @@ public class CargarDatosPresentador {
 
 	public void manejarClickBtnSalir() {
 		System.exit(0);
+	}
+
+	public void cargarJSON() {
+	    try {
+	        List<CiudadSeleccionada> capitales = JsonLoader.cargarCapitales("/capitales.json");
+
+	        List<String> nombres = new ArrayList<>();
+	        Map<String, Coordinate> coords = new HashMap<>();
+
+	        for (CiudadSeleccionada c : capitales) {
+	            nombres.add(c.getNombre());
+	            coords.put(c.getNombre(), new Coordinate(c.getLat(), c.getLon()));
+	        }
+
+	        vista.cargarCapitales(nombres, coords);
+
+	    } catch (Exception e) {
+	        vista.mostrarMensajeError("Error al leer JSON: " + e.getMessage());
+	    }
 	}
 }

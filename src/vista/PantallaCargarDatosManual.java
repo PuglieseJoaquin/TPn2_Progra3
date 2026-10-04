@@ -1,78 +1,39 @@
 package vista;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingConstants;
+import presenter.CargarDatosPresentador;
+
+import java.awt.*;
+import java.awt.event.*;
+
+import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import presenter.CargarDatosPresentador;
-
-public class PantallaCargarDatos extends JFrame implements CargarDatosVista {
-
-	private static final String eliminar = "X"; // si no se ve en tu equipo, usá "X"
+public class PantallaCargarDatosManual extends VistaBaseCompartida implements CargarDatosVista {
 
 	private CargarDatosPresentador cargarDatosPresentador;
+	
 	private JPanel panelFondo;
-	private JLabel lblTitulo;
-
-	// Vértices
-	private JLabel lblNombreVertice;
-	private JTextField textNombreVertice;
-	private JButton btnAgregarVertice;
-	private DefaultTableModel modeloVertices;
-	private JTable tablaVertices;
-
-	// Aristas
-	private JLabel lblOrigen;
-	private JLabel lblDestino;
-	private JLabel lblPeso;
-	private DefaultComboBoxModel<String> modeloOrigen;
-	private DefaultComboBoxModel<String> modeloDestino;
-	private JComboBox<String> comboOrigen;
-	private JComboBox<String> comboDestino;
-	private JTextField textPeso;
-	private JButton btnAgregarArista;
-	private DefaultTableModel modeloAristas;
-	private JTable tablaAristas;
-
-	// Parte inferior
-	private JLabel lblRegiones;
+	private JLabel lblTitulo, lblNombreVertice, lblOrigen, lblDestino, lblPeso, lblRegiones;
+	private JTextField textNombreVertice, textPeso;
+	private JButton btnAgregarVertice, btnAgregarArista, btnCalcular, btnVolverAlMenu, btnSalir;
+	private DefaultTableModel modeloVertices, modeloAristas;
+	private JTable tablaVertices, tablaAristas;
+	private DefaultComboBoxModel<String> modeloOrigen, modeloDestino;
+	private JComboBox<String> comboOrigen, comboDestino;
 	private JSpinner spinnerRegiones;
-	private JButton btnCalcular;
-	private JButton btnVolverAlMenu;
-	private JButton btnSalir;
+	
+	private static final String eliminar = "X";
 
-	public PantallaCargarDatos(GestorPantallas gestorPantallas) {
+	public PantallaCargarDatosManual(GestorPantallas gestorPantallas) {
 		cargarDatosPresentador = new CargarDatosPresentador(this, gestorPantallas);
 
 		configurarPantalla();
 		crearLblTitulo();
-
 		crearLblNombreVertice();
 		crearTextNombreVertice();
 		crearBtnAgregarVertice();
 		crearTablaVertices();
-
 		crearLblOrigen();
 		crearComboOrigen();
 		crearLblDestino();
@@ -81,7 +42,6 @@ public class PantallaCargarDatos extends JFrame implements CargarDatosVista {
 		crearTextPeso();
 		crearBtnAgregarArista();
 		crearTablaAristas();
-
 		crearLblRegiones();
 		crearSpinnerRegiones();
 		crearBtnVolverAlMenu();
@@ -272,6 +232,7 @@ public class PantallaCargarDatos extends JFrame implements CargarDatosVista {
 				}
 			}
 		});
+		
 		agregarCursorManoSobreCruz(tablaAristas);
 	}
 
@@ -429,8 +390,6 @@ public class PantallaCargarDatos extends JFrame implements CargarDatosVista {
 	    });
 	}
 
-	// ------------------- MÉTODOS QUE LLAMA EL PRESENTADOR -------------------
-
 	@Override
 	public void agregarVertice(String nombre) {
 		modeloVertices.addRow(new Object[] { nombre, eliminar });
@@ -452,11 +411,6 @@ public class PantallaCargarDatos extends JFrame implements CargarDatosVista {
 	@Override
 	public void limpiarCampoPeso() {
 		textPeso.setText("");
-	}
-
-	@Override
-	public void mostrarMensajeError(String mensaje) {
-		JOptionPane.showMessageDialog(this, mensaje, "Dato no válido", JOptionPane.ERROR_MESSAGE);
 	}
 
 	@Override

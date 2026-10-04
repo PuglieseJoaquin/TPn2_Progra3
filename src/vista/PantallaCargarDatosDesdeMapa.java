@@ -1,53 +1,42 @@
 package vista;
 
+import presenter.CargarDatosPresentador;
+
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import org.openstreetmap.gui.jmapviewer.Coordinate;
-import org.openstreetmap.gui.jmapviewer.JMapViewer;
-import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
-import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
+import org.openstreetmap.gui.jmapviewer.*;
 
-import presenter.CargarDatosPresentador;
+public class PantallaCargarDatosDesdeMapa extends VistaBaseCompartida implements CargarDatosVista {
 
-public class PantallaCargaDesdeMapa extends JFrame implements CargarDatosVista {
-
-    private static final String eliminar = "X";
-
-    private CargarDatosPresentador presentador;
+    private CargarDatosPresentador cargarDatosPresentador;
+    
     private JPanel panelFondo;
-    private JLabel lblTitulo;
-
-    private JComboBox<String> comboOrigen;
-    private JComboBox<String> comboDestino;
+    private JLabel lblTitulo, lblOrigen, lblDestino, lblPeso, lblRegiones;
+    private JComboBox<String> comboOrigen, comboDestino;
     private JTextField textPeso;
-    private JButton btnAgregarArista;
+    private JButton btnAgregarArista, btnCalcular, btnVolverAlMenu, btnSalir;
     private DefaultTableModel modeloAristas;
     private JTable tablaAristas;
-
-    private JLabel lblOrigen, lblDestino, lblPeso, lblRegiones;
     private JSpinner spinnerRegiones;
-    private JButton btnCalcular, btnVolverAlMenu, btnSalir;
-
     private JMapViewer mapa;
+    
     private Map<String, MapPolygonImpl> lineas = new HashMap<>();
     private Map<String, MapMarkerDot> marcadores = new HashMap<>();
+    
+    private static final String eliminar = "X";
 
-    public PantallaCargaDesdeMapa(GestorPantallas gestorPantallas) {
-        presentador = new CargarDatosPresentador(this, gestorPantallas);
+    public PantallaCargarDatosDesdeMapa(GestorPantallas gestorPantallas) {
+        cargarDatosPresentador = new CargarDatosPresentador(this, gestorPantallas);
         
-
         configurarPantalla();
         crearLblTitulo();
         crearMapa();
-
         crearLblOrigen();
         crearComboOrigen();
         crearLblDestino();
@@ -56,7 +45,6 @@ public class PantallaCargaDesdeMapa extends JFrame implements CargarDatosVista {
         crearTextPeso();
         crearBtnAgregarArista();
         crearTablaAristas();
-
         crearLblRegiones();
         crearSpinnerRegiones();
         crearBtnVolverAlMenu();
@@ -67,7 +55,7 @@ public class PantallaCargaDesdeMapa extends JFrame implements CargarDatosVista {
     private void configurarPantalla() {
         setTitle("Diseñando regiones — Carga desde mapa");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 1000, 600);
+        setBounds(100, 100, 900, 600);
         setLocationRelativeTo(null);
         setResizable(false);
 
@@ -90,8 +78,13 @@ public class PantallaCargaDesdeMapa extends JFrame implements CargarDatosVista {
         mapa.setBounds(40, 80, 360, 360);
         mapa.setDisplayPosition(new Coordinate(-38.4161, -63.6167), 4);
 
-        // Listener de clic en mapa
-        mapa.addMouseListener(new MouseAdapter() {
+        agregarListenerMapaMouse();
+
+        panelFondo.add(mapa);
+    }
+
+	private void agregarListenerMapaMouse() {
+		mapa.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getButton() == MouseEvent.BUTTON1) {
@@ -100,69 +93,73 @@ public class PantallaCargaDesdeMapa extends JFrame implements CargarDatosVista {
                             mapa.getPosition(e.getPoint()).getLon()
                         );
                     
-                    // Verificar si el clic está cerca de un marcador existente
-                    for (Map.Entry<String, MapMarkerDot> entry : marcadores.entrySet()) {
-                        MapMarkerDot marker = entry.getValue();
-                        Point markerPoint = mapa.getMapPosition(marker.getCoordinate(), false);
-
-                        if (markerPoint != null && markerPoint.distance(e.getPoint()) < 20) {
-                            int opcion = JOptionPane.showConfirmDialog(
-                                null,
-                                "¿Eliminar vértice " + entry.getKey() + "?",
-                                "Confirmar eliminación",
-                                JOptionPane.YES_NO_OPTION
-                            );
-                            if (opcion == JOptionPane.YES_OPTION) {
-                                marker = marcadores.get(entry.getKey());
-                                if (marker != null) {
-                                    mapa.removeMapMarker(marker);
-                                    marcadores.remove(entry.getKey());
-                                }
-                                presentador.manejarClickEliminarVertice(entry.getKey());
-                                dibujarMarcadores();
-                                return;
-                            }
-                            else {
-                            	return;
-                            }
-                        }
-                    }
-                    
-                    String nombre = JOptionPane.showInputDialog("Nombre de la provincia:");
-                    if (nombre != null && !nombre.trim().isEmpty()) {
-                        
-                        double verticeLat = coord.getLat();
-                        double verticeLon = coord.getLon();
-                        
-                        try {
-                        	
-                            MapMarkerDot nuevo = new MapMarkerDot(nombre, coord);
-                                                      
-                            presentador.manejarClickAgregarVertice(nombre, verticeLat, verticeLon);
-                            
-                            mapa.addMapMarker(nuevo);
-                            mapa.addMapMarker(new MapMarkerDot(nombre, coord));
-                            marcadores.put(nombre, nuevo);
-                            dibujarMarcadores();
-
-                        } catch (IllegalArgumentException ex) {
-                            JOptionPane.showMessageDialog(
-                                null,
-                                ex.getMessage(),
-                                "Error al crear vértice",
-                                JOptionPane.ERROR_MESSAGE
-                            );
-                        }
-                    }
+                    chequearEventoSobreVerticeExistente(e, coord);                  
                 }
             }
-        });
 
-        panelFondo.add(mapa);
-    }
+			private void chequearEventoSobreVerticeExistente(MouseEvent e, Coordinate coord) {
+				for (Map.Entry<String, MapMarkerDot> entry : marcadores.entrySet()) {
+				    MapMarkerDot marker = entry.getValue();
+				    Point markerPoint = mapa.getMapPosition(marker.getCoordinate(), false);
+
+				    if (markerPoint != null && markerPoint.distance(e.getPoint()) < 20) {
+				        int opcion = JOptionPane.showConfirmDialog(
+				            null,
+				            "¿Eliminar vértice " + entry.getKey() + "?",
+				            "Confirmar eliminación",
+				            JOptionPane.YES_NO_OPTION
+				        );
+				        if (opcion == JOptionPane.YES_OPTION) {
+				            marker = marcadores.get(entry.getKey());
+				            if (marker != null) {
+				                mapa.removeMapMarker(marker);
+				                marcadores.remove(entry.getKey());
+				            }
+				            cargarDatosPresentador.manejarClickEliminarVertice(entry.getKey());
+				            dibujarMarcadores();
+				            return;
+				        }
+				        else {
+		                    return;
+				        }
+				    }			   
+				}
+				resolverEventoSobreLugarNuevo(coord);
+			}
+        });
+	}
+	
+	private void resolverEventoSobreLugarNuevo(Coordinate coord) {
+		String nombre = JOptionPane.showInputDialog("Nombre de la provincia:");
+		if (nombre != null && !nombre.trim().isEmpty()) {
+		    
+		    double verticeLat = coord.getLat();
+		    double verticeLon = coord.getLon();
+		    
+		    try {
+		    	
+		        MapMarkerDot nuevo = new MapMarkerDot(nombre, coord);
+		                                  
+		        cargarDatosPresentador.manejarClickAgregarVertice(nombre, verticeLat, verticeLon);
+		        
+		        mapa.addMapMarker(nuevo);
+		        mapa.addMapMarker(new MapMarkerDot(nombre, coord));
+		        marcadores.put(nombre, nuevo);
+		        dibujarMarcadores();
+
+		    } catch (IllegalArgumentException ex) {
+		        JOptionPane.showMessageDialog(
+		            null,
+		            ex.getMessage(),
+		            "Error al crear vértice",
+		            JOptionPane.ERROR_MESSAGE
+		        );
+		    }
+		}
+	}
 
     private void dibujarMarcadores() {
-        mapa.removeAllMapMarkers(); // limpia el mapa
+        mapa.removeAllMapMarkers();
         for (Map.Entry<String, MapMarkerDot> entry : marcadores.entrySet()) {
             mapa.addMapMarker(entry.getValue());
         }
@@ -218,16 +215,18 @@ public class PantallaCargaDesdeMapa extends JFrame implements CargarDatosVista {
         estiloBotonPrimario(btnAgregarArista);
         btnAgregarArista.setBounds(600, 175, 240, 34);
 
-        btnAgregarArista.addActionListener(e -> {
-            String origen = (String) comboOrigen.getSelectedItem();
-            String destino = (String) comboDestino.getSelectedItem();
-            presentador.manejarClickAgregarArista(origen, destino, textPeso.getText());
-
-            dibujarConexion(origen, destino);
-        });
+        agregarListenerBtnAgregarArista();
 
         panelFondo.add(btnAgregarArista);
     }
+
+	private void agregarListenerBtnAgregarArista() {
+		btnAgregarArista.addActionListener(e -> {
+            String origen = (String) comboOrigen.getSelectedItem();
+            String destino = (String) comboDestino.getSelectedItem();
+            cargarDatosPresentador.manejarClickAgregarArista(origen, destino, textPeso.getText());
+        });
+	}
 
     private void crearTablaAristas() {
         modeloAristas = crearModeloNoEditable(new String[]{"Origen", "Destino", "Peso", ""});
@@ -253,7 +252,7 @@ public class PantallaCargaDesdeMapa extends JFrame implements CargarDatosVista {
 				if (fila >= 0 && columna == tablaAristas.getColumnCount() - 1) {
 					String origen = (String) modeloAristas.getValueAt(fila, 0);
 					String destino = (String) modeloAristas.getValueAt(fila, 1);
-					presentador.manejarClickEliminarArista(origen, destino);
+					cargarDatosPresentador.manejarClickEliminarArista(origen, destino);
 					eliminarDibujoArista(origen, destino);
 				}
 			}
@@ -270,7 +269,6 @@ public class PantallaCargaDesdeMapa extends JFrame implements CargarDatosVista {
 	        }
 	    }
 
-	    // borrar la línea del mapa
 	    String clave = origen + "-" + destino;
 	    MapPolygonImpl line = lineas.get(clave);
 	    if (line != null) {
@@ -320,7 +318,7 @@ public class PantallaCargaDesdeMapa extends JFrame implements CargarDatosVista {
 	private void agregarListenerBtnVolverAlMenu() {
 		btnVolverAlMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				presentador.manejarClickVolverAlMenu();
+				cargarDatosPresentador.manejarClickVolverAlMenu();
 			}
 		});
 	}
@@ -337,14 +335,13 @@ public class PantallaCargaDesdeMapa extends JFrame implements CargarDatosVista {
         btnCalcular.setBounds(660, 470, 180, 42);
 
         agregarListenerBtnCalcular();
-
         panelFondo.add(btnCalcular);
     }
 
 	private void agregarListenerBtnCalcular() {
 		btnCalcular.addActionListener(e -> {
             int cantidadRegiones = (Integer) spinnerRegiones.getValue();
-            presentador.manejarClickCalcular(cantidadRegiones);
+            cargarDatosPresentador.manejarClickCalcular(cantidadRegiones);
         });
 	}
 
@@ -360,19 +357,16 @@ public class PantallaCargaDesdeMapa extends JFrame implements CargarDatosVista {
         btnSalir.setBounds(360, 515, 180, 40);
 
         agregarListenerBtnSalir();
-
         panelFondo.add(btnSalir);
     }
     
 	private void agregarListenerBtnSalir() {
 		btnSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				presentador.manejarClickBtnSalir();
+				cargarDatosPresentador.manejarClickBtnSalir();
 			}
 		});
 	}
-
-    // ------------------------- ESTILOS REUTILIZADOS -------------------------
 
     private DefaultTableModel crearModeloNoEditable(String[] columnas) {
         return new DefaultTableModel(columnas, 0) {
@@ -428,8 +422,16 @@ public class PantallaCargaDesdeMapa extends JFrame implements CargarDatosVista {
         boton.setOpaque(true);
         boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
+    
+    private void borrarConexion(String origen, String destino) {
+        String clave = origen + "-" + destino;
+        MapPolygonImpl line = lineas.get(clave);
 
-    // ------------------- MÉTODOS QUE LLAMA EL PRESENTADOR -------------------
+        if (line != null) {
+            mapa.removeMapPolygon(line);
+            lineas.remove(clave);
+        }
+    }
 
     @Override
     public void agregarVertice(String nombre) {
@@ -443,40 +445,14 @@ public class PantallaCargaDesdeMapa extends JFrame implements CargarDatosVista {
     }
 
     @Override
-    public void limpiarCampoVertice() {
-        // En este caso no hay campo de texto, se maneja con clic en mapa
-    }
-
-    @Override
     public void limpiarCampoPeso() {
         textPeso.setText("");
     }
-
+    
     @Override
-    public void mostrarMensajeError(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Dato no válido", JOptionPane.ERROR_MESSAGE);
-    }
-
-    @Override
-    public void eliminarVertice(String nombre) {
-        comboOrigen.removeItem(nombre);
-        comboDestino.removeItem(nombre);
-    }
-
-    @Override
-    public void eliminarArista(String origen, String destino) {
-        for (int i = modeloAristas.getRowCount() - 1; i >= 0; i--) {
-            if (modeloAristas.getValueAt(i, 0).equals(origen) &&
-                modeloAristas.getValueAt(i, 1).equals(destino)) {
-                modeloAristas.removeRow(i);
-                borrarConexion(origen, destino);
-            }
-        }
-    }
-
-    private void dibujarConexion(String origen, String destino) {
-        Coordinate coordOrigen = presentador.getCoordenadaDeVertice(origen);
-        Coordinate coordDestino = presentador.getCoordenadaDeVertice(destino);
+    public void dibujarConexion(String origen, String destino) {
+        Coordinate coordOrigen = cargarDatosPresentador.getCoordenadaDeVertice(origen);
+        Coordinate coordDestino = cargarDatosPresentador.getCoordenadaDeVertice(destino);
 
         if (coordOrigen != null && coordDestino != null) {
             java.util.List<Coordinate> coords = Arrays.asList(
@@ -493,13 +469,20 @@ public class PantallaCargaDesdeMapa extends JFrame implements CargarDatosVista {
         }
     }
     
-    private void borrarConexion(String origen, String destino) {
-        String clave = origen + "-" + destino;
-        MapPolygonImpl line = lineas.get(clave);
+    @Override
+    public void eliminarVertice(String nombre) {
+        comboOrigen.removeItem(nombre);
+        comboDestino.removeItem(nombre);
+    }
 
-        if (line != null) {
-            mapa.removeMapPolygon(line);
-            lineas.remove(clave);
+    @Override
+    public void eliminarArista(String origen, String destino) {
+        for (int i = modeloAristas.getRowCount() - 1; i >= 0; i--) {
+            if (modeloAristas.getValueAt(i, 0).equals(origen) &&
+                modeloAristas.getValueAt(i, 1).equals(destino)) {
+                modeloAristas.removeRow(i);
+                borrarConexion(origen, destino);
+            }
         }
     }
 }

@@ -9,7 +9,14 @@ import java.util.Set;
 
 public class BFS {
     public static Set<Vertice> verticesAlcanzablesDesde(Grafo grafo, Vertice origen) {
-        Set<Vertice> visitados = new HashSet<>();
+    	if (grafo == null) {
+            throw new NullPointerException("El grafo no puede ser null");
+        }
+        if (origen == null || !grafo.contieneVertice(origen)) {
+            throw new IllegalArgumentException("El vértice origen no pertenece al grafo.");
+        }
+    	
+    	Set<Vertice> visitados = new HashSet<>();
         Queue<Vertice> porVisitar = new LinkedList<>();
 
         porVisitar.add(origen);

@@ -51,7 +51,7 @@ public class Grafo {
                 return v;
             }
         }
-        return null;
+        throw new IllegalArgumentException("No existe un vértice con el nombre: " + nombre);
     }
     
     private boolean validarArista(Vertice origen, Vertice destino) {
@@ -73,12 +73,10 @@ public class Grafo {
     }
 
     public List<Arista> getAristasDe(Vertice v) {
-    	
-		if (mapaDeListaDeVecinos.containsKey(v)) {
-			return new ArrayList<>(mapaDeListaDeVecinos.get(v));
-		} else {
-			return Collections.emptyList();
-		}
+        if (!mapaDeListaDeVecinos.containsKey(v)) {
+            throw new IllegalArgumentException("El vértice no pertenece al grafo");
+        }
+        return new ArrayList<>(mapaDeListaDeVecinos.get(v));
     }
      
     public List<Arista> getTodasLasAristas() {

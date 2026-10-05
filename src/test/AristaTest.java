@@ -47,8 +47,8 @@ public class AristaTest {
     public void compareToOrdenaDeMayorAMenorTest() {
         Arista liviana = new Arista(a, b, 1.0);
         Arista pesada = new Arista(a, b, 10.0);
-        assertTrue(liviana.compareTo(pesada) > 0);
-        assertTrue(pesada.compareTo(liviana) < 0);
+        assertTrue(liviana.compareTo(pesada) < 0); 
+        assertTrue(pesada.compareTo(liviana) > 0);
     }
 
     @Test

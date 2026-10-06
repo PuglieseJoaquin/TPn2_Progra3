@@ -21,6 +21,7 @@ public class ResultadoPresentador {
 		this.solver = new Solver();
 	}
 
+	
 	public void calcularSolucion() {
 		try {
 			solver.calcularAGM(grafo);
@@ -33,14 +34,17 @@ public class ResultadoPresentador {
 		dividirYMostrar(cantidadRegionesActual);
 	}
 
+	
 	public void manejarClickRecalcular(int nuevaCantidad) {
 		dividirYMostrar(nuevaCantidad);
 	}
 
+	
 	public void manejarClickVolverAlMenu() {
 		gestorPantallas.crearPantallaInicio();
 	}
 
+	
 	private void dividirYMostrar(int cantidad) {
 		try {
 			solver.dividirEnRegiones(cantidad);

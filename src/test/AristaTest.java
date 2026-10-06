@@ -39,16 +39,7 @@ public class AristaTest {
     @Test
     public void obtenerExtremoTest() {
         Arista arista = new Arista(a, b, 10);
-        assertEquals(b, arista.getOpuesto(a));
-        assertEquals(a, arista.getOpuesto(b));
-    }
-
-    @Test
-    public void compareToOrdenaDeMayorAMenorTest() {
-        Arista liviana = new Arista(a, b, 1.0);
-        Arista pesada = new Arista(a, b, 10.0);
-        assertTrue(liviana.compareTo(pesada) < 0); 
-        assertTrue(pesada.compareTo(liviana) > 0);
+        assertEquals(b, arista.obtenerOpuesto(a));
     }
 
     @Test

@@ -10,17 +10,21 @@ public class BienvenidaPresentador {
 		this.gestorPantallas = gestorPantallas;
 	}
  
+	
 	public void manejarClickBotonCargaManual() {
 		gestorPantallas.crearPantallaCargaDatos();
 	}
  
+	
 	public void manejarClickBotonCargaAutomatica() {
 		gestorPantallas.crearPantallaCargaDesdeJSON();
 	}
 
+	
 	public void manejarClickBotonCargaMapa() {
 		gestorPantallas.crearPantallaCargaDesdeMapa();
 	}
+	
 	
 	public void manejarClickBotonSalir() {
 	    System.exit(0);

@@ -12,24 +12,29 @@ public class Vertice {
         this.nombre = nombre;
     }
     
+    
     public Vertice(String nombre, double lat, double lon) {
         this.nombre = nombre;
         this.lat = lat;
         this.lon = lon;
     }
 
+    
     public String getNombre() {
         return nombre;
     }
+    
     
 	public double getLat() {
 		return this.lat;
 	}
 
+	
 	public double getLon() {
 		return this.lon;
 	}
 
+	
     @Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -42,11 +47,13 @@ public class Vertice {
 		return Objects.equals(nombre, otro.nombre);
 	}
 
+    
     @Override
 	public int hashCode() {
 		return Objects.hash(nombre);
 	}
 
+    
     @Override
     public String toString() {
         return nombre;

@@ -6,7 +6,7 @@ public class UnionFind {
     private int cantidadComponentes;
 
     public UnionFind(int n) {
-        if (n < 0) throw new IllegalArgumentException("n negativo");
+        if (n < 0) throw new IllegalArgumentException("n es negativo");
         padre = new int[n];
         tamaño = new int[n];
         for (int i = 0; i < n; i++) {
@@ -16,35 +16,37 @@ public class UnionFind {
         cantidadComponentes = n;
     }
     
-    // Une las componentes de i y j. Devuelve false si ya estaban unidas = hay ciclo
+    
     public boolean union(int i, int j) {
-        int ri = raiz(i);
-        int rj = raiz(j);
-        if (ri == rj) return false;
+        int raizI = raiz(i);
+        int raizJ = raiz(j);
+        if (raizI == raizJ) return false;
 
-        // el arbol más chico cuelga del más grande
-        if (tamaño[ri] < tamaño[rj]) {
-            int raizTemporal = ri; 
-            ri = rj; 
-            rj = raizTemporal;
-        }
-        padre[rj] = ri;
-        tamaño[ri] += tamaño[rj];
+        
+        if (tamaño[raizI] < tamaño[raizJ]) {
+            int raizTemporal = raizI; 
+            raizI = raizJ; 
+            raizJ = raizTemporal;
+        	}
+        
+        padre[raizJ] = raizI;
+        tamaño[raizI] += tamaño[raizJ];
         cantidadComponentes--;
         
         return true;
     }
 
-    // Encuentra la raíz
+    
     public int raiz(int i) {
         validar(i);
         while (padre[i] != i) {
-            padre[i] = padre[padre[i]]; // cada nodo apunta a su padre
+            padre[i] = padre[padre[i]]; 
             i = padre[i];
         }
         return i;
     }
 
+    
     public boolean find(int i, int j) {
         return raiz(i) == raiz(j);
     }
@@ -54,8 +56,9 @@ public class UnionFind {
         return cantidadComponentes;
     }
 
+    
     private void validar(int i) {
         if (i < 0 || i >= padre.length)
-            throw new IndexOutOfBoundsException("Índice fuera de rango: " + i);
+            throw new IndexOutOfBoundsException("Indice fuera de rango: " + i);
     }
 }

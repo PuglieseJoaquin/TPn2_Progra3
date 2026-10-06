@@ -12,20 +12,21 @@ public class Solver {
     private List<Set<Vertice>> regiones;
 
     public void calcularAGM(Grafo grafoOriginal) {
+    	
         Kruskal kruskal = new Kruskal();
         this.aristasAGM = kruskal.arbolGeneradorMinimo(grafoOriginal);
-        this.vertices = grafoOriginal.getVertices();
+        this.vertices = grafoOriginal.obtenerVertices();
         this.aristasDeRegiones = null;
         this.regiones = null;
     }
 
-    // Se puede llamar varias veces con distinto k sin volver a calcular el AGM
+    
     public void dividirEnRegiones(int cantidadPartes) {
         if (aristasAGM == null) throw new IllegalStateException("AGM no calculado");
         validarCantidadPartes(cantidadPartes);
 
         Grafo arbol = crearGrafoDesdeAristas(aristasAGM);
-        List<Arista> ordenadas = arbol.getAristasOrdenadasMayorAMenor();
+        List<Arista> ordenadas = arbol.obtenerAristasOrdenadasMayorAMenor();
 
         for (int i = 0; i < cantidadPartes - 1; i++) {
             Arista masPesada = ordenadas.get(i);
@@ -33,15 +34,17 @@ public class Solver {
         }
 
         regiones = BFS.obtenerSeccionesConexas(arbol);
-        aristasDeRegiones = arbol.getTodasLasAristas();
+        aristasDeRegiones = arbol.obtenerTodasLasAristas();
     }
 
+    
     private void validarCantidadPartes(int cantidadPartes) {
         if (cantidadPartes < 1 || cantidadPartes > vertices.size())
             throw new IllegalArgumentException(
                     "La cantidad de regiones debe estar entre 1 y " + vertices.size() + ".");
     }
 
+    
     private Grafo crearGrafoDesdeAristas(List<Arista> aristas) {
         Grafo grafo = new Grafo();
         for (Vertice v : vertices) {
@@ -53,6 +56,7 @@ public class Solver {
         return grafo;
     }
 
+    
     public List<Set<Vertice>> getRegiones() {
         if (regiones == null) throw new IllegalStateException("Las regiones no fueron calculadas");
 
@@ -63,11 +67,13 @@ public class Solver {
         return copia;
     }
 
+    
     public List<Arista> getAristasDeRegiones() {
         if (aristasDeRegiones == null) throw new IllegalStateException("Las regiones no fueron calculadas");
         return new ArrayList<>(aristasDeRegiones);
     }
 
+    
     public String resultadoEnString() {
         if (regiones == null) {
             return "No se han calculado las regiones todavía.";

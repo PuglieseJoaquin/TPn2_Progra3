@@ -1,6 +1,6 @@
 package presenter;
  
-/** Convierte un peso a texto para mostrarlo: 5.0 se ve como "5", 2.5 se ve como "2.5". */
+
 final class FormatoPesoArista {
  
 	private FormatoPesoArista() {

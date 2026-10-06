@@ -31,14 +31,17 @@ public class CargarDatosPresentador {
 		this.cantidadRegiones = 0;
 	}
  
+	
 	public int getCantidadRegiones() {
 		return cantidadRegiones;
 	}
 
+	
 	public Grafo getGrafo() {
 		return grafo;
 	}
 
+	
 	public void manejarClickAgregarVertice(String nombre) {
 		String nombreLimpio = nombre.trim();
 		if (nombreLimpio.isEmpty()) {
@@ -56,14 +59,15 @@ public class CargarDatosPresentador {
 		vista.limpiarCampoVertice();
 	}
 	
+	
 	public void manejarClickAgregarVertice(String nombre, double lat, double lon) {
 		String nombreLimpio = nombre.trim();
 		if (nombreLimpio.isEmpty()) {
-		    throw new IllegalArgumentException("El nombre del vértice no puede estar vacío.");
+		    throw new IllegalArgumentException("El nombre del vertice no puede estar vacio.");
 		}
 
 		if (existeNombre(nombreLimpio)) {
-		    throw new IllegalArgumentException("Ya existe un vértice llamado \"" + nombreLimpio + "\".");
+		    throw new IllegalArgumentException("Ya existe un vertice llamado \"" + nombreLimpio + "\".");
 		}
  
 		grafo.agregarVertice(new Vertice(nombreLimpio, lat, lon));
@@ -71,6 +75,7 @@ public class CargarDatosPresentador {
 		vista.limpiarCampoVertice();
 	}
  
+	
 	public void manejarClickAgregarArista(String origen, String destino, String peso) {
 		Double pesoNumerico = convertirPeso(peso);
 		
@@ -95,6 +100,7 @@ public class CargarDatosPresentador {
 		vista.agregarArista(origen, destino, FormatoPesoArista.aTexto(pesoNumerico));
 		vista.limpiarCampoPeso();
 	}
+	
 	
 	public void manejarClickAgregarArista(String origen, String destino, String peso, Coordinate coordOrigen,
 			Coordinate coordDestino) {
@@ -130,28 +136,31 @@ public class CargarDatosPresentador {
 		vista.limpiarCampoPeso();
 	}
  
+	
 	public void manejarClickEliminarArista(String origen, String destino) {
 		grafo.eliminarArista(grafo.getVertice(origen), grafo.getVertice(destino));
 		vista.eliminarArista(origen, destino);
 	}
 	
+	
 	public void chequearSiBorrarVertices(String origen, String destino) {
 	    Vertice vOrigen = grafo.getVertice(origen);
 	    Vertice vDestino = grafo.getVertice(destino);
 
-	    if (grafo.getAristasDe(vOrigen).isEmpty()) {
+	    if (grafo.obtenerAristasDe(vOrigen).isEmpty()) {
 	        grafo.eliminarVertice(vOrigen);
 	    }
 
-	    if (grafo.getAristasDe(vDestino).isEmpty()) {
+	    if (grafo.obtenerAristasDe(vDestino).isEmpty()) {
 	        grafo.eliminarVertice(vDestino);
 	    }
 	}
  
+	
 	public void manejarClickEliminarVertice(String nombre) {
 		Vertice vertice = grafo.getVertice(nombre);
  
-		for (Arista arista : grafo.getAristasDe(vertice)) {
+		for (Arista arista : grafo.obtenerAristasDe(vertice)) {
 			vista.eliminarArista(arista.getOrigen().getNombre(), arista.getDestino().getNombre());
 		}
 
@@ -159,6 +168,7 @@ public class CargarDatosPresentador {
 		vista.eliminarVertice(nombre);
 	}
  
+	
 	public void manejarClickCalcular(int cantidadRegiones) {
 		
 		this.cantidadRegiones = cantidadRegiones;
@@ -183,6 +193,7 @@ public class CargarDatosPresentador {
 
 	}
  
+	
 	private void visualizarSolucion() {
 		PantallaResultado pantallaResultado = gestorPantallas.crearPantallaResultado();
 		ResultadoPresentador resultadoPresentador = new ResultadoPresentador(pantallaResultado, gestorPantallas, grafo, cantidadRegiones);
@@ -192,12 +203,14 @@ public class CargarDatosPresentador {
 		
 	}
 
+	
 	public void manejarClickVolverAlMenu() {
 		gestorPantallas.crearPantallaInicio();
 	}
  
+	
 	private boolean existeNombre(String nombre) {
-		for (Vertice existente : grafo.getVertices()) {
+		for (Vertice existente : grafo.obtenerVertices()) {
 			if (existente.getNombre().equalsIgnoreCase(nombre)) {
 				return true;
 			}
@@ -205,6 +218,7 @@ public class CargarDatosPresentador {
 		return false;
 	}
  
+	
 	private Double convertirPeso(String texto) {
 		try {
 			double peso = Double.parseDouble(texto.trim().replace(',', '.'));
@@ -214,6 +228,7 @@ public class CargarDatosPresentador {
 		}
 	}
 	
+	
 	public Coordinate getCoordenadaDeVertice(String nombre) {
 	    Vertice v = grafo.getVertice(nombre);
 	    if (v != null) {
@@ -222,10 +237,12 @@ public class CargarDatosPresentador {
 	    return null;
 	}
 
+	
 	public void manejarClickBtnSalir() {
 		System.exit(0);
 	}
 
+	
 	public void cargarJSON() {
 	    try {
 	        List<CiudadSeleccionada> capitales = JsonLoader.cargarCapitales("/capitales.json");

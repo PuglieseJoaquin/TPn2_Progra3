@@ -57,14 +57,18 @@ public class KruskalTest {
 		assertEquals(3, kruskal.arbolGeneradorMinimo(g).size()); 
 	}
 
+	private List<Arista> agmConPesosEmpatados() {
+	    return kruskal.arbolGeneradorMinimo(inicializarPesosEmpatados());
+	}
+
 	@Test
-	public void pesosIgualesTest() {
-		Grafo g = inicializarPesosEmpatados();
-		
-		List<Arista> agm = kruskal.arbolGeneradorMinimo(g);
-		
-		assertEquals(2, agm.size());
-		assertEquals(2.0, pesoTotal(agm), 0.0001);
+	public void pesosIgualesCantidadDeAristasTest() {
+	    assertEquals(2, agmConPesosEmpatados().size());
+	}
+
+	@Test
+	public void pesosIgualesPesoTotalTest() {
+	    assertEquals(2.0, pesoTotal(agmConPesosEmpatados()), 0.0001);
 	}
 
 	private Vertice v(String nombre) {
@@ -76,6 +80,7 @@ public class KruskalTest {
 		for (Arista a : aristas) total += a.getPeso();
 		return total;
 	}
+	
 
 	private Grafo inicializarConexo() {
 		Grafo g = new Grafo();

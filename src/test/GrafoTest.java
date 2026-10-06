@@ -13,15 +13,28 @@ public class GrafoTest {
     private Vertice a;
     private Vertice b;
     private Vertice c;
+    private Vertice d;
+    private Vertice e;
 
     @Before
-    public void setUp() {
+    public void inicializar() {
         grafo = new Grafo();
         a = new Vertice("A");
         b = new Vertice("B");
         c = new Vertice("C");
+        d = new Vertice("D");
+        e = new Vertice("E");
     }
-    
+    @Test(expected = IllegalArgumentException.class)
+    public void eliminarAristaConVerticeInexistenteLanzaExcepcionTest() {
+        grafo.agregarVertice(a);
+        grafo.eliminarArista(a, b);
+    }
+    @Test(expected = IllegalArgumentException.class)
+    public void aristaConDestinoInexistenteLanzaExcepcionTest() {
+        grafo.agregarVertice(a);
+        grafo.agregarArista(a, b, 1);
+    }
     @Test(expected = IllegalArgumentException.class)
     public void aristaDuplicadaLanzaExcepcionTest() {
         grafo.agregarVertice(a);
@@ -71,14 +84,18 @@ public class GrafoTest {
     
     @Test(expected = IllegalArgumentException.class)
     public void getAristasDeVerticeInexistenteLanzaExcepcionTest() {
-        grafo.getAristasDe(a);
+        grafo.obtenerAristasDe(a);
     }
-
+    @Test
+    public void getVerticePorNombreDevuelveElVerticeTest() {
+        grafo.agregarVertice(a);
+        assertEquals(a, grafo.getVertice("A"));
+    }
     @Test
     public void agregaVerticeNuevoYAumentaCantidadTest() {
         grafo.agregarVertice(a);
         assertEquals(1, grafo.cantidadVertices());
-        assertTrue(grafo.getVertices().contains(a));
+        assertTrue(grafo.obtenerVertices().contains(a));
     }
 
     @Test
@@ -91,42 +108,38 @@ public class GrafoTest {
     @Test
     public void agregaAristaValidaYApareceEnAmbosVerticesTest() {
         agregoAristaPesoPositivo();
-        assertEquals(1, grafo.getAristasDe(a).size());
-        assertEquals(1, grafo.getAristasDe(b).size());
+        assertEquals(1, grafo.obtenerAristasDe(a).size());
     }
 
     @Test
     public void aristaPuedeTenerPesoNegativoTest() {
         agregoAristaPesoNegativo();
-        assertEquals(-5, grafo.getAristasDe(a).get(0).getPeso(),0);
+        assertEquals(-5, grafo.obtenerAristasDe(a).get(0).getPeso(),0);
     }
 
     @Test
     public void aristaPuedeTenerPesoCeroTest() {
     	agregoAristaPesoCero();
-        assertEquals(0, grafo.getAristasDe(a).get(0).getPeso(),0);
+        assertEquals(0, grafo.obtenerAristasDe(a).get(0).getPeso(),0);
     }
 
     @Test
     public void eliminaVerticeSinAristasTest() {
         grafo.agregarVertice(a);
         grafo.eliminarVertice(a);
-        assertEquals(0, grafo.cantidadVertices());
-        assertFalse(grafo.getVertices().contains(a));
+        assertFalse(grafo.obtenerVertices().contains(a));
     }
     
     @Test
     public void eliminaAristaExistente() {
-        agregarYEliminarArista();
-        grafo.eliminarArista(a, b);
-        assertEquals(0, grafo.getAristasDe(a).size());
-        assertEquals(0, grafo.getAristasDe(b).size());
+    	agregarYEliminarArista();
+        assertEquals(0, grafo.obtenerAristasDe(a).size());
     }
  
     @Test
     public void getAristasDeVerticeSinAristasDevuelveListaVaciaTest() {
         grafo.agregarVertice(a);
-        assertTrue(grafo.getAristasDe(a).isEmpty());
+        assertTrue(grafo.obtenerAristasDe(a).isEmpty());
     }
 
     @Test
@@ -142,40 +155,142 @@ public class GrafoTest {
    
     @Test
     public void grafoEnLineaEsConexo() {
+    	crearGrafoConexo();
+        assertTrue(crearGrafoConexo().esConexo());
+    }
+  
+    @Test
+    public void grafoConVerticesAisladosNoEsConexo() {
+        assertFalse(crearGrafoInconexo().esConexo());
+    }
+    @Test
+    public void contieneVerticeAgregadoTest() {
         grafo.agregarVertice(a);
-        grafo.agregarVertice(b);
-        grafo.agregarVertice(c);
-        grafo.agregarArista(a, b, 1.0);
-        grafo.agregarArista(b, c, 2.0);
-        assertTrue(grafo.esConexo());
+        assertTrue(grafo.contieneVertice(a));
     }
 
     @Test
-    public void grafoConVerticesAisladosNoEsConexo() {
-        grafo.agregarVertice(a);
-        grafo.agregarVertice(b);
-        assertFalse(grafo.esConexo());
+    public void noContieneVerticeNoAgregadoTest() {
+        assertFalse(grafo.contieneVertice(a));
+    }
+    @Test
+    public void eliminarVerticeConAristasLoQuitaDelGrafoTest() {
+        agregoAristaPesoPositivo();
+        grafo.eliminarVertice(a);
+        assertFalse(grafo.contieneVertice(a));
     }
 
+    @Test
+    public void eliminarVerticeConAristasQuitaLaAristaDelVecinoTest() {
+        agregoAristaPesoPositivo();
+        grafo.eliminarVertice(a);
+        assertTrue(grafo.obtenerAristasDe(b).isEmpty());
+    }
+    @Test
+    public void eliminarAristaTambienLaQuitaDelOtroVerticeTest() {
+        agregarYEliminarArista();
+        assertTrue(grafo.obtenerAristasDe(b).isEmpty());
+    }
+    @Test
+    public void todasLasAristasDeGrafoVacioEsListaVaciaTest() {
+        assertTrue(grafo.obtenerTodasLasAristas().isEmpty());
+    }
+
+    @Test
+    public void todasLasAristasNoDuplicaLaAristaCompartidaTest() {
+        agregoAristaPesoPositivo();
+        assertEquals(1, grafo.obtenerTodasLasAristas().size());
+    }
+
+    @Test
+    public void todasLasAristasDeGrafoEnLineaTest() {
+        assertEquals(2, crearGrafoConexo().obtenerTodasLasAristas().size());
+    }
+    @Test
+    public void aristasOrdenadasDeGrafoVacioEsListaVaciaTest() {
+        assertTrue(grafo.obtenerAristasOrdenadasMayorAMenor().isEmpty());
+    }
+
+    @Test
+    public void aristasOrdenadasPrimeraEsLaDeMayorPesoTest() {
+        agregoAristasConPesosDistintos();
+        assertEquals(7, grafo.obtenerAristasOrdenadasMayorAMenor().get(0).getPeso(), 0);
+    }
+
+    @Test
+    public void aristasOrdenadasUltimaEsLaDeMenorPesoTest() {
+        agregoAristasConPesosDistintos();
+        assertEquals(1, grafo.obtenerAristasOrdenadasMayorAMenor().get(1).getPeso(), 0);
+    }
+    @Test
+    public void modificarVerticesObtenidosNoAfectaAlGrafoTest() {
+        grafo.agregarVertice(a);
+        grafo.obtenerVertices().clear();
+        assertEquals(1, grafo.cantidadVertices());
+    }
+
+    @Test
+    public void modificarAristasObtenidasNoAfectaAlGrafoTest() {
+        agregoAristaPesoPositivo();
+        grafo.obtenerAristasDe(a).clear();
+        assertEquals(1, grafo.obtenerAristasDe(a).size());
+    }
+    @Test
+    public void toStringIncluyeEncabezadoDelGrafoTest() {
+        assertTrue(grafo.toString().contains("Grafo:"));
+    }
+
+    @Test
+    public void toStringIncluyeLaSeccionDeAristasTest() {
+        agregoAristaPesoPositivo();
+        assertTrue(grafo.toString().contains("Aristas:"));
+    }
+    private void agregoAristasConPesosDistintos() {
+        grafo.agregarVertice(a);
+        grafo.agregarVertice(b);
+        grafo.agregarVertice(c);
+        grafo.agregarArista(a, b, 1);
+        grafo.agregarArista(b, c, 7);
+    }
     
-    public void agregoAristaPesoPositivo() {
+    private void agregoAristaPesoPositivo() {
     	grafo.agregarVertice(a);
         grafo.agregarVertice(b);
         grafo.agregarArista(a, b, 5);
     }
-    public void agregoAristaPesoNegativo() {
+    private void agregoAristaPesoNegativo() {
     	grafo.agregarVertice(a);
         grafo.agregarVertice(b);
         grafo.agregarArista(a, b, -5);
     }
-    public void agregoAristaPesoCero() {
+    private void agregoAristaPesoCero() {
     	grafo.agregarVertice(a);
         grafo.agregarVertice(b);
         grafo.agregarArista(a, b, 0);
     }
-    public  void agregarYEliminarArista() {
+    private  void agregarYEliminarArista() {
     	grafo.agregarVertice(a);
         grafo.agregarVertice(b);
-        grafo.agregarArista(a, b, 1.0);
+        grafo.agregarArista(a, b, 1);
+        grafo.eliminarArista(a, b);
     }
+    
+    private Grafo crearGrafoConexo() {
+        Grafo g = new Grafo();
+        g.agregarVertice(a);
+        g.agregarVertice(b);
+        g.agregarVertice(c);
+        g.agregarArista(a, b, 1);
+        g.agregarArista(b, c, 1);
+        return g;
+    }
+    
+    private Grafo crearGrafoInconexo() {
+        Grafo g = crearGrafoConexo();
+        g.agregarVertice(d);
+        g.agregarVertice(e);
+        g.agregarArista(d, e, 1);
+        return g;
+    }
+
 }

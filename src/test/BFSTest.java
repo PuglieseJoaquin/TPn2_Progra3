@@ -29,10 +29,7 @@ public class BFSTest{
     
     @Test(expected = IllegalArgumentException.class)
     public void origenQueNoPerteneceAlGrafoLanzaExcepcionTest() {
-        Grafo g = new Grafo();
-        g.agregarVertice(a);
-        
-        BFS.verticesAlcanzablesDesde(g, b);
+        BFS.verticesAlcanzablesDesde(unVertice(), b);
     }
 
     @Test(expected = NullPointerException.class)
@@ -47,80 +44,49 @@ public class BFSTest{
 
     @Test
     public void unVerticeAisladoSeAlcanzaASiMismoTest() {
-        Grafo g = new Grafo();
-        g.agregarVertice(a);
-
-        Set<Vertice> alcanzables = BFS.verticesAlcanzablesDesde(g, a);
-
+        Set<Vertice> alcanzables = BFS.verticesAlcanzablesDesde(unVertice(), a);
         assertEquals(1, alcanzables.size());
     }
 
     @Test
     public void unVerticeAisladoContieneAlOrigenTest() {
-        Grafo g = new Grafo();
-        g.agregarVertice(a);
-
-        Set<Vertice> alcanzables = BFS.verticesAlcanzablesDesde(g, a);
-
+        Set<Vertice> alcanzables = BFS.verticesAlcanzablesDesde(unVertice(), a);
         assertTrue(alcanzables.contains(a));
     }
 
     @Test
     public void dosVerticesAisladosNoSeAlcanzanElUnoAlOtroTest() {
-        Grafo g = new Grafo();
-        g.agregarVertice(a);
-        g.agregarVertice(b);
-
-        Set<Vertice> alcanzables = BFS.verticesAlcanzablesDesde(g, a);
-
+        Set<Vertice> alcanzables = BFS.verticesAlcanzablesDesde(grafoAislado(), a);
         assertFalse(alcanzables.contains(b));
     }
 
     @Test
     public void dosVerticesConectadosAlcanzanAlVecinoTest() {
-        Grafo g = new Grafo();
-        g.agregarVertice(a);
-        g.agregarVertice(b);
-        g.agregarArista(a, b, 1);
-
-        Set<Vertice> alcanzables = BFS.verticesAlcanzablesDesde(g, a);
-
+        Set<Vertice> alcanzables = BFS.verticesAlcanzablesDesde(grafoconectado(), a);
         assertTrue(alcanzables.contains(b));
     }
 
     @Test
     public void grafoConexoCantidadDeAlcanzablesEsCorrectaTest() {
-        Grafo g = crearGrafoConexo();
-
-        Set<Vertice> alcanzables = BFS.verticesAlcanzablesDesde(g, a);
-
+        Set<Vertice> alcanzables = BFS.verticesAlcanzablesDesde(crearGrafoConexo(), a);
         assertEquals(3, alcanzables.size());
     }
 
     @Test
     public void grafoInconexoNoAlcanzaComponenteAjenaTest() {
-        Grafo g = crearGrafoInconexo();
-
-        Set<Vertice> alcanzables = BFS.verticesAlcanzablesDesde(g, a);
-
+        Set<Vertice> alcanzables = BFS.verticesAlcanzablesDesde(crearGrafoInconexo(), a);
         assertFalse(alcanzables.contains(d));
     }
 
     @Test
     public void grafoConexoTieneUnaSolaSeccionTest() {
-        Grafo g = crearGrafoConexo();
-
-        List<Set<Vertice>> secciones = BFS.obtenerSeccionesConexas(g);
-
+        List<Set<Vertice>> secciones = BFS.obtenerSeccionesConexas(crearGrafoConexo());
         assertEquals(1, secciones.size());
     }
 
     @Test
     public void grafoInconexoTieneDosSeccionesTest() {
-        Grafo g = crearGrafoInconexo();
-
-        List<Set<Vertice>> secciones = BFS.obtenerSeccionesConexas(g);
-
+        List<Set<Vertice>> secciones = BFS.obtenerSeccionesConexas(crearGrafoInconexo());
         assertEquals(2, secciones.size());
     }
 
@@ -141,5 +107,28 @@ public class BFSTest{
         g.agregarVertice(e);
         g.agregarArista(d, e, 1);
         return g;
+    }
+    
+    private Grafo grafoAislado() {
+   	    Grafo g = new Grafo();
+   	    g.agregarVertice(a);
+   	    g.agregarVertice(b);
+		return g;
+    
+    }
+    
+    private Grafo unVertice() {
+    	Grafo g = new Grafo();
+        g.agregarVertice(a);
+        return g;
+    }
+    
+    private Grafo grafoconectado() {
+    	Grafo g = new Grafo();
+   	    g.agregarVertice(a);
+   	    g.agregarVertice(b);
+   	    g.agregarArista(a, b, 1);
+		return g;
+    	
     }
 }

@@ -90,12 +90,29 @@ public class CargarDatosPresentador {
 		}
  
 		try {
-			grafo.agregarArista(grafo.getVertice(origen), grafo.getVertice(destino), pesoNumerico);
-			vista.dibujarConexion(origen, destino);
-		} catch (IllegalArgumentException e) {
-			vista.mostrarMensajeError(e.getMessage());
-			return;
-		}
+	        Vertice vOrigen;
+	        try {
+	            vOrigen = grafo.getVertice(origen);
+	        } catch (IllegalArgumentException e) {
+	            vOrigen = new Vertice(origen);
+	            grafo.agregarVertice(vOrigen);
+	        }
+	    
+	        Vertice vDestino;
+	        try {
+	            vDestino = grafo.getVertice(destino);
+	        } catch (IllegalArgumentException e) {
+	            vDestino = new Vertice(destino);
+	            grafo.agregarVertice(vDestino);
+	        }
+	        
+	        grafo.agregarArista(vOrigen, vDestino, pesoNumerico);
+	        vista.dibujarConexion(origen, destino);
+	        
+	    } catch (IllegalArgumentException e) {
+	        vista.mostrarMensajeError(e.getMessage());
+	        return;
+	    }
  
 		vista.agregarArista(origen, destino, FormatoPesoArista.aTexto(pesoNumerico));
 		vista.limpiarCampoPeso();
@@ -111,17 +128,20 @@ public class CargarDatosPresentador {
 			return;
 		}
 		
-	    if (grafo.getVertice(origen) == null) {
-	    	double lat = coordOrigen.getLat();
-	    	double lon = coordOrigen.getLon();
-	    	grafo.agregarVertice(new Vertice(origen, lat, lon));
-	    	
+	    try {
+	        grafo.getVertice(origen);
+	    } catch (IllegalArgumentException e) {
+	        double lat = coordOrigen.getLat();
+	        double lon = coordOrigen.getLon();
+	        grafo.agregarVertice(new Vertice(origen, lat, lon));
 	    }
 	    
-	    if (grafo.getVertice(destino) == null) {
-	    	double lat = coordDestino.getLat();
-	    	double lon = coordDestino.getLon();
-	    	grafo.agregarVertice(new Vertice(destino, lat, lon));
+	    try {
+	        grafo.getVertice(destino);
+	    } catch (IllegalArgumentException e) {
+	        double lat = coordDestino.getLat();
+	        double lon = coordDestino.getLon();
+	        grafo.agregarVertice(new Vertice(destino, lat, lon));
 	    }
 
 		try {

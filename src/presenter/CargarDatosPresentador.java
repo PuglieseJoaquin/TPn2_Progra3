@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.openstreetmap.gui.jmapviewer.Coordinate;
-
 import datos.JsonLoader;
 import modelo.Arista;
 import modelo.CiudadSeleccionada;
@@ -22,7 +20,7 @@ public class CargarDatosPresentador {
 	private GestorPantallas gestorPantallas;
 	private Grafo grafo;
 	private int cantidadRegiones;
-    private List<CiudadSeleccionada> capitales;
+    
  
 	public CargarDatosPresentador(CargarDatosVista vista, GestorPantallas gestorPantallas) {
 		this.vista = vista;

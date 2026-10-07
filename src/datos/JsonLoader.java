@@ -1,8 +1,6 @@
 package datos;
 
 import com.google.gson.Gson;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.List;

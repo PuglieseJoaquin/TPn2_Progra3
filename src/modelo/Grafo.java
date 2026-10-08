@@ -10,33 +10,26 @@ import java.util.Set;
 
 
 public class Grafo {
-
-    private final Map<Vertice, List<Arista>> mapaDeListaDeVecinos;
+    private Map<Vertice, List<Arista>> mapaDeListaDeVecinos;
 
     public Grafo() {
         this.mapaDeListaDeVecinos = new HashMap<>();
     }
-
     
-    public void agregarVertice(Vertice v) {
-    	
+    public void agregarVertice(Vertice v) {  	
     		if(!mapaDeListaDeVecinos.containsKey(v)) 
     		mapaDeListaDeVecinos.put(v, new ArrayList<>());    
     }
-
     
     public void agregarArista(Vertice origen, Vertice destino, double peso) {
-    	
     	 	if (validarArista(origen, destino)) {
     	 		Arista arista = new Arista(origen, destino, peso);
     	 		mapaDeListaDeVecinos.get(origen).add(arista);
     	 		mapaDeListaDeVecinos.get(destino).add(arista);
     	 	}
-    }
-    
+    }    
     
     private boolean validarArista(Vertice origen, Vertice destino) {
-    	
 		if (!mapaDeListaDeVecinos.containsKey(origen) || !mapaDeListaDeVecinos.containsKey(destino))
 			throw new IllegalArgumentException("Ambos vertices deben existir en el grafo antes de agregar la arista.");
    
@@ -47,13 +40,11 @@ public class Grafo {
 		 throw new IllegalArgumentException("Ya existe una arista entre estos dos vertices.");
 			
 		else {return true;}
-    }
-    
+    }    
     
     public boolean contieneVertice(Vertice v) {
         return mapaDeListaDeVecinos.containsKey(v);
-    }
-    
+    }    
     
     public void eliminarVertice(Vertice v) {
         if (!mapaDeListaDeVecinos.containsKey(v))
@@ -63,8 +54,7 @@ public class Grafo {
             mapaDeListaDeVecinos.get(arista.obtenerOpuesto(v)).remove(arista);
         }
         mapaDeListaDeVecinos.remove(v);
-    }
-    
+    }    
     
     public Vertice getVertice(String nombre) {
         for (Vertice v : mapaDeListaDeVecinos.keySet()) {
@@ -73,13 +63,11 @@ public class Grafo {
             }
         }
         throw new IllegalArgumentException("No existe un vertice con el nombre: " + nombre);
-    }
-    
+    }    
     
     public Set<Vertice> obtenerVertices() {
     		return new HashSet<>(mapaDeListaDeVecinos.keySet());
     }
-
     
     public List<Arista> obtenerAristasDe(Vertice v) {
         if (!mapaDeListaDeVecinos.containsKey(v)) {
@@ -88,34 +76,28 @@ public class Grafo {
         return new ArrayList<>(mapaDeListaDeVecinos.get(v));
     }
     
-    
     public List<Arista> obtenerTodasLasAristas() {
         Set<Arista> aristasUnicas = new HashSet<>();
         for (List<Arista> aristasDeUnVertice : mapaDeListaDeVecinos.values()) {
             aristasUnicas.addAll(aristasDeUnVertice);
         }
         return new ArrayList<>(aristasUnicas);
-    }
-   
+    }  
     
     public int cantidadVertices() {
         return mapaDeListaDeVecinos.size();
     }
-
     
     public boolean esConexo() {
         if (mapaDeListaDeVecinos.isEmpty())
             return true;
         
-        Vertice origen = mapaDeListaDeVecinos.keySet().iterator().next();
-        
+        Vertice origen = mapaDeListaDeVecinos.keySet().iterator().next();   
         int tamanioVerticesConectados = BFS.verticesAlcanzablesDesde(this, origen).size();
         
-        
-       return tamanioVerticesConectados == cantidadVertices();
+        return tamanioVerticesConectados == cantidadVertices();
     }
 
-    
     public void eliminarArista(Vertice a, Vertice b) {
         if (!mapaDeListaDeVecinos.containsKey(a) || !mapaDeListaDeVecinos.containsKey(b)) {
             throw new IllegalArgumentException("Ambos vértices deben existir en el grafo");
@@ -127,8 +109,7 @@ public class Grafo {
         mapaDeListaDeVecinos.get(a).remove(arista);
         mapaDeListaDeVecinos.get(b).remove(arista);
     }
-    
-    
+        
     private Arista buscarArista(Vertice a, Vertice b) {
         for (Arista arista : mapaDeListaDeVecinos.get(a)) {
             if (arista.obtenerOpuesto(a).equals(b)) {
@@ -137,15 +118,13 @@ public class Grafo {
         }
         return null;
     }
-    
-    
+        
     public List<Arista> obtenerAristasOrdenadasMayorAMenor() {
-        List<Arista> ordenadas = new ArrayList<>(obtenerTodasLasAristas());
-        Collections.sort(ordenadas, Collections.reverseOrder());
-        return ordenadas;
+		List<Arista> ordenadas = new ArrayList<>(obtenerTodasLasAristas());
+		Collections.sort(ordenadas, Collections.reverseOrder());
+		return ordenadas;
     }
-    
-    
+        
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -161,6 +140,5 @@ public class Grafo {
         }
 
         return sb.toString();
-    }
-    
+    }    
 }

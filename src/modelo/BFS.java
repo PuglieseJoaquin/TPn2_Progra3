@@ -10,12 +10,10 @@ import java.util.Set;
 public class BFS {
 	
     public static Set<Vertice> verticesAlcanzablesDesde(Grafo grafo, Vertice origen) {
-    	if (grafo == null) {
-            throw new NullPointerException("El grafo no puede ser null.");
-        }
-        if (origen == null || !grafo.contieneVertice(origen)) {
-            throw new IllegalArgumentException("El vertice origen no pertenece al grafo.");
-        }
+    	if (grafo == null)
+    		throw new NullPointerException("El grafo no puede ser null.");
+        if (origen == null || !grafo.contieneVertice(origen))
+        	throw new IllegalArgumentException("El vertice origen no pertenece al grafo.");
     	
     	Set<Vertice> visitados = new HashSet<>();
         Queue<Vertice> porVisitar = new LinkedList<>();
@@ -29,7 +27,6 @@ public class BFS {
         }
         return visitados;
     }
-
     
 	private static void agregarVecinosPendientes(Grafo grafo, Vertice actual, Set<Vertice> visitados, Queue<Vertice> porVisitar) {
 		
@@ -43,7 +40,6 @@ public class BFS {
 		}
 	}
 	
-	
 	public static List<Set<Vertice>> obtenerSeccionesConexas(Grafo grafo) {
 	        List<Set<Vertice>> componentes = new ArrayList<>();
 	        Set<Vertice> noVisitados = new HashSet<>(grafo.obtenerVertices());
@@ -56,8 +52,7 @@ public class BFS {
 	            noVisitados.removeAll(componente);
 	        }
 	        return componentes;    
-	}
-	
+	}	
 	
 	public static String componentesToString(List<Set<Vertice>> componentes) {
 	    StringBuilder sb = new StringBuilder();

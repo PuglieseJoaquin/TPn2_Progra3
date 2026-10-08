@@ -1,13 +1,14 @@
 package vista;
 
-import presenter.CargarDatosPresentador;
-
 import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import presenter.CargarDatosPresentador;
+import presenter.TipoPantallaDeCarga;
 
 public class PantallaCargarDatosManual extends VistaBaseCompartida implements CargarDatosVista {
 
@@ -23,11 +24,14 @@ public class PantallaCargarDatosManual extends VistaBaseCompartida implements Ca
 	private JComboBox<String> comboOrigen, comboDestino;
 	private JSpinner spinnerRegiones;
 	
+	private TipoPantallaDeCarga origenDeDatos;
+	
 	private static final String eliminar = "X";
 
-	public PantallaCargarDatosManual(GestorPantallas gestorPantallas) {
-		cargarDatosPresentador = new CargarDatosPresentador(this, gestorPantallas);
-
+	public PantallaCargarDatosManual(InterfazGestorPantalla gestorInterfaz) {
+		cargarDatosPresentador = new CargarDatosPresentador(this, gestorInterfaz);
+		origenDeDatos = TipoPantallaDeCarga.MANUAL;
+		
 		configurarPantalla();
 		crearLblTitulo();
 		crearLblNombreVertice();
@@ -69,8 +73,6 @@ public class PantallaCargarDatosManual extends VistaBaseCompartida implements Ca
 		lblTitulo.setBounds(50, 20, 800, 35);
 		panelFondo.add(lblTitulo);
 	}
-
-	// ---------------------------- VÉRTICES ----------------------------
 
 	private void crearLblNombreVertice() {
 		lblNombreVertice = new JLabel("1. NOMBRE DEL VÉRTICE (PROVINCIA):");
@@ -135,8 +137,6 @@ public class PantallaCargarDatosManual extends VistaBaseCompartida implements Ca
 		});
 		agregarCursorManoSobreCruz(tablaVertices);
 	}
-
-	// ----------------------------- ARISTAS -----------------------------
 
 	private void crearLblOrigen() {
 		lblOrigen = new JLabel("2. ORIGEN:");
@@ -236,8 +236,6 @@ public class PantallaCargarDatosManual extends VistaBaseCompartida implements Ca
 		agregarCursorManoSobreCruz(tablaAristas);
 	}
 
-	// -------------------------- PARTE INFERIOR --------------------------
-
 	private void crearLblRegiones() {
 		lblRegiones = new JLabel("3. CANTIDAD DE REGIONES:");
 		estiloEtiqueta(lblRegiones);
@@ -291,12 +289,10 @@ public class PantallaCargarDatosManual extends VistaBaseCompartida implements Ca
 		btnCalcular.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int cantidadRegiones = (Integer) spinnerRegiones.getValue();
-				cargarDatosPresentador.manejarClickCalcular(cantidadRegiones);
+				cargarDatosPresentador.manejarClickCalcular(cantidadRegiones, origenDeDatos);
 			}
 		});
 	}
-
-	// ------------------------- ESTILOS REUTILIZADOS -------------------------
 
 	private DefaultTableModel crearModeloNoEditable(String[] columnas) {
 		return new DefaultTableModel(columnas, 0) {
@@ -319,7 +315,6 @@ public class PantallaCargarDatosManual extends VistaBaseCompartida implements Ca
 		tabla.getTableHeader().setForeground(new Color(248, 250, 252));
 	}
 
-	/** La última columna de la tabla es la de la cruz: angosta, roja y centrada. */
 	private void configurarColumnaEliminar(JTable tabla) {
 		DefaultTableCellRenderer render = new DefaultTableCellRenderer();
 		render.setHorizontalAlignment(SwingConstants.CENTER);
@@ -384,12 +379,12 @@ public class PantallaCargarDatosManual extends VistaBaseCompartida implements Ca
 
 	private void agregarListenerBtnSalir() {
 		btnSalir.addActionListener(new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	            System.exit(0);
-	        }
+			public void actionPerformed(ActionEvent e) {
+				cargarDatosPresentador.manejarClickBtnSalir();
+			}
 	    });
 	}
-
+    
 	@Override
 	public void agregarVertice(String nombre) {
 		modeloVertices.addRow(new Object[] { nombre, eliminar });

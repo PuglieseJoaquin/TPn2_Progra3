@@ -1,6 +1,8 @@
 package principal;
+
 import javax.swing.UIManager;
 
+import vista.InterfazGestorPantalla;
 import vista.GestorPantallas;
 
 public class Principal {
@@ -12,7 +14,7 @@ public class Principal {
             System.out.println("No se pudo cargar el LookAndFeel: " + e);
         }
 
-        GestorPantallas gestorPantallas = new GestorPantallas();
-        gestorPantallas.crearPantallaInicio();
+        InterfazGestorPantalla gestorInterfaz = new GestorPantallas();
+        gestorInterfaz.crearPantallaInicio();
     }
 }

@@ -20,16 +20,11 @@ public class PantallaInicio extends JFrame {
 
 	private BienvenidaPresentador bienvenidaPresentador;
 	private JPanel panelFondo;
-	private JLabel lblTitulo;
-	private JLabel lblSubtitulo;
-	private JLabel lblImagen;
-	private JButton btnCargaManual;
-	private JButton btnCargaAutomatica;
-	private JButton btnCargaMapa;
-	private JButton btnSalir;
+	private JLabel lblTitulo,lblSubtitulo, lblImagen;
+	private JButton btnCargaManual, btnCargaAutomatica, btnCargaMapa, btnSalir;
 
-	public PantallaInicio(GestorPantallas gestorPantallas) {
-		bienvenidaPresentador = new BienvenidaPresentador(gestorPantallas);
+	public PantallaInicio(InterfazGestorPantalla gestorInterfaz) {
+		bienvenidaPresentador = new BienvenidaPresentador(gestorInterfaz);
 
 		configurarPantalla();
 		crearLblTitulo();
@@ -94,7 +89,7 @@ public class PantallaInicio extends JFrame {
 	}
 
 	private void crearBtnCargaAutomatica() {
-		btnCargaAutomatica = new JButton("Carga automática (archivo)");
+		btnCargaAutomatica = new JButton("Carga automática Argentina");
 		btnCargaAutomatica.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		btnCargaAutomatica.setForeground(Color.WHITE);
 		btnCargaAutomatica.setBackground(new Color(37, 99, 235));

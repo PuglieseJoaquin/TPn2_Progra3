@@ -1,7 +1,5 @@
 package vista;
 
-import presenter.CargarDatosPresentador;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
@@ -11,6 +9,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import org.openstreetmap.gui.jmapviewer.*;
+
+import presenter.CargarDatosPresentador;
+import presenter.TipoPantallaDeCarga;
 
 public class PantallaCargarDatosDesdeMapa extends VistaBaseCompartida implements CargarDatosVista {
 
@@ -26,14 +27,17 @@ public class PantallaCargarDatosDesdeMapa extends VistaBaseCompartida implements
     private JSpinner spinnerRegiones;
     private JMapViewer mapa;
     
+	private TipoPantallaDeCarga origenDeDatos;
+    
     private Map<String, MapPolygonImpl> lineas = new HashMap<>();
     private Map<String, MapMarkerDot> marcadores = new HashMap<>();
     
     private static final String eliminar = "X";
 
-    public PantallaCargarDatosDesdeMapa(GestorPantallas gestorPantallas) {
-        cargarDatosPresentador = new CargarDatosPresentador(this, gestorPantallas);
-        
+    public PantallaCargarDatosDesdeMapa(InterfazGestorPantalla gestorInterfaz) {
+        cargarDatosPresentador = new CargarDatosPresentador(this, gestorInterfaz);
+		origenDeDatos = TipoPantallaDeCarga.MAPA;
+		
         configurarPantalla();
         crearLblTitulo();
         crearMapa();
@@ -85,76 +89,67 @@ public class PantallaCargarDatosDesdeMapa extends VistaBaseCompartida implements
 
 	private void agregarListenerMapaMouse() {
 		mapa.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (e.getButton() == MouseEvent.BUTTON1) {
-                    Coordinate coord = new Coordinate(
-                            mapa.getPosition(e.getPoint()).getLat(),
-                            mapa.getPosition(e.getPoint()).getLon()
-                        );
-                    
-                    chequearEventoSobreVerticeExistente(e, coord);                  
-                }
-            }
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON1) {
+					Coordinate coord = new Coordinate(mapa.getPosition(e.getPoint()).getLat(),
+							mapa.getPosition(e.getPoint()).getLon());
+
+					chequearEventoSobreVerticeExistente(e, coord);
+				}
+			}
 
 			private void chequearEventoSobreVerticeExistente(MouseEvent e, Coordinate coord) {
 				for (Map.Entry<String, MapMarkerDot> entry : marcadores.entrySet()) {
-				    MapMarkerDot marker = entry.getValue();
-				    Point markerPoint = mapa.getMapPosition(marker.getCoordinate(), false);
+					MapMarkerDot marker = entry.getValue();
+					Point markerPoint = mapa.getMapPosition(marker.getCoordinate(), false);
 
-				    if (markerPoint != null && markerPoint.distance(e.getPoint()) < 20) {
-				        int opcion = JOptionPane.showConfirmDialog(
-				            null,
-				            "¿Eliminar vértice " + entry.getKey() + "?",
-				            "Confirmar eliminación",
-				            JOptionPane.YES_NO_OPTION
-				        );
-				        if (opcion == JOptionPane.YES_OPTION) {
-				            marker = marcadores.get(entry.getKey());
-				            if (marker != null) {
-				                mapa.removeMapMarker(marker);
-				                marcadores.remove(entry.getKey());
-				            }
-				            cargarDatosPresentador.manejarClickEliminarVertice(entry.getKey());
-				            dibujarMarcadores();
-				            return;
-				        }
-				        else {
-		                    return;
-				        }
-				    }			   
+					if (markerPoint != null && markerPoint.distance(e.getPoint()) < 20) {
+						int opcion = JOptionPane.showConfirmDialog(null, "¿Eliminar vértice " + entry.getKey() + "?",
+								"Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+						if (opcion == JOptionPane.YES_OPTION) {
+							marker = marcadores.get(entry.getKey());
+							if (marker != null) {
+								mapa.removeMapMarker(marker);
+								marcadores.remove(entry.getKey());
+							}
+							cargarDatosPresentador.manejarClickEliminarVertice(entry.getKey());
+							dibujarMarcadores();
+							return;
+						} else {
+							return;
+						}
+					}
 				}
 				resolverEventoSobreLugarNuevo(coord);
 			}
-        });
+		});
 	}
-	
+
 	private void resolverEventoSobreLugarNuevo(Coordinate coord) {
 		String nombre = JOptionPane.showInputDialog("Nombre de la provincia:");
-		if (nombre != null && !nombre.trim().isEmpty()) {
-		    
-		    double verticeLat = coord.getLat();
-		    double verticeLon = coord.getLon();
-		    
-		    try {
-		    	
-		        MapMarkerDot nuevo = new MapMarkerDot(nombre, coord);
-		                                  
-		        cargarDatosPresentador.manejarClickAgregarVertice(nombre, verticeLat, verticeLon);
-		        
-		        mapa.addMapMarker(nuevo);
-		        mapa.addMapMarker(new MapMarkerDot(nombre, coord));
-		        marcadores.put(nombre, nuevo);
-		        dibujarMarcadores();
+		if (nombre != null && !nombre.trim().isEmpty() && !marcadores.containsKey(nombre)) {
 
-		    } catch (IllegalArgumentException ex) {
-		        JOptionPane.showMessageDialog(
-		            null,
-		            ex.getMessage(),
-		            "Error al crear vértice",
-		            JOptionPane.ERROR_MESSAGE
-		        );
-		    }
+			double verticeLat = coord.getLat();
+			double verticeLon = coord.getLon();
+
+			try {
+
+				MapMarkerDot nuevo = new MapMarkerDot(nombre, coord);
+
+				cargarDatosPresentador.manejarClickAgregarVertice(nombre, verticeLat, verticeLon);
+
+				mapa.addMapMarker(nuevo);
+				mapa.addMapMarker(new MapMarkerDot(nombre, coord));
+				marcadores.put(nombre, nuevo);
+				dibujarMarcadores();
+
+			} catch (IllegalArgumentException ex) {
+				JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al crear vértice",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Ya existe vertice " + nombre, nombre, JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -341,7 +336,7 @@ public class PantallaCargarDatosDesdeMapa extends VistaBaseCompartida implements
 	private void agregarListenerBtnCalcular() {
 		btnCalcular.addActionListener(e -> {
             int cantidadRegiones = (Integer) spinnerRegiones.getValue();
-            cargarDatosPresentador.manejarClickCalcular(cantidadRegiones);
+            cargarDatosPresentador.manejarClickCalcular(cantidadRegiones, origenDeDatos);
         });
 	}
 
@@ -451,8 +446,8 @@ public class PantallaCargarDatosDesdeMapa extends VistaBaseCompartida implements
     
     @Override
     public void dibujarConexion(String origen, String destino) {
-        Coordinate coordOrigen = cargarDatosPresentador.getCoordenadaDeVertice(origen);
-        Coordinate coordDestino = cargarDatosPresentador.getCoordenadaDeVertice(destino);
+        Coordinate coordOrigen = new Coordinate(cargarDatosPresentador.getLatDeVertice(origen), cargarDatosPresentador.getLonDeVertice(origen));
+        Coordinate coordDestino = new Coordinate(cargarDatosPresentador.getLatDeVertice(destino), cargarDatosPresentador.getLonDeVertice(destino));
 
         if (coordOrigen != null && coordDestino != null) {
             java.util.List<Coordinate> coords = Arrays.asList(

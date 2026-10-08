@@ -3,8 +3,6 @@ package vista;
 import java.util.List;
 import java.util.Map;
 
-import org.openstreetmap.gui.jmapviewer.Coordinate;
-
 public interface CargarDatosVista {
 	void agregarVertice(String nombre);
  
@@ -22,5 +20,5 @@ public interface CargarDatosVista {
 
 	void dibujarConexion(String origen, String destino);
 
-	void cargarCapitales(List<String> nombres, Map<String, Coordinate> coords);
+	void cargarCapitales(List<String> nombres, Map<String, double[]> coords);
 }

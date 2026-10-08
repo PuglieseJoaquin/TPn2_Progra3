@@ -14,29 +14,32 @@ public class Solver {
     public void calcularAGM(Grafo grafoOriginal) {
     	
         Kruskal kruskal = new Kruskal();
-        this.aristasAGM = kruskal.arbolGeneradorMinimo(grafoOriginal);
         this.vertices = grafoOriginal.obtenerVertices();
+        this.aristasAGM = kruskal.arbolGeneradorMinimo(grafoOriginal);
         this.aristasDeRegiones = null;
         this.regiones = null;
     }
-
     
     public void dividirEnRegiones(int cantidadPartes) {
         if (aristasAGM == null) throw new IllegalStateException("AGM no calculado");
         validarCantidadPartes(cantidadPartes);
 
         Grafo arbol = crearGrafoDesdeAristas(aristasAGM);
-        List<Arista> ordenadas = arbol.obtenerAristasOrdenadasMayorAMenor();
-
-        for (int i = 0; i < cantidadPartes - 1; i++) {
-            Arista masPesada = ordenadas.get(i);
-            arbol.eliminarArista(masPesada.getOrigen(), masPesada.getDestino());
-        }
+        
+        crearRegiones(cantidadPartes, arbol);
 
         regiones = BFS.obtenerSeccionesConexas(arbol);
         aristasDeRegiones = arbol.obtenerTodasLasAristas();
     }
 
+	private void crearRegiones(int cantidadPartes, Grafo arbol) {
+		List<Arista> ordenadas = arbol.obtenerAristasOrdenadasMayorAMenor();
+
+        for (int i = 0; i < cantidadPartes - 1; i++) {
+            Arista masPesada = ordenadas.get(i);
+            arbol.eliminarArista(masPesada.getOrigen(), masPesada.getDestino());
+        }
+	}
     
     private void validarCantidadPartes(int cantidadPartes) {
         if (cantidadPartes < 1 || cantidadPartes > vertices.size())
@@ -44,19 +47,18 @@ public class Solver {
                     "La cantidad de regiones debe estar entre 1 y " + vertices.size() + ".");
     }
 
-    
     private Grafo crearGrafoDesdeAristas(List<Arista> aristas) {
         Grafo grafo = new Grafo();
         for (Vertice v : vertices) {
             grafo.agregarVertice(v);
         }
+        
         for (Arista a : aristas) {
             grafo.agregarArista(a.getOrigen(), a.getDestino(), a.getPeso());
         }
         return grafo;
     }
-
-    
+   
     public List<Set<Vertice>> getRegiones() {
         if (regiones == null) throw new IllegalStateException("Las regiones no fueron calculadas");
 
@@ -66,13 +68,11 @@ public class Solver {
         }
         return copia;
     }
-
     
     public List<Arista> getAristasDeRegiones() {
         if (aristasDeRegiones == null) throw new IllegalStateException("Las regiones no fueron calculadas");
         return new ArrayList<>(aristasDeRegiones);
     }
-
     
     public String resultadoEnString() {
         if (regiones == null) {

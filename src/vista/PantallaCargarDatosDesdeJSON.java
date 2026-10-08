@@ -1,7 +1,5 @@
 package vista;
 
-import presenter.CargarDatosPresentador;
-
 import org.openstreetmap.gui.jmapviewer.*;
 
 import java.awt.Color;
@@ -14,6 +12,9 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import presenter.CargarDatosPresentador;
+import presenter.TipoPantallaDeCarga;
 
 public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements CargarDatosVista{
 
@@ -29,12 +30,14 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
     private JTable tablaAristas;
     private JMapViewer mapa;
     
+	private TipoPantallaDeCarga origenDeDatos;
+    
     private Map<String, MapPolygonImpl> lineas = new HashMap<>();
     private Map<String, Coordinate> coordsGuardadas = new HashMap<>();
     
 	private static final String eliminar = "X";
 
-    public PantallaCargarDatosDesdeJSON(GestorPantallas gestorPantallas) {
+    public PantallaCargarDatosDesdeJSON(InterfazGestorPantalla gestorInterfaz) {
         
         configurarPantalla();
         crearLblTitulo();   
@@ -54,8 +57,9 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
 		crearBtnCalcular();
 		crearBtnSalir();
 
-		cargarDatosPresentador = new CargarDatosPresentador(this, gestorPantallas);
+		cargarDatosPresentador = new CargarDatosPresentador(this, gestorInterfaz);
 		cargarDatosPresentador.cargarJSON();
+		origenDeDatos = TipoPantallaDeCarga.JSON;
     }
 
 	private void configurarPantalla() {
@@ -155,10 +159,12 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
 		btnAgregarArista.addActionListener(e -> {
             String origen = (String) comboOrigen.getSelectedItem();
             String destino = (String) comboDestino.getSelectedItem();
-            Coordinate coordOrigen = coordsGuardadas.get(origen);
-            Coordinate coordDestino = coordsGuardadas.get(destino);
+            Double origenLat = coordsGuardadas.get(origen).getLat();
+            Double origenLon = coordsGuardadas.get(origen).getLon();
+            Double destinoLat = coordsGuardadas.get(destino).getLat();
+            Double destinoLon = coordsGuardadas.get(destino).getLon();
             
-            cargarDatosPresentador.manejarClickAgregarArista(origen, destino, textPeso.getText(), coordOrigen, coordDestino);
+            cargarDatosPresentador.manejarClickAgregarArista(origen, destino, textPeso.getText(), origenLat, origenLon, destinoLat, destinoLon);
         });
 	}
 	
@@ -214,7 +220,7 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
 	private void agregarListenerBtnCalcular() {
 		btnCalcular.addActionListener(e -> {
             int cantidadRegiones = (Integer) spinnerRegiones.getValue();
-            cargarDatosPresentador.manejarClickCalcular(cantidadRegiones);
+            cargarDatosPresentador.manejarClickCalcular(cantidadRegiones, origenDeDatos);
         });
 	}
 
@@ -266,7 +272,7 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
 					String origen = (String) modeloAristas.getValueAt(fila, 0);
 					String destino = (String) modeloAristas.getValueAt(fila, 1);
 					cargarDatosPresentador.manejarClickEliminarArista(origen, destino);
-					cargarDatosPresentador.chequearSiBorrarVertices(origen, destino);
+					cargarDatosPresentador.chequearSiBorrarVerticeDibujado(origen, destino);
 					eliminarDibujoArista(origen, destino);
 				}
 			}
@@ -375,8 +381,8 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
 
 	@Override
     public void dibujarConexion(String origen, String destino) {
-        Coordinate coordOrigen = cargarDatosPresentador.getCoordenadaDeVertice(origen);
-        Coordinate coordDestino = cargarDatosPresentador.getCoordenadaDeVertice(destino);
+        Coordinate coordOrigen = new Coordinate(cargarDatosPresentador.getLatDeVertice(origen), cargarDatosPresentador.getLonDeVertice(origen));
+        Coordinate coordDestino = new Coordinate(cargarDatosPresentador.getLatDeVertice(destino), cargarDatosPresentador.getLonDeVertice(destino));
 
         if (coordOrigen != null && coordDestino != null) {
             java.util.List<Coordinate> coords = Arrays.asList(
@@ -394,14 +400,16 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
     }
 
 	@Override
-	public void cargarCapitales(List<String> nombres, Map<String, Coordinate> coords) {
-		this.coordsGuardadas = coords;
+	public void cargarCapitales(List<String> nombres, Map<String, double[]> coords) {
 		
-		for (String nombre : nombres) {
+	    for (String nombre : nombres) {
+	        double[] coord = coords.get(nombre);
+	        Coordinate c = new Coordinate(coord[0], coord[1]);
+	        coordsGuardadas.put(nombre, c);
+
 	        comboOrigen.addItem(nombre);
 	        comboDestino.addItem(nombre);
-
-	        mapa.addMapMarker(new MapMarkerDot(nombre, coords.get(nombre)));
+	        mapa.addMapMarker(new MapMarkerDot(nombre, c));
 	    }
 	}
 }

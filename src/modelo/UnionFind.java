@@ -1,27 +1,26 @@
 package modelo;
 
 public class UnionFind {
-    private final int[] padre;
-    private final int[] tamaño;
+    private int[] padre;
+    private int[] tamaño;
     private int cantidadComponentes;
 
     public UnionFind(int n) {
         if (n < 0) throw new IllegalArgumentException("n es negativo");
         padre = new int[n];
         tamaño = new int[n];
+        
         for (int i = 0; i < n; i++) {
             padre[i] = i;
             tamaño[i] = 1;
         }
         cantidadComponentes = n;
-    }
-    
+    }   
     
     public boolean union(int i, int j) {
         int raizI = raiz(i);
         int raizJ = raiz(j);
         if (raizI == raizJ) return false;
-
         
         if (tamaño[raizI] < tamaño[raizJ]) {
             int raizTemporal = raizI; 
@@ -35,7 +34,6 @@ public class UnionFind {
         
         return true;
     }
-
     
     public int raiz(int i) {
         validar(i);
@@ -45,17 +43,14 @@ public class UnionFind {
         }
         return i;
     }
-
     
     public boolean find(int i, int j) {
         return raiz(i) == raiz(j);
     }
-
     
     public int cantidadComponentes() {
         return cantidadComponentes;
     }
-
     
     private void validar(int i) {
         if (i < 0 || i >= padre.length)

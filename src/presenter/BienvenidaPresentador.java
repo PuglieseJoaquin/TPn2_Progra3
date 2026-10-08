@@ -1,31 +1,27 @@
 package presenter;
  
-import vista.GestorPantallas;
+import vista.InterfazGestorPantalla;
  
 public class BienvenidaPresentador {
  
-	private GestorPantallas gestorPantallas;
+	private InterfazGestorPantalla gestorInterfaz;
  
-	public BienvenidaPresentador(GestorPantallas gestorPantallas) {
-		this.gestorPantallas = gestorPantallas;
+	public BienvenidaPresentador(InterfazGestorPantalla gestorInterfaz) {
+		this.gestorInterfaz = gestorInterfaz;
 	}
- 
-	
+ 	
 	public void manejarClickBotonCargaManual() {
-		gestorPantallas.crearPantallaCargaDatos();
+		gestorInterfaz.crearPantallaCargaDatos();
 	}
- 
-	
+ 	
 	public void manejarClickBotonCargaAutomatica() {
-		gestorPantallas.crearPantallaCargaDesdeJSON();
+		gestorInterfaz.crearPantallaCargaDesdeJSON();
 	}
-
 	
 	public void manejarClickBotonCargaMapa() {
-		gestorPantallas.crearPantallaCargaDesdeMapa();
+		gestorInterfaz.crearPantallaCargaDesdeMapa();
 	}
-	
-	
+		
 	public void manejarClickBotonSalir() {
 	    System.exit(0);
 	}

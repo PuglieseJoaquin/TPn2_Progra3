@@ -21,15 +21,13 @@ public class Kruskal {
 
         validarConexo(arbolUnionFind); 
         return resultadoAristasMinimas;
-    }
-	
+    }	
 	
 	private List<Arista> aristasOrdenadasPorPeso(Grafo grafo) {
         List<Arista> aristas = grafo.obtenerTodasLasAristas(); 
         Collections.sort(aristas);
         return aristas;
     }
-	
 	
 	private List<Arista> elegirAristas(List<Arista> listaDeAristas, Map<Vertice, Integer> mapaVerticePosicion, UnionFind uf) {
     	
@@ -44,22 +42,17 @@ public class Kruskal {
         }
         return resultado;
     }
-	
-	
+		
 	private boolean puedeUnirComponentes(Arista arista, Map<Vertice, Integer> indice, UnionFind uf) {
         int origen = indice.get(arista.getOrigen());
         int destino = indice.get(arista.getDestino());
         return uf.union(origen, destino);
     }
 
-	
-    private void validarNoNulo(Grafo grafo) {
-        if (grafo == null) {
-            throw new IllegalArgumentException("El grafo no puede ser null.");
-        }
+	private void validarNoNulo(Grafo grafo) {
+        if (grafo == null) throw new IllegalArgumentException("El grafo no puede ser null.");
     }
-    
-   
+       
     private Map<Vertice, Integer> indexar(List<Vertice> vertices) {
         Map<Vertice, Integer> indice = new HashMap<>();
         for (Vertice v : vertices) {
@@ -67,7 +60,6 @@ public class Kruskal {
         }
         return indice;
     }
-    
 
     private void validarConexo(UnionFind uf) {
         if (uf.cantidadComponentes() > 1) {

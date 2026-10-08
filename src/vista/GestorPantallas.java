@@ -2,9 +2,7 @@ package vista;
 
 import javax.swing.JFrame;
 
-import presenter.ResultadoPresentador;
-
-public class GestorPantallas implements GestorInterfaz {
+public class GestorPantallas implements InterfazGestorPantalla {
 
 	private PantallaInicio pantallaInicio;
 	private PantallaCargarDatosManual pantallaCargaDatos;
@@ -22,30 +20,42 @@ public class GestorPantallas implements GestorInterfaz {
 		mostrarPantalla(pantallaCargaDatos);
 	}
 
+	public void crearPantallaCargaDesdeJSON() {
+	    pantallaCargaDesdeJSON = new PantallaCargarDatosDesdeJSON(this);
+	    mostrarPantalla(pantallaCargaDesdeJSON);
+	}
+	
 	public void crearPantallaCargaDesdeMapa() {
 		PantallaCargaDesdeMapa = new PantallaCargarDatosDesdeMapa(this);
 		mostrarPantalla(PantallaCargaDesdeMapa);	
 	}
 	
 	public PantallaResultado crearPantallaResultado() {
-	    PantallaResultado pantalla = new PantallaResultado(this);
-	    mostrarPantalla(pantalla);
-	    return pantalla;
-	}
-
-	public void crearPantallaCargaDesdeJSON() {
-	    pantallaCargaDesdeJSON = new PantallaCargarDatosDesdeJSON(this);
-	    mostrarPantalla(pantallaCargaDesdeJSON);
+		pantallaResultado = new PantallaResultado(this);
+	    mostrarPantalla(pantallaResultado);
+	    return pantallaResultado;
 	}
 	
-		public JFrame mostrarPantalla(JFrame pantalla) {
+	public void mostrarPantallaCargaManual() {
+		mostrarPantalla(pantallaCargaDatos);
+	}
+
+	public void mostrarPantallaCargaDesdeJSON() {
+	    mostrarPantalla(pantallaCargaDesdeJSON);
+	}
+
+	public void mostrarPantallaCargaDesdeMapa() {
+		mostrarPantalla(PantallaCargaDesdeMapa);
+	}
+
+	private JFrame mostrarPantalla(JFrame pantalla) {
 		pantalla.setVisible(true);
 		ocultarPantallas(pantalla);
 		return pantalla;
 	}
 		
-	public void ocultarPantallas(JFrame pantallaActual) {
-		JFrame[] todasLasPantallas = { pantallaInicio, pantallaCargaDatos, pantallaResultado,pantallaCargaDesdeJSON };
+	private void ocultarPantallas(JFrame pantallaActual) {
+		JFrame[] todasLasPantallas = { pantallaInicio, pantallaCargaDatos, pantallaResultado, pantallaCargaDesdeJSON, PantallaCargaDesdeMapa };
 
 		for (JFrame pantalla : todasLasPantallas) {
 			if (pantalla != pantallaActual && pantalla != null) {

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 public abstract class VistaBaseCompartida extends JFrame implements CargarDatosVista{
 	
@@ -27,6 +26,6 @@ public abstract class VistaBaseCompartida extends JFrame implements CargarDatosV
 
 	public void dibujarConexion(String origen, String destino) {}
 
-	public void cargarCapitales(List<String> nombres, Map<String, Coordinate> coords) {}
+	public void cargarCapitales(List<String> nombres, Map<String, double[]> coords) {}
 	
 }

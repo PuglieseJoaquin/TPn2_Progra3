@@ -128,29 +128,16 @@ public class PantallaCargarDatosDesdeMapa extends VistaBaseCompartida implements
 
 	private void resolverEventoSobreLugarNuevo(Coordinate coord) {
 		String nombre = JOptionPane.showInputDialog("Nombre de la provincia:");
-		if (nombre != null && !nombre.trim().isEmpty() && !marcadores.containsKey(nombre)) {
-
-			double verticeLat = coord.getLat();
-			double verticeLon = coord.getLon();
-
-			try {
-
-				MapMarkerDot nuevo = new MapMarkerDot(nombre, coord);
-
-				cargarDatosPresentador.manejarClickAgregarVertice(nombre, verticeLat, verticeLon);
-
-				mapa.addMapMarker(nuevo);
-				mapa.addMapMarker(new MapMarkerDot(nombre, coord));
-				marcadores.put(nombre, nuevo);
-				dibujarMarcadores();
-
-			} catch (IllegalArgumentException ex) {
-				JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al crear vértice",
-						JOptionPane.ERROR_MESSAGE);
-			}
-		} else {
-			JOptionPane.showMessageDialog(null, "Ya existe vertice " + nombre, nombre, JOptionPane.ERROR_MESSAGE);
-		}
+		if (nombre == null) return; //apreto cancelar
+		
+		nombre = nombre.trim();
+		boolean agregado = cargarDatosPresentador.manejarClickAgregarVertice(
+	            nombre, coord.getLat(), coord.getLon());
+				
+		if (agregado) {
+			marcadores.put(nombre, new MapMarkerDot(nombre, coord));
+        dibujarMarcadores();
+        } 	
 	}
 
     private void dibujarMarcadores() {

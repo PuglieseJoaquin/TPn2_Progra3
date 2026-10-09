@@ -43,15 +43,16 @@ public class CargarDatosPresentador {
 	    }
 	}	
 	
-	public void manejarClickAgregarVertice(String nombre, double lat, double lon) {
+	public boolean  manejarClickAgregarVertice(String nombre, double lat, double lon) {
 		try {String nombreLimpio = validarString(nombre);
 			grafo.agregarVertice(new Vertice(nombreLimpio, lat, lon));
 			vista.agregarVertice(nombreLimpio);
 			vista.limpiarCampoVertice();
+			return true;
 	        
 	    } catch (IllegalArgumentException e) {
 	        vista.mostrarMensajeError(e.getMessage());
-	        return;
+	        return false;
 	    }
 	}
 

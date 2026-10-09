@@ -22,14 +22,21 @@ public class Grafo {
     }
     
     public void agregarArista(Vertice origen, Vertice destino, double peso) {
-    	 	if (validarArista(origen, destino)) {
+    	 	if (validarPeso(peso) && validarArista(origen, destino)) {
     	 		Arista arista = new Arista(origen, destino, peso);
     	 		mapaDeListaDeVecinos.get(origen).add(arista);
     	 		mapaDeListaDeVecinos.get(destino).add(arista);
     	 	}
     }    
     
-    private boolean validarArista(Vertice origen, Vertice destino) {
+    private boolean validarPeso(double peso) {
+		if (peso <= 0)
+			throw new IllegalArgumentException("El peso debe ser valor positivo");
+			
+		else {return true;}
+	}
+
+	private boolean validarArista(Vertice origen, Vertice destino) {
 		if (!mapaDeListaDeVecinos.containsKey(origen) || !mapaDeListaDeVecinos.containsKey(destino))
 			throw new IllegalArgumentException("Ambos vertices deben existir en el grafo antes de agregar la arista.");
    

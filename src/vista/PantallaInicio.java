@@ -89,7 +89,7 @@ public class PantallaInicio extends JFrame {
 	}
 
 	private void crearBtnCargaAutomatica() {
-		btnCargaAutomatica = new JButton("Carga automática Argentina");
+		btnCargaAutomatica = new JButton("Carga automática");
 		btnCargaAutomatica.setFont(new Font("Segoe UI", Font.BOLD, 16));
 		btnCargaAutomatica.setForeground(Color.WHITE);
 		btnCargaAutomatica.setBackground(new Color(37, 99, 235));
@@ -111,7 +111,7 @@ public class PantallaInicio extends JFrame {
 		});
 	}
 	
-	private void crearBtnCargaMapa() {
+	private void crearBtnSalir() {
 	    btnSalir = new JButton("Salir");
 	    btnSalir.setFont(new Font("Segoe UI", Font.BOLD, 16));
 	    btnSalir.setForeground(Color.WHITE);
@@ -129,12 +129,12 @@ public class PantallaInicio extends JFrame {
 	private void agregarListenerBtnCargaMapa() {
 		btnSalir.addActionListener(new ActionListener() {
 	        public void actionPerformed(ActionEvent e) {
-	            System.exit(0);
+	            bienvenidaPresentador.manejarClickBotonSalir();
 	        }
 	    });
 	}
 	
-	private void crearBtnSalir() {
+	private void crearBtnCargaMapa() {
 	    btnCargaMapa = new JButton("Carga desde mapa");
 	    btnCargaMapa.setFont(new Font("Segoe UI", Font.BOLD, 16));
 	    btnCargaMapa.setForeground(Color.WHITE);

@@ -8,7 +8,7 @@ import modelo.CiudadSeleccionada;
 
 public class JsonLoader {
 
-    public static List<CiudadSeleccionada> cargarCapitales(String ruta) {
+    public static List<CiudadSeleccionada> cargarCiudades(String ruta) {
         Gson gson = new Gson();
         try (Reader reader = new InputStreamReader(
                 JsonLoader.class.getResourceAsStream(ruta))) {
@@ -19,7 +19,6 @@ public class JsonLoader {
         }
     }
 
-    // Clase interna para mapear el JSON
     private static class CapitalesWrapper {
         private List<CiudadSeleccionada> vertices;
 

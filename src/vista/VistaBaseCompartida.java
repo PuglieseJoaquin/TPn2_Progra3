@@ -26,6 +26,6 @@ public abstract class VistaBaseCompartida extends JFrame implements CargarDatosV
 
 	public void dibujarConexion(String origen, String destino) {}
 
-	public void cargarCapitales(List<String> nombres, Map<String, double[]> coords) {}
+	public void cargarCiudades(List<String> nombres, Map<String, double[]> coords) {}
 	
 }

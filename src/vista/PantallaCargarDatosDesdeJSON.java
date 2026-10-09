@@ -21,11 +21,11 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
     private CargarDatosPresentador cargarDatosPresentador;
     
     private JPanel panelFondo;
-    private JLabel lblTitulo, lblMapa, lblOrigen, lblDestino, lblPeso, lblRegiones;
+    private JLabel lblTitulo, lblMapa, lblOrigen, lblDestino, lblPeso, lblRegiones, lblElegirMapa;
     private DefaultTableModel modeloAristas;
 	private JSpinner spinnerRegiones;
-	private JButton btnVolverAlMenu, btnCalcular, btnSalir, btnAgregarArista;
-    private JComboBox<String> comboOrigen, comboDestino;
+	private JButton btnVolverAlMenu, btnCalcular, btnSalir, btnAgregarArista, btnCargarMapa;
+    private JComboBox<String> comboOrigen, comboDestino, comboElegirMapa;
     private JTextField textPeso;
     private JTable tablaAristas;
     private JMapViewer mapa;
@@ -56,15 +56,17 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
 		crearBtnVolverAlMenu();
 		crearBtnCalcular();
 		crearBtnSalir();
+		crearLblElegirMapa();
+		crearComboElegirMapa();
+		crearBotonCargarMapa();
 
 		cargarDatosPresentador = new CargarDatosPresentador(this, gestorInterfaz);
-		cargarDatosPresentador.cargarJSON();
 		origenDeDatos = TipoPantallaDeCarga.JSON;
     }
 
 	private void configurarPantalla() {
-    	setTitle("Diseñando regiones — Carga de datos");
-    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    	setTitle("Diseñando regiones — Carga de datos");
+	    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -80,7 +82,7 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
 		lblTitulo = new JLabel("CARGA DE DATOS DESDE JSON", SwingConstants.CENTER);
 		lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
 		lblTitulo.setForeground(new Color(248, 250, 252));
-		lblTitulo.setBounds(50, 20, 1000, 35);
+		lblTitulo.setBounds(50, 20, 490, 35);
 		panelFondo.add(lblTitulo);
 	}
 	
@@ -92,7 +94,7 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
 	}
 
     private void crearMapa() {
-    	mapa = new JMapViewer();
+    		mapa = new JMapViewer();
 		mapa.setBorder(BorderFactory.createLineBorder(new Color(51, 65, 85)));
 		mapa.setBounds(30, 108, 460, 340);
 
@@ -157,14 +159,30 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
 
 	private void agregarListenerBtnAgregarArista() {
 		btnAgregarArista.addActionListener(e -> {
-            String origen = (String) comboOrigen.getSelectedItem();
-            String destino = (String) comboDestino.getSelectedItem();
-            Double origenLat = coordsGuardadas.get(origen).getLat();
-            Double origenLon = coordsGuardadas.get(origen).getLon();
-            Double destinoLat = coordsGuardadas.get(destino).getLat();
-            Double destinoLon = coordsGuardadas.get(destino).getLon();
+            try {
+	            	String origen = (String) comboOrigen.getSelectedItem();
+	            String destino = (String) comboDestino.getSelectedItem();
+	            
+	            double origenLat = coordsGuardadas.get(origen).getLat();
+	            double origenLon = coordsGuardadas.get(origen).getLon();
+	            
+	            double destinoLat = coordsGuardadas.get(destino).getLat();
+	            double destinoLon = coordsGuardadas.get(destino).getLon();
+	            
+	            double[][] coords = {
+	            	    { origenLat, origenLon },
+	            	    { destinoLat, destinoLon }
+	            };
             
-            cargarDatosPresentador.manejarClickAgregarArista(origen, destino, textPeso.getText(), origenLat, origenLon, destinoLat, destinoLon);
+	            cargarDatosPresentador.manejarClickAgregarArista(origen, destino, textPeso.getText(), coords);
+            } catch (NullPointerException ex){
+                JOptionPane.showMessageDialog(
+                        panelFondo,
+                        "Error: faltan coordenadas para el origen o destino.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                    );
+            }
         });
 	}
 	
@@ -245,6 +263,57 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
 				cargarDatosPresentador.manejarClickBtnSalir();
 			}
 		});
+	}
+	
+	private void crearComboElegirMapa() {
+		comboElegirMapa = new JComboBox<>(new String[] {
+			    "Capitales",
+			    "Países de América",
+			    "Países del Mundo"
+			});
+		comboElegirMapa.setForeground(new Color(15, 23, 42));
+		comboElegirMapa.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		comboElegirMapa.setBackground(new Color(241, 245, 249));
+		comboElegirMapa.setBounds(563, 23, 175, 35);
+		panelFondo.add(comboElegirMapa);
+	}
+	
+	private void crearBotonCargarMapa() {
+	    btnCargarMapa = new JButton("Cargar");
+	    btnCargarMapa.setForeground(new Color(240, 255, 240));
+	    btnCargarMapa.setBackground(new Color(250, 128, 114));
+	    btnCargarMapa.setBounds(748, 25, 128, 35);
+	    
+	    agregarListenerBtnCargarMapa();
+	    panelFondo.add(btnCargarMapa);
+	}
+	
+	private void agregarListenerBtnCargarMapa() {
+		btnCargarMapa.addActionListener(e -> {
+		
+			String seleccion = (String) comboElegirMapa.getSelectedItem();
+	
+		    switch (seleccion) {
+		        case "Capitales":
+		            cargarDatosPresentador.cargarJSON(OpcionMapa.CAPITALES);
+		            break;
+		        case "Países de América":
+		            cargarDatosPresentador.cargarJSON(OpcionMapa.AMERICA);
+		            break;
+		        case "Países del Mundo":
+		            cargarDatosPresentador.cargarJSON(OpcionMapa.MUNDO);
+		            break;
+		        default:
+		        		break;
+		    }
+		});
+	}
+	
+	private void crearLblElegirMapa() {
+		lblElegirMapa = new JLabel("Elegir Mapa");
+		estiloEtiqueta(lblElegirMapa);
+		lblElegirMapa.setBounds(481, 30, 79, 25);
+		panelFondo.add(lblElegirMapa);
 	}
 
     private void crearTablaAristas() {
@@ -400,7 +469,9 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
     }
 
 	@Override
-	public void cargarCapitales(List<String> nombres, Map<String, double[]> coords) {
+	public void cargarCiudades(List<String> nombres, Map<String, double[]> coords) {
+		
+		borrarDibujosYDatosDelMapa();
 		
 	    for (String nombre : nombres) {
 	        double[] coord = coords.get(nombre);
@@ -411,5 +482,15 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
 	        comboDestino.addItem(nombre);
 	        mapa.addMapMarker(new MapMarkerDot(nombre, c));
 	    }
+	}
+
+	private void borrarDibujosYDatosDelMapa() {
+	    comboOrigen.removeAllItems();
+	    comboDestino.removeAllItems();
+	    modeloAristas.setRowCount(0);
+	    coordsGuardadas.clear();
+	    lineas.clear();
+	    mapa.getMapMarkerList().clear();
+	    mapa.getMapPolygonList().clear();
 	}
 }

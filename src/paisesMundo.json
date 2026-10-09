@@ -1,0 +1,254 @@
+{
+  "vertices": [
+	{ 
+		"nombre": "Nigeria", 
+		"lat": 9.05785, 
+		"lon": 7.49508 
+	},
+	{ 
+		"nombre": "Egipto", 
+		"lat": 30.0444, 
+		"lon": 31.2357 
+	},
+	{ 
+		"nombre": "Sudáfrica", 
+		"lat": -25.7461, 
+		"lon": 28.1881 
+	},
+	{ 
+		"nombre": "Etiopía", 
+		"lat": 9.03, 
+		"lon": 38.74 
+	},
+	{ 
+		"nombre": "Kenia", 
+		"lat": -1.2921, 
+		"lon": 36.8219 
+	},
+	{ 
+		"nombre": "Ghana", 
+		"lat": 5.5600, 
+		"lon": -0.2057 
+	},
+	{ 
+		"nombre": "Marruecos", 
+		"lat": 34.0209, 
+		"lon": -6.8416 
+	},
+	{ 
+		"nombre": "Tanzania", 
+		"lat": -6.7924, 
+		"lon": 39.2083 
+	},
+	{ 
+		"nombre": "Uganda", 
+		"lat": 0.3136, 
+		"lon": 32.5811 
+	},
+	{ 
+		"nombre": "Senegal", 
+		"lat": 14.6928, 
+		"lon": -17.4467 
+	},
+	{ 
+		"nombre": "China", 
+		"lat": 39.9042, 
+		"lon": 116.4074 
+	},
+	{ 
+		"nombre": "India", 
+		"lat": 28.6139, 
+		"lon": 77.2090 
+	},
+	{ 
+		"nombre": "Japón", 
+		"lat": 35.6895, 
+		"lon": 139.6917 
+	},
+	{ 
+		"nombre": "Corea del Sur", 
+		"lat": 37.5665, 
+		"lon": 126.9780 
+	},
+	{ 
+		"nombre": "Indonesia", 
+		"lat": -6.2088, 
+		"lon": 106.8456 
+	},
+	{ 
+		"nombre": "Arabia Saudita", 
+		"lat": 24.7136, 
+		"lon": 46.6753 
+	},
+	{ 
+		"nombre": "Irán", 
+		"lat": 35.6892, 
+		"lon": 51.3890 
+	},
+	{ 
+		"nombre": "Tailandia", 
+		"lat": 13.7563, 
+		"lon": 100.5018 
+	},
+	{ 
+		"nombre": "Vietnam", 
+		"lat": 21.0278, 
+		"lon": 105.8342 
+	},
+	{ 
+		"nombre": "Pakistán", 
+		"lat": 33.6844, 
+		"lon": 73.0479 
+	},
+	{ 
+		"nombre": "Alemania", 
+		"lat": 52.5200, 
+		"lon": 13.4050 
+	},
+	{ 
+		"nombre": "Francia", 
+		"lat": 48.8566, 
+		"lon": 2.3522 
+	},
+	{ 
+		"nombre": "Italia", 
+		"lat": 41.9028, 
+		"lon": 12.4964 
+	},
+	{ 
+		"nombre": "España", 
+		"lat": 40.4168, 
+		"lon": -3.7038 
+	},
+	{ 
+		"nombre": "Reino Unido", 
+		"lat": 51.5074, 
+		"lon": -0.1278 
+	},
+	{ 
+		"nombre": "Países Bajos", 
+		"lat": 52.3676, 
+		"lon": 4.9041 
+	},
+	{ 
+		"nombre": "Polonia", 
+		"lat": 52.2297, 
+		"lon": 21.0122 
+	},
+	{ 
+		"nombre": "Suecia", 
+		"lat": 59.3293, 
+		"lon": 18.0686 
+	},
+	{ 
+		"nombre": "Grecia", 
+		"lat": 37.9838, 
+		"lon": 23.7275 
+	},
+	{ 
+		"nombre": "Portugal", 
+		"lat": 38.7169, 
+		"lon": -9.1390 
+	},
+	{ 
+		"nombre": "Argentina", 
+		"lat": -34.6037, 
+		"lon": -58.3816 
+	},
+	{ 
+		"nombre": "Brasil", 
+		"lat": -15.7939, 
+		"lon": -47.8828 
+	},
+	{ 
+		"nombre": "México", 
+		"lat": 19.4326, 
+		"lon": -99.1332 
+	},
+	{ 
+		"nombre": "Estados Unidos", 
+		"lat": 38.8951, 
+		"lon": -77.0364 
+	},
+	{ 
+		"nombre": "Canadá", 
+		"lat": 45.4215, 
+		"lon": -75.6972 
+	},
+	{ 
+		"nombre": "Chile", 
+		"lat": -33.4489, 
+		"lon": -70.6693 
+	},
+	{ 
+		"nombre": "Colombia", 
+		"lat": 4.7110, 
+		"lon": -74.0721 
+	},
+	{ 
+		"nombre": "Perú", 
+		"lat": -12.0464, 
+		"lon": -77.0428 
+	},
+	{ 
+		"nombre": "Uruguay",
+		 "lat": -34.9011, 
+		 "lon": -56.1645 
+	},
+	{ 
+		"nombre": "Paraguay", 
+		"lat": -25.2637, 
+		"lon": -57.5759 
+	},
+	{ 
+		"nombre": "Australia", 
+		"lat": -35.2809, 
+		"lon": 149.1300 
+	},
+	{ 
+		"nombre": "Nueva Zelanda", 
+		"lat": -41.2865, 
+		"lon": 174.7762 
+	},
+	{ 
+		"nombre": "Papúa Nueva Guinea", 
+		"lat": -9.4438, 
+		"lon": 147.1803 
+	},
+	{ 
+		"nombre": "Fiyi", 
+		"lat": -18.1416, 
+		"lon": 178.4419 
+	},
+	{ 
+		"nombre": "Samoa", 
+		"lat": -13.8333, 
+		"lon": -171.7500 
+	},
+	{ 
+		"nombre": "Tonga", 
+		"lat": -21.1394, 
+		"lon": -175.2047 
+	},
+	{ 
+		"nombre": "Vanuatu", 
+		"lat": -17.7333, 
+		"lon": 168.3167 
+	},
+	{ 
+		"nombre": "Islas Salomón",
+		"lat": -9.4333, 
+		"lon": 159.9500 
+	},
+	{ 
+		"nombre": "Micronesia", 
+		"lat": 6.9167, 
+		"lon": 158.1500 
+	},
+	{ 
+		"nombre": "Kiribati", 
+		"lat": 1.3290, 
+		"lon": 172.9790 
+	}
+  ]
+}

@@ -78,9 +78,7 @@ public class CargarDatosPresentador {
 	        Vertice vDestino = obternerOCrearVertice(destino);
 	        
 	        grafo.agregarArista(vOrigen, vDestino, pesoNumerico);
-	        vista.dibujarConexion(origen, destino);
-	        vista.agregarArista(origen, destino, peso);
-	        vista.limpiarCampoPeso();
+	        dibujarAristaEnPantalla(origen, destino, peso);
 	        
 	    } catch (IllegalArgumentException e) {
 	        vista.mostrarMensajeError(e.getMessage());
@@ -111,26 +109,39 @@ public class CargarDatosPresentador {
 		}
 	}	
 	
-	public void manejarClickAgregarArista(String origen, String destino, String peso, Double origenLat, Double origenLon, Double destinoLat, Double destinoLon) {	
+	public void manejarClickAgregarArista(String origen, String destino, String peso, double[][] coords) {	
 		try {
 			Double pesoNumerico = convertirPeso(peso);
 			validarStringNoNull(origen, destino);
 			validarDoubleNoNull(pesoNumerico);
+			validarDoublePositivo(pesoNumerico);
 			
-	        Vertice vOrigen = obternerOCrearVertice(origen, origenLat, origenLon);
-	        Vertice vDestino = obternerOCrearVertice(destino, destinoLat, destinoLon);
+	        Vertice vOrigen = obternerOCrearVertice(origen, coords[0][0], coords[0][1]);
+	        Vertice vDestino = obternerOCrearVertice(destino, coords[1][0], coords[1][1]);
 	        
 	        grafo.agregarArista(vOrigen, vDestino, pesoNumerico);
-	        vista.dibujarConexion(origen, destino);
-	        vista.agregarArista(origen, destino, peso);
-	        vista.limpiarCampoPeso();
+	        
+	        dibujarAristaEnPantalla(origen, destino, peso);
 	    } catch (IllegalArgumentException e) {
 	        vista.mostrarMensajeError(e.getMessage());
 	        return;
 	    }
 	}
+
+	private void dibujarAristaEnPantalla(String origen, String destino, String peso) {
+		vista.dibujarConexion(origen, destino);
+		vista.agregarArista(origen, destino, peso);
+		vista.limpiarCampoPeso();
+	}
 	
-	private Vertice obternerOCrearVertice(String nombreVertice, Double verticeLat, Double verticeLon) {
+	private boolean validarDoublePositivo(Double pesoNumerico) {
+		if (pesoNumerico <= 0)
+			throw new IllegalArgumentException("El peso debe ser valor positivo");
+			
+		else {return true;}
+	}
+
+	private Vertice obternerOCrearVertice(String nombreVertice, double verticeLat, double verticeLon) {
 		Vertice vertice;
 		try {
 			vertice = grafo.getVertice(nombreVertice);
@@ -247,9 +258,11 @@ public class CargarDatosPresentador {
 		System.exit(0);
 	}
 	
-	public void cargarJSON() {
+	public void cargarJSON(OpcionMapa opcionElegida) {
 	    try {
-	        List<CiudadSeleccionada> capitales = JsonLoader.cargarCapitales("/capitales.json");
+	    		this.grafo = new Grafo();
+	    	
+	        List<CiudadSeleccionada> capitales = JsonLoader.cargarCiudades(opcionElegida.getPath());
 
 	        List<String> nombres = new ArrayList<>();
 	        Map<String, double[]> coords = new HashMap<>();
@@ -259,7 +272,7 @@ public class CargarDatosPresentador {
 	            coords.put(c.getNombre(), new double[]{c.getLat(), c.getLon()});
 	        }
 
-	        vista.cargarCapitales(nombres, coords);
+	        vista.cargarCiudades(nombres, coords);
 
 	    } catch (Exception e) {
 	        vista.mostrarMensajeError("Error al leer JSON: " + e.getMessage());

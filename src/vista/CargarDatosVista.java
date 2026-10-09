@@ -20,5 +20,5 @@ public interface CargarDatosVista {
 
 	void dibujarConexion(String origen, String destino);
 
-	void cargarCapitales(List<String> nombres, Map<String, double[]> coords);
+	void cargarCiudades(List<String> nombres, Map<String, double[]> coords);
 }

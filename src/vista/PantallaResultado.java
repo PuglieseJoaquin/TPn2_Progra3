@@ -259,7 +259,7 @@ public class PantallaResultado extends JFrame implements ResultadoVista {
 	    mapa.setVisible(false);
 	    
 	    
-	    URL url = getClass().getResource("/imagenes/23322.jpg");
+		URL url = getClass().getResource("/23322.jpg");
 		if (url == null) {
 			return; 
 		}

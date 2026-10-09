@@ -2,8 +2,8 @@ package principal;
 
 import javax.swing.UIManager;
 
-import vista.InterfazGestorPantalla;
 import vista.GestorPantallas;
+import vista.InterfazGestorPantalla;
 
 public class Principal {
 

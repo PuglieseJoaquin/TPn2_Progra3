@@ -158,7 +158,7 @@ public class PantallaInicio extends JFrame {
 	}
 
 	private void crearImagenFondo() {
-		URL url = getClass().getResource("/imagenes/23322.jpg");
+		URL url = getClass().getResource("/23322.jpg");
 		if (url == null) {
 			return; 
 		}

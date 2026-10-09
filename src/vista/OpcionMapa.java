@@ -1,9 +1,9 @@
 package vista;
 
 public enum OpcionMapa {
-    CAPITALES("/capitales.json"),
-    AMERICA("/paisesAmerica.json"),
-    MUNDO("/paisesMundo.json");
+    CAPITALES("/JSONs/capitales.json"),
+    AMERICA("/JSONs/paisesAmerica.json"),
+    MUNDO("/JSONs/paisesMundo.json");
 
     private final String path;
 

@@ -26,12 +26,9 @@ public class PantallaCargarDatosDesdeMapa extends VistaBaseCompartida implements
     private JTable tablaAristas;
     private JSpinner spinnerRegiones;
     private JMapViewer mapa;
-    
 	private TipoPantallaDeCarga origenDeDatos;
-    
     private Map<String, MapPolygonImpl> lineas = new HashMap<>();
     private Map<String, MapMarkerDot> marcadores = new HashMap<>();
-    
     private static final String eliminar = "X";
 
     public PantallaCargarDatosDesdeMapa(InterfazGestorPantalla gestorInterfaz) {

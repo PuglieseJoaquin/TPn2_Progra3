@@ -44,16 +44,16 @@ public class UnionFind {
         return i;
     }
     
+    private void validar(int i) {
+        if (i < 0 || i >= padre.length)
+            throw new IndexOutOfBoundsException("Indice fuera de rango: " + i);
+    }
+    
     public boolean find(int i, int j) {
         return raiz(i) == raiz(j);
     }
     
     public int cantidadComponentes() {
         return cantidadComponentes;
-    }
-    
-    private void validar(int i) {
-        if (i < 0 || i >= padre.length)
-            throw new IndexOutOfBoundsException("Indice fuera de rango: " + i);
     }
 }

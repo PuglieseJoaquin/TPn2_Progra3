@@ -10,25 +10,30 @@ public class GestorPantallas implements InterfazGestorPantalla {
 	private PantallaCargarDatosDesdeMapa PantallaCargaDesdeMapa;
 	private PantallaResultado pantallaResultado;
 	
+	
 	public void crearPantallaInicio() {
 		pantallaInicio = new PantallaInicio(this);
 		mostrarPantalla(pantallaInicio);
 	}
 
+	
 	public void crearPantallaCargaDatos() {
 		pantallaCargaDatos = new PantallaCargarDatosManual(this);
 		mostrarPantalla(pantallaCargaDatos);
 	}
 
+	
 	public void crearPantallaCargaDesdeJSON() {
 	    pantallaCargaDesdeJSON = new PantallaCargarDatosDesdeJSON(this);
 	    mostrarPantalla(pantallaCargaDesdeJSON);
 	}
 	
+	
 	public void crearPantallaCargaDesdeMapa() {
 		PantallaCargaDesdeMapa = new PantallaCargarDatosDesdeMapa(this);
 		mostrarPantalla(PantallaCargaDesdeMapa);	
 	}
+	
 	
 	public PantallaResultado crearPantallaResultado() {
 		pantallaResultado = new PantallaResultado(this);
@@ -36,14 +41,17 @@ public class GestorPantallas implements InterfazGestorPantalla {
 	    return pantallaResultado;
 	}
 	
+	
 	public void mostrarPantallaCargaManual() {
 		mostrarPantalla(pantallaCargaDatos);
 	}
 
+	
 	public void mostrarPantallaCargaDesdeJSON() {
 	    mostrarPantalla(pantallaCargaDesdeJSON);
 	}
 
+	
 	public void mostrarPantallaCargaDesdeMapa() {
 		mostrarPantalla(PantallaCargaDesdeMapa);
 	}

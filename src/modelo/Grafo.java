@@ -16,10 +16,12 @@ public class Grafo {
         this.mapaDeListaDeVecinos = new HashMap<>();
     }
     
+    
     public void agregarVertice(Vertice v) {  	
     		if(!mapaDeListaDeVecinos.containsKey(v)) 
     		mapaDeListaDeVecinos.put(v, new ArrayList<>());    
     }
+    
     
     public void agregarArista(Vertice origen, Vertice destino, double peso) {
     	 	if (validarPeso(peso) && validarArista(origen, destino)) {
@@ -29,6 +31,7 @@ public class Grafo {
     	 	}
     }    
     
+    
     private boolean validarPeso(double peso) {
 		if (peso <= 0)
 			throw new IllegalArgumentException("El peso debe ser valor positivo");
@@ -36,6 +39,7 @@ public class Grafo {
 		else {return true;}
 	}
 
+    
 	private boolean validarArista(Vertice origen, Vertice destino) {
 		if (!mapaDeListaDeVecinos.containsKey(origen) || !mapaDeListaDeVecinos.containsKey(destino))
 			throw new IllegalArgumentException("Ambos vertices deben existir en el grafo antes de agregar la arista.");
@@ -48,10 +52,12 @@ public class Grafo {
 			
 		else {return true;}
     }    
-    
+ 
+	
     public boolean contieneVertice(Vertice v) {
         return mapaDeListaDeVecinos.containsKey(v);
     }    
+ 
     
     public void eliminarVertice(Vertice v) {
         if (!mapaDeListaDeVecinos.containsKey(v))
@@ -62,6 +68,7 @@ public class Grafo {
         }
         mapaDeListaDeVecinos.remove(v);
     }    
+
     
     public Vertice getVertice(String nombre) {
         for (Vertice v : mapaDeListaDeVecinos.keySet()) {
@@ -71,10 +78,12 @@ public class Grafo {
         }
         throw new IllegalArgumentException("No existe un vertice con el nombre: " + nombre);
     }    
+ 
     
     public Set<Vertice> obtenerVertices() {
     		return new HashSet<>(mapaDeListaDeVecinos.keySet());
     }
+    
     
     public List<Arista> obtenerAristasDe(Vertice v) {
         if (!mapaDeListaDeVecinos.containsKey(v)) {
@@ -82,6 +91,7 @@ public class Grafo {
         }
         return new ArrayList<>(mapaDeListaDeVecinos.get(v));
     }
+    
     
     public List<Arista> obtenerTodasLasAristas() {
         Set<Arista> aristasUnicas = new HashSet<>();
@@ -91,9 +101,11 @@ public class Grafo {
         return new ArrayList<>(aristasUnicas);
     }  
     
+    
     public int cantidadVertices() {
         return mapaDeListaDeVecinos.size();
     }
+ 
     
     public boolean esConexo() {
         if (mapaDeListaDeVecinos.isEmpty())
@@ -105,6 +117,7 @@ public class Grafo {
         return tamanioVerticesConectados == cantidadVertices();
     }
 
+    
     public void eliminarArista(Vertice a, Vertice b) {
         if (!mapaDeListaDeVecinos.containsKey(a) || !mapaDeListaDeVecinos.containsKey(b)) {
             throw new IllegalArgumentException("Ambos vértices deben existir en el grafo");
@@ -125,13 +138,15 @@ public class Grafo {
         }
         return null;
     }
-        
+  
+    
     public List<Arista> obtenerAristasOrdenadasMayorAMenor() {
 		List<Arista> ordenadas = new ArrayList<>(obtenerTodasLasAristas());
 		Collections.sort(ordenadas, Collections.reverseOrder());
 		return ordenadas;
     }
-        
+   
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

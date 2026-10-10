@@ -24,10 +24,8 @@ public class PantallaCargarDatosManual extends VistaBaseCompartida implements Ca
 	private JTable tablaVertices, tablaAristas;
 	private DefaultComboBoxModel<String> modeloOrigen, modeloDestino;
 	private JComboBox<String> comboOrigen, comboDestino;
-	private JSpinner spinnerRegiones;
-	
-	private TipoPantallaDeCarga origenDeDatos;
-	
+	private JSpinner spinnerRegiones;	
+	private TipoPantallaDeCarga origenDeDatos;	
 	private static final String eliminar = "X";
 
 	public PantallaCargarDatosManual(InterfazGestorPantalla gestorInterfaz) {

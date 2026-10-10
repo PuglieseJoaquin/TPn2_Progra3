@@ -27,9 +27,11 @@ public class CargarDatosPresentador {
 		return cantidadRegiones;
 	}
 
+	
 	public Grafo getGrafo() {
 		return grafo;
 	}
+	
 	
 	public void manejarClickAgregarVertice(String nombre) {
 		try {String nombreLimpio = validarString(nombre);
@@ -42,6 +44,7 @@ public class CargarDatosPresentador {
 	        return;
 	    }
 	}	
+	
 	
 	public boolean  manejarClickAgregarVertice(String nombre, double lat, double lon) {
 		try {String nombreLimpio = validarString(nombre);
@@ -67,6 +70,16 @@ public class CargarDatosPresentador {
 		}
 		return nombreLimpio;
 	}
+	
+	private boolean existeNombre(String nombre) {
+		for (Vertice existente : grafo.obtenerVertices()) {
+			if (existente.getNombre().equalsIgnoreCase(nombre)) {
+				return true;
+			}
+		}
+		return false;
+	} 
+	
 	
 	public void manejarClickAgregarArista(String origen, String destino, String peso) {
 		try {
@@ -110,6 +123,7 @@ public class CargarDatosPresentador {
 		}
 	}	
 	
+	
 	public void manejarClickAgregarArista(String origen, String destino, String peso, double[][] coords) {	
 		try {
 			Double pesoNumerico = convertirPeso(peso);
@@ -127,6 +141,15 @@ public class CargarDatosPresentador {
 	        vista.mostrarMensajeError(e.getMessage());
 	        return;
 	    }
+	}
+	
+	private Double convertirPeso(String texto) {
+		try {
+			double peso = Double.parseDouble(texto.trim().replace(',', '.'));
+			return (Double.isNaN(peso) || Double.isInfinite(peso)) ? null : peso;
+		} catch (NumberFormatException e) {
+			return null;
+		}
 	}
 
 	private void dibujarAristaEnPantalla(String origen, String destino, String peso) {
@@ -153,10 +176,12 @@ public class CargarDatosPresentador {
 		return vertice;
 	}
 
+	
 	public void manejarClickEliminarArista(String origen, String destino) {
 		grafo.eliminarArista(grafo.getVertice(origen), grafo.getVertice(destino));
 		vista.eliminarArista(origen, destino);
 	}	
+	
 	
 	public void chequearSiBorrarVerticeDibujado(String origen, String destino) {
 	    Vertice vOrigen = grafo.getVertice(origen);
@@ -171,6 +196,7 @@ public class CargarDatosPresentador {
 	    }
 	}
 	
+	
 	public void manejarClickEliminarVertice(String nombre) {
 		Vertice vertice = grafo.getVertice(nombre);
  
@@ -181,6 +207,7 @@ public class CargarDatosPresentador {
 		grafo.eliminarVertice(vertice);
 		vista.eliminarVertice(nombre);
 	} 
+	
 	
 	public void manejarClickCalcular(int cantidadRegiones, TipoPantallaDeCarga origen) {
 		
@@ -217,27 +244,11 @@ public class CargarDatosPresentador {
 		resultadoPresentador.calcularSolucion();		
 	}
 	
+	
 	public void manejarClickVolverAlMenu() {
 		gestorInterfaz.crearPantallaInicio();
-	}
- 	
-	private boolean existeNombre(String nombre) {
-		for (Vertice existente : grafo.obtenerVertices()) {
-			if (existente.getNombre().equalsIgnoreCase(nombre)) {
-				return true;
-			}
-		}
-		return false;
-	} 
-	
-	private Double convertirPeso(String texto) {
-		try {
-			double peso = Double.parseDouble(texto.trim().replace(',', '.'));
-			return (Double.isNaN(peso) || Double.isInfinite(peso)) ? null : peso;
-		} catch (NumberFormatException e) {
-			return null;
-		}
 	}	
+	
 	
 	public Double getLatDeVertice(String nombre) {
 	    Vertice v = grafo.getVertice(nombre);
@@ -247,6 +258,7 @@ public class CargarDatosPresentador {
 	    return null;
 	}
 	
+	
 	public Double getLonDeVertice(String nombre) {
 	    Vertice v = grafo.getVertice(nombre);
 	    if (v != null) {
@@ -255,9 +267,11 @@ public class CargarDatosPresentador {
 	    return null;
 	}
 	
+	
 	public void manejarClickBtnSalir() {
 		System.exit(0);
 	}
+	
 	
 	public void cargarJSON(OpcionMapa opcionElegida) {
 	    try {

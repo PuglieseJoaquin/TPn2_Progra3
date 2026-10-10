@@ -20,8 +20,7 @@ public class PantallaResultado extends JFrame implements ResultadoVista {
 	private JTextArea txtResultado;
 	private JSpinner spinnerRegiones;
 	private JButton btnRecalcular, btnVolverAlMenu, btnSalir, btnModificarDatos;
-    private JMapViewer mapa;
-    
+    private JMapViewer mapa; 
     private List<MapPolygonImpl> lineasDibujadas = new ArrayList<>();
     private List<MapMarkerDot> verticesDibujados = new ArrayList<>();
 

@@ -29,12 +29,9 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
     private JTextField textPeso;
     private JTable tablaAristas;
     private JMapViewer mapa;
-    
-	private TipoPantallaDeCarga origenDeDatos;
-    
+	private TipoPantallaDeCarga origenDeDatos;  
     private Map<String, MapPolygonImpl> lineas = new HashMap<>();
-    private Map<String, Coordinate> coordsGuardadas = new HashMap<>();
-    
+    private Map<String, Coordinate> coordsGuardadas = new HashMap<>();   
 	private static final String eliminar = "X";
 
     public PantallaCargarDatosDesdeJSON(InterfazGestorPantalla gestorInterfaz) {
@@ -437,7 +434,17 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
         tabla.getColumnModel().getColumn(ultima).setMinWidth(45);
         tabla.getColumnModel().getColumn(ultima).setMaxWidth(45);
     }
-
+    
+	private void borrarDibujosYDatosDelMapa() {
+	    comboOrigen.removeAllItems();
+	    comboDestino.removeAllItems();
+	    modeloAristas.setRowCount(0);
+	    coordsGuardadas.clear();
+	    lineas.clear();
+	    mapa.getMapMarkerList().clear();
+	    mapa.getMapPolygonList().clear();
+	}
+	
 	@Override
 	public void agregarArista(String origen, String destino, String peso) {
         modeloAristas.addRow(new Object[]{origen, destino, peso, eliminar});
@@ -482,15 +489,5 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
 	        comboDestino.addItem(nombre);
 	        mapa.addMapMarker(new MapMarkerDot(nombre, c));
 	    }
-	}
-
-	private void borrarDibujosYDatosDelMapa() {
-	    comboOrigen.removeAllItems();
-	    comboDestino.removeAllItems();
-	    modeloAristas.setRowCount(0);
-	    coordsGuardadas.clear();
-	    lineas.clear();
-	    mapa.getMapMarkerList().clear();
-	    mapa.getMapPolygonList().clear();
 	}
 }

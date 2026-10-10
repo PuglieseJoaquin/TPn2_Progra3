@@ -28,6 +28,7 @@ public class BFS {
         return visitados;
     }
     
+    
 	private static void agregarVecinosPendientes(Grafo grafo, Vertice actual, Set<Vertice> visitados, Queue<Vertice> porVisitar) {
 		
 		for (Arista arista : grafo.obtenerAristasDe(actual)) {
@@ -39,6 +40,7 @@ public class BFS {
 		    }
 		}
 	}
+	
 	
 	public static List<Set<Vertice>> obtenerSeccionesConexas(Grafo grafo) {
 	        List<Set<Vertice>> componentes = new ArrayList<>();
@@ -53,6 +55,7 @@ public class BFS {
 	        }
 	        return componentes;    
 	}	
+	
 	
 	public static String componentesToString(List<Set<Vertice>> componentes) {
 	    StringBuilder sb = new StringBuilder();

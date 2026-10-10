@@ -22,6 +22,7 @@ public class ResultadoPresentador {
 		this.solver = new Solver();
 	}
 	
+	
 	public void calcularSolucion() {
 		try {
 			solver.calcularAGM(grafo);
@@ -80,6 +81,7 @@ public class ResultadoPresentador {
 		}
 	}
 
+	
 	public void manejarClickRecalcular(int nuevaCantidad) {
 		dividirYMostrar(nuevaCantidad);
 	}
@@ -88,6 +90,7 @@ public class ResultadoPresentador {
 	public void manejarClickVolverAlMenu() {
 		gestorInterfaz.crearPantallaInicio();
 	}
+	
 	
 	public void manejarClickModificarDatos() {
         switch (origen) {
@@ -103,6 +106,7 @@ public class ResultadoPresentador {
 		}
 	}
 
+	
 	public void manejarClickBtnSalir() {
 		System.exit(0);
 	}

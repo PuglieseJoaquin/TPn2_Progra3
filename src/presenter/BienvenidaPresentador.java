@@ -10,18 +10,22 @@ public class BienvenidaPresentador {
 		this.gestorInterfaz = gestorInterfaz;
 	}
  	
+	
 	public void manejarClickBotonCargaManual() {
 		gestorInterfaz.crearPantallaCargaDatos();
 	}
  	
+	
 	public void manejarClickBotonCargaAutomatica() {
 		gestorInterfaz.crearPantallaCargaDesdeJSON();
 	}
 	
+	
 	public void manejarClickBotonCargaMapa() {
 		gestorInterfaz.crearPantallaCargaDesdeMapa();
 	}
-		
+	
+	
 	public void manejarClickBotonSalir() {
 	    System.exit(0);
 	}

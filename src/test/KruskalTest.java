@@ -1,6 +1,8 @@
 package test;
 import static org.junit.Assert.*;
 import java.util.List;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import modelo.Arista;
@@ -10,6 +12,18 @@ import modelo.Vertice;
 
 public class KruskalTest {
 	private Kruskal kruskal = new Kruskal();
+	private Vertice a;
+	private Vertice b;
+	private Vertice c;
+	private Vertice d;
+	
+	@Before
+	public void inicializar() {
+		a=new Vertice("A");
+		b=new Vertice("B");
+		c=new Vertice("C");
+		d=new Vertice("D");
+	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void grafoNullTest() {
@@ -18,13 +32,7 @@ public class KruskalTest {
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void grafoNoConexoTest() {
-		Grafo g = new Grafo();
-		g.agregarVertice(v("A"));
-		g.agregarVertice(v("B"));
-		g.agregarVertice(v("C"));
-		g.agregarArista(v("A"), v("B"), 1);
-		
-		kruskal.arbolGeneradorMinimo(g); 
+		kruskal.arbolGeneradorMinimo(grafoNoConexo()); 
 	}
 	
 	@Test
@@ -35,26 +43,17 @@ public class KruskalTest {
 
 	@Test
 	public void grafoUnVerticeTest() {
-		Grafo g = new Grafo();
-		g.agregarVertice(v("A"));
-		assertTrue(kruskal.arbolGeneradorMinimo(g).isEmpty());
+		assertTrue(kruskal.arbolGeneradorMinimo(grafoDeUnSoloVertice()).isEmpty());
 	}
 
 	@Test
 	public void grafoDosVerticesUnaAristaTest() {
-		Grafo g = new Grafo();
-		g.agregarVertice(v("A"));
-		g.agregarVertice(v("B"));
-		g.agregarArista(v("A"), v("B"), 5);
-		
-		assertEquals(1, kruskal.arbolGeneradorMinimo(g).size());
+		assertEquals(1, kruskal.arbolGeneradorMinimo(grafoConDosVertices()).size());
 	}
 
 	@Test
 	public void grafoConexoTieneNMenosUnoAristasTest() {
-		Grafo g = inicializarConexo();
-		
-		assertEquals(3, kruskal.arbolGeneradorMinimo(g).size()); 
+		assertEquals(3, kruskal.arbolGeneradorMinimo(inicializarConexo()).size()); 
 	}
 
 	private List<Arista> agmConPesosEmpatados() {
@@ -71,41 +70,58 @@ public class KruskalTest {
 	    assertEquals(2.0, pesoTotal(agmConPesosEmpatados()), 0.0001);
 	}
 
-	private Vertice v(String nombre) {
-		return new Vertice(nombre); 
-	}
-
 	private double pesoTotal(List<Arista> aristas) {
 		double total = 0;
 		for (Arista a : aristas) total += a.getPeso();
 		return total;
 	}
 	
-
+	private Grafo grafoDeUnSoloVertice() {
+		Grafo g = new Grafo();
+		g.agregarVertice(a);
+		return g;
+	}
+	private Grafo grafoConDosVertices() {
+		Grafo g = new Grafo();
+		g.agregarVertice(a);
+		g.agregarVertice(b);
+		g.agregarArista(a, b, 5);
+		return g;
+	}
+	
 	private Grafo inicializarConexo() {
 		Grafo g = new Grafo();
-		g.agregarVertice(v("A"));
-		g.agregarVertice(v("B"));
-		g.agregarVertice(v("C"));
-		g.agregarVertice(v("D"));
-		g.agregarArista(v("A"), v("B"), 1);
-		g.agregarArista(v("B"), v("C"), 2);
-		g.agregarArista(v("C"), v("D"), 3);
-		g.agregarArista(v("A"), v("D"), 4);
-		g.agregarArista(v("A"), v("C"), 5);
+		g.agregarVertice(a);
+		g.agregarVertice(b);
+		g.agregarVertice(c);
+		g.agregarVertice(d);
+		g.agregarArista(a,b, 1);
+		g.agregarArista(b,c, 2);
+		g.agregarArista(c,d, 3);
+		g.agregarArista(a,d, 4);
+		g.agregarArista(a,c, 5);
 		
 		return g;
 	}
 
 	private Grafo inicializarPesosEmpatados() {
 		Grafo g = new Grafo();
-		g.agregarVertice(v("A"));
-		g.agregarVertice(v("B"));
-		g.agregarVertice(v("C"));
-		g.agregarArista(v("A"), v("B"), 1);
-		g.agregarArista(v("B"), v("C"), 1);
-		g.agregarArista(v("A"), v("C"), 1);
+		g.agregarVertice(a);
+		g.agregarVertice(b);
+		g.agregarVertice(c);
+		g.agregarArista(a,b, 1);
+		g.agregarArista(b,c, 1);
+		g.agregarArista(a,c, 1);
 		
+		return g;
+	}
+	
+	private Grafo grafoNoConexo() {
+		Grafo g = new Grafo();
+		g.agregarVertice(a);
+		g.agregarVertice(b);
+		g.agregarVertice(c);
+		g.agregarArista(a,b, 1);
 		return g;
 	}
 

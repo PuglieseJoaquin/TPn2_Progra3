@@ -11,7 +11,11 @@ import modelo.Solver;
 import modelo.Vertice;
 
 public class SolverTest {
-	private Vertice a, b, c, d, e;
+	private Vertice a; 
+	private Vertice b; 
+	private Vertice c; 
+	private Vertice d; 
+	private Vertice e;
 	private Solver solver;
 
 	@Before
@@ -22,34 +26,32 @@ public class SolverTest {
 		d = new Vertice("D");
 		e = new Vertice("E");
 		solver = new Solver();
+		solver.calcularAGM(inicializarGrafo());
 	}
 
 	@Test(expected=IllegalStateException.class)
 	public void dividirSinCalcularAGMLanzaExcepcionTest(){
-		solver.dividirEnRegiones(2);
+		Solver s= new Solver();
+		s.dividirEnRegiones(2);
 	}
 
 	@Test(expected=IllegalStateException.class)
 	public void getRegionesSinDividirLanzaExcepcionTest(){
-		solver.calcularAGM(inicializarGrafo());
 		solver.getRegiones();
 	}
 
 	@Test(expected=IllegalStateException.class)
 	public void getAristasDeRegionesSinDividirLanzaExcepcionTest(){
-		solver.calcularAGM(inicializarGrafo());
 		solver.getAristasDeRegiones();
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void cantidadDePartesCeroLanzaExcepcionTest(){
-		solver.calcularAGM(inicializarGrafo());
 		solver.dividirEnRegiones(0);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void cantidadDePartesMayorQueVerticesLanzaExcepcionTest(){
-		solver.calcularAGM(inicializarGrafo());
 		solver.dividirEnRegiones(6);
 	}
 
@@ -60,14 +62,12 @@ public class SolverTest {
 
 	@Test
 	public void unaSolaRegionCantidadDeRegionesEsUnoTest() {
-	    solver.calcularAGM(inicializarGrafo());
 	    solver.dividirEnRegiones(1);
 	    assertEquals(1, solver.getRegiones().size());
 	}
 
 	@Test
 	public void unaSolaRegionContieneTodosLosVerticesTest(){
-		solver.calcularAGM(inicializarGrafo());
 		solver.dividirEnRegiones(1);
 		List<Set<Vertice>> regiones = solver.getRegiones();
 		assertEquals(5, regiones.get(0).size());
@@ -75,7 +75,6 @@ public class SolverTest {
 
 	@Test
 	public void unaRegionPorVerticeCantidadDeRegionesEsIgualAVerticesTest(){
-		solver.calcularAGM(inicializarGrafo());
 		solver.dividirEnRegiones(5);
 		List<Set<Vertice>> regiones = solver.getRegiones();
 		assertEquals(5, regiones.size());
@@ -83,14 +82,12 @@ public class SolverTest {
 
 	@Test
 	public void unaRegionPorVerticeNoTieneAristasRestantesTest(){
-		solver.calcularAGM(inicializarGrafo());
 		solver.dividirEnRegiones(5);
 		assertTrue(solver.getAristasDeRegiones().isEmpty());
 	}
 
 	@Test
 	public void tresRegionesCantidadDeRegionesEsTresTest(){
-		solver.calcularAGM(inicializarGrafo());
 		solver.dividirEnRegiones(3);
 		List<Set<Vertice>> regiones = solver.getRegiones();
 		assertEquals(3, regiones.size());
@@ -98,7 +95,6 @@ public class SolverTest {
 
 	@Test
 	public void tresRegionesRegionQueContieneAVerticeATieneTresElementosTest(){
-		solver.calcularAGM(inicializarGrafo());
 		solver.dividirEnRegiones(3);
 		List<Set<Vertice>> regiones = solver.getRegiones();
 		assertEquals(3, regionDe(regiones, a).size());
@@ -106,7 +102,6 @@ public class SolverTest {
 
 	@Test
 	public void tresRegionesRegionQueContieneAVerticeDEsUnitariaTest(){
-		solver.calcularAGM(inicializarGrafo());
 		solver.dividirEnRegiones(3);
 		List<Set<Vertice>> regiones = solver.getRegiones();
 		assertEquals(1, regionDe(regiones, d).size());
@@ -114,7 +109,6 @@ public class SolverTest {
 
 	@Test
 	public void tresRegionesRegionQueContieneAVerticeEEsUnitariaTest(){
-		solver.calcularAGM(inicializarGrafo());
 		solver.dividirEnRegiones(3);
 		List<Set<Vertice>> regiones = solver.getRegiones();
 		assertEquals(1, regionDe(regiones, e).size());
@@ -122,7 +116,6 @@ public class SolverTest {
 
 	@Test
 	public void tresRegionesCantidadDeAristasRestantesEsDosTest(){
-		solver.calcularAGM(inicializarGrafo());
 		solver.dividirEnRegiones(3);
 
 		assertEquals(2, solver.getAristasDeRegiones().size());
@@ -130,14 +123,12 @@ public class SolverTest {
 
 	@Test
 	public void sePuedeDividirEnDosPartesSinRecalcularAGMTest(){
-		solver.calcularAGM(inicializarGrafo());
 		solver.dividirEnRegiones(2);
 		assertEquals(2, solver.getRegiones().size());
 	}
 
 	@Test
 	public void sePuedeDividirEnCuatroPartesDespuesDeDosSinRecalcularAGMTest(){
-		solver.calcularAGM(inicializarGrafo());
 		solver.dividirEnRegiones(2);
 		solver.dividirEnRegiones(4);
 		assertEquals(4, solver.getRegiones().size());
@@ -145,13 +136,23 @@ public class SolverTest {
 
 	@Test
 	public void getRegionesDevuelveUnaCopiaYProtegeElEstadoInternoTest(){
-		solver.calcularAGM(inicializarGrafo());
 		solver.dividirEnRegiones(2);
 		solver.getRegiones().clear();
 		assertEquals(2, solver.getRegiones().size());
 	}
-
 	
+	@Test
+	public void resultadoEnStringConRegionesCalculadasTest() {
+	    solver.calcularAGM(unVertice());
+	    solver.dividirEnRegiones(1);
+	    assertEquals("Componentes conexas:\nComponente 1: [A]\n", solver.resultadoEnString());
+	}
+
+	private Grafo unVertice() {
+		Grafo g= new Grafo();
+		g.agregarVertice(a);
+		return g;
+	}
 	private Grafo inicializarGrafo(){
 		Grafo g = new Grafo();
 		g.agregarVertice(a);

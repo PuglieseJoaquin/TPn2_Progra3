@@ -2,6 +2,7 @@ package test;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.junit.Before;
@@ -11,10 +12,16 @@ import modelo.Grafo;
 import modelo.Vertice;
 
 public class BFSTest{
-	private Vertice a, b, c, d, e;
+	private Grafo grafo;
+	private Vertice a; 
+	private Vertice b; 
+	private Vertice c; 
+	private Vertice d; 
+	private Vertice e;
 
     @Before
     public void inicializar() {
+    	grafo= new Grafo();
         a = new Vertice("A");
         b = new Vertice("B");
         c = new Vertice("C");
@@ -89,8 +96,19 @@ public class BFSTest{
         List<Set<Vertice>> secciones = BFS.obtenerSeccionesConexas(crearGrafoInconexo());
         assertEquals(2, secciones.size());
     }
-
-
+    
+    @Test
+    public void componentesToStringVaciaTest() {
+    	String resultado=BFS.componentesToString(new ArrayList<>());
+    	assertEquals("Componentes conexas:\n",resultado);
+    }
+    
+    @Test
+    public void componentesToStringTest() {
+    	grafo.agregarVertice(a);
+        assertEquals("Componentes conexas:\nComponente 1: [A]\n", BFS.componentesToString(BFS.obtenerSeccionesConexas(grafo)));
+    }
+    
     private Grafo crearGrafoConexo() {
         Grafo g = new Grafo();
         g.agregarVertice(a);

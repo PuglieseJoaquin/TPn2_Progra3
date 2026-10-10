@@ -25,30 +25,27 @@ public class GrafoTest {
         d = new Vertice("D");
         e = new Vertice("E");
     }
+    
     @Test(expected = IllegalArgumentException.class)
     public void eliminarAristaConVerticeInexistenteLanzaExcepcionTest() {
         grafo.agregarVertice(a);
         grafo.eliminarArista(a, b);
     }
+    
     @Test(expected = IllegalArgumentException.class)
     public void aristaConDestinoInexistenteLanzaExcepcionTest() {
         grafo.agregarVertice(a);
         grafo.agregarArista(a, b, 1);
     }
+    
     @Test(expected = IllegalArgumentException.class)
     public void aristaDuplicadaLanzaExcepcionTest() {
-        grafo.agregarVertice(a);
-        grafo.agregarVertice(b);
-        grafo.agregarArista(a, b, 1);
-        grafo.agregarArista(a, b, 2);
+    	aristaDuplicada();
     }
-
+    
     @Test(expected = IllegalArgumentException.class)
     public void aristaDuplicadaInvertidaLanzaExcepcionTest() {
-        grafo.agregarVertice(a);
-        grafo.agregarVertice(b);
-        grafo.agregarArista(a, b, 1);
-        grafo.agregarArista(b, a, 2);
+    	aristaDuplicadaInvertida();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -65,11 +62,7 @@ public class GrafoTest {
     
     @Test(expected = IllegalArgumentException.class)
     public void eliminarAristaInexistenteLanzaExcepcionTest() {
-        grafo.agregarVertice(a);
-        grafo.agregarVertice(b);
-        grafo.agregarArista(a, b, 1.0);
-        grafo.eliminarArista(a, b);
-        grafo.eliminarArista(a, b);
+    	eliminarAristainexistente();
     }
     
     @Test(expected = IllegalArgumentException.class)
@@ -86,11 +79,23 @@ public class GrafoTest {
     public void getAristasDeVerticeInexistenteLanzaExcepcionTest() {
         grafo.obtenerAristasDe(a);
     }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void aristaConPesoNegativoLanzaExcepcionTest() {
+    	agregoAristaPesoCero();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void aristaConPesoCeroLanzaExcepcionTest() {
+    	agregoAristaPesoCero();
+    }
+    
     @Test
     public void getVerticePorNombreDevuelveElVerticeTest() {
         grafo.agregarVertice(a);
         assertEquals(a, grafo.getVertice("A"));
     }
+    
     @Test
     public void agregaVerticeNuevoYAumentaCantidadTest() {
         grafo.agregarVertice(a);
@@ -109,18 +114,6 @@ public class GrafoTest {
     public void agregaAristaValidaYApareceEnAmbosVerticesTest() {
         agregoAristaPesoPositivo();
         assertEquals(1, grafo.obtenerAristasDe(a).size());
-    }
-
-    @Test
-    public void aristaPuedeTenerPesoNegativoTest() {
-        agregoAristaPesoNegativo();
-        assertEquals(-5, grafo.obtenerAristasDe(a).get(0).getPeso(),0);
-    }
-
-    @Test
-    public void aristaPuedeTenerPesoCeroTest() {
-    	agregoAristaPesoCero();
-        assertEquals(0, grafo.obtenerAristasDe(a).get(0).getPeso(),0);
     }
 
     @Test
@@ -163,6 +156,7 @@ public class GrafoTest {
     public void grafoConVerticesAisladosNoEsConexo() {
         assertFalse(crearGrafoInconexo().esConexo());
     }
+    
     @Test
     public void contieneVerticeAgregadoTest() {
         grafo.agregarVertice(a);
@@ -173,6 +167,7 @@ public class GrafoTest {
     public void noContieneVerticeNoAgregadoTest() {
         assertFalse(grafo.contieneVertice(a));
     }
+    
     @Test
     public void eliminarVerticeConAristasLoQuitaDelGrafoTest() {
         agregoAristaPesoPositivo();
@@ -186,11 +181,13 @@ public class GrafoTest {
         grafo.eliminarVertice(a);
         assertTrue(grafo.obtenerAristasDe(b).isEmpty());
     }
+    
     @Test
     public void eliminarAristaTambienLaQuitaDelOtroVerticeTest() {
         agregarYEliminarArista();
         assertTrue(grafo.obtenerAristasDe(b).isEmpty());
     }
+    
     @Test
     public void todasLasAristasDeGrafoVacioEsListaVaciaTest() {
         assertTrue(grafo.obtenerTodasLasAristas().isEmpty());
@@ -206,6 +203,7 @@ public class GrafoTest {
     public void todasLasAristasDeGrafoEnLineaTest() {
         assertEquals(2, crearGrafoConexo().obtenerTodasLasAristas().size());
     }
+    
     @Test
     public void aristasOrdenadasDeGrafoVacioEsListaVaciaTest() {
         assertTrue(grafo.obtenerAristasOrdenadasMayorAMenor().isEmpty());
@@ -222,6 +220,7 @@ public class GrafoTest {
         agregoAristasConPesosDistintos();
         assertEquals(1, grafo.obtenerAristasOrdenadasMayorAMenor().get(1).getPeso(), 0);
     }
+    
     @Test
     public void modificarVerticesObtenidosNoAfectaAlGrafoTest() {
         grafo.agregarVertice(a);
@@ -235,6 +234,7 @@ public class GrafoTest {
         grafo.obtenerAristasDe(a).clear();
         assertEquals(1, grafo.obtenerAristasDe(a).size());
     }
+    
     @Test
     public void toStringIncluyeEncabezadoDelGrafoTest() {
         assertTrue(grafo.toString().contains("Grafo:"));
@@ -258,11 +258,6 @@ public class GrafoTest {
         grafo.agregarVertice(b);
         grafo.agregarArista(a, b, 5);
     }
-    private void agregoAristaPesoNegativo() {
-    	grafo.agregarVertice(a);
-        grafo.agregarVertice(b);
-        grafo.agregarArista(a, b, -5);
-    }
     private void agregoAristaPesoCero() {
     	grafo.agregarVertice(a);
         grafo.agregarVertice(b);
@@ -274,7 +269,25 @@ public class GrafoTest {
         grafo.agregarArista(a, b, 1);
         grafo.eliminarArista(a, b);
     }
-    
+    private void eliminarAristainexistente() {
+    	grafo.agregarVertice(a);
+        grafo.agregarVertice(b);
+        grafo.agregarArista(a, b, 1.0);
+        grafo.eliminarArista(a, b);
+        grafo.eliminarArista(a, b);
+    }
+    private void aristaDuplicada() {
+   	 grafo.agregarVertice(a);
+        grafo.agregarVertice(b);
+        grafo.agregarArista(a, b, 1);
+        grafo.agregarArista(a, b, 2);
+   }
+   private void aristaDuplicadaInvertida() {
+   	grafo.agregarVertice(a);
+       grafo.agregarVertice(b);
+       grafo.agregarArista(a, b, 1);
+       grafo.agregarArista(b, a, 2);
+   }
     private Grafo crearGrafoConexo() {
         Grafo g = new Grafo();
         g.agregarVertice(a);

@@ -11,12 +11,20 @@ public class AristaTest {
 
     private Vertice a;
     private Vertice b;
+    private Vertice c;
 
     @Before
     public void Inicializacion() {
         a = new Vertice("Argentina");
         b = new Vertice("Brasil");
+        c = new Vertice ("Colombia");
     }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void OpuestoDeVerticeAjenoTest() {
+    	new Arista(a,b,5).obtenerOpuesto(c);
+    }
+    
 
     @Test
     public void obtenerOrigenTest() {

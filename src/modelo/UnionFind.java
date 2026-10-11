@@ -5,21 +5,28 @@ public class UnionFind {
     private int[] tamaño;
     private int cantidadComponentes;
 
-    public UnionFind(int n) {
-        if (n < 0) throw new IllegalArgumentException("n es negativo");
-        padre = new int[n];
-        tamaño = new int[n];
+    public UnionFind(int cantidadVertices) {
+        validarCantidadEsNumeroPositivo(cantidadVertices);
         
-        for (int i = 0; i < n; i++) {
+        padre = new int[cantidadVertices];
+        tamaño = new int[cantidadVertices];
+        
+        for (int i = 0; i < cantidadVertices; i++) {
             padre[i] = i;
             tamaño[i] = 1;
-        }
-        cantidadComponentes = n;
-    }   
+        }       
+        cantidadComponentes = cantidadVertices;
+    }
+
+	private void validarCantidadEsNumeroPositivo(int cantidadVertices) {
+		if (cantidadVertices < 0)
+			throw new IllegalArgumentException("La cantidad de vertices es negativo");
+	}   
     
     public boolean union(int i, int j) {
         int raizI = raiz(i);
         int raizJ = raiz(j);
+        
         if (raizI == raizJ) return false;
         
         if (tamaño[raizI] < tamaño[raizJ]) {
@@ -44,16 +51,16 @@ public class UnionFind {
         return i;
     }
     
-    private void validar(int i) {
-        if (i < 0 || i >= padre.length)
-            throw new IndexOutOfBoundsException("Indice fuera de rango: " + i);
-    }
-    
+	private void validar(int i) {
+		if (i < 0 || i >= padre.length)
+			throw new IndexOutOfBoundsException("Indice fuera de rango: " + i);
+	}
+
     public boolean find(int i, int j) {
         return raiz(i) == raiz(j);
     }
     
-    public int cantidadComponentes() {
+    public int getCantidadComponentes() {
         return cantidadComponentes;
     }
 }

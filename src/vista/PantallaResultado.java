@@ -211,6 +211,18 @@ public class PantallaResultado extends JFrame implements ResultadoVista {
 		JOptionPane.showMessageDialog(this, mensaje, "Dato no válido", JOptionPane.ERROR_MESSAGE);
 	}
 
+	
+	@Override
+	public void dibujarVertice(String nombre, double lat, double lon) {
+		
+		Coordinate coord = new Coordinate(lat, lon);
+		MapMarkerDot nuevo = new MapMarkerDot(nombre, coord);
+		nuevo.setColor(Color.MAGENTA);
+		nuevo.setBackColor(Color.PINK);
+		mapa.addMapMarker(nuevo);
+		verticesDibujados.add(nuevo);
+	}
+	
 	@Override
 	public void dibujarConexion(double origenLat, double origenLon, double destinoLat, double destinoLon) {
 
@@ -230,17 +242,6 @@ public class PantallaResultado extends JFrame implements ResultadoVista {
 	}
 	
 	@Override
-	public void dibujarVertice(String nombre, double lat, double lon) {
-		
-		Coordinate coord = new Coordinate(lat, lon);
-		MapMarkerDot nuevo = new MapMarkerDot(nombre, coord);
-		nuevo.setColor(Color.MAGENTA);
-		nuevo.setBackColor(Color.PINK);
-		mapa.addMapMarker(nuevo);
-		verticesDibujados.add(nuevo);
-	}
-
-	@Override
 	public void borrarDibujosEnMapa() {
 	    for (MapPolygonImpl linea : lineasDibujadas) {
 	        mapa.removeMapPolygon(linea);
@@ -258,10 +259,11 @@ public class PantallaResultado extends JFrame implements ResultadoVista {
 	    mapa.setVisible(false);
 	    
 	    
-		URL url = getClass().getResource("/imagenes/23322.jpg");
+		URL url = getClass().getResource("/imagenes/mapa_fondo.jpg");
 		if (url == null) {
 			return; 
 		}
+		
 		JLabel lblImagen = new JLabel();
 		lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
 

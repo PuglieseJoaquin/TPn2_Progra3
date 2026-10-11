@@ -9,7 +9,7 @@ import java.util.Map;
 public class Kruskal {
 
 	public List<Arista> arbolGeneradorMinimo(Grafo grafo) {
-        validarNoNulo(grafo);
+        validarGrafoNoNull(grafo);
 
         List<Vertice> listaDeVertices = new ArrayList<>(grafo.obtenerVertices());
         Map<Vertice, Integer> mapaVerticePosicion = indexar(listaDeVertices);
@@ -25,17 +25,18 @@ public class Kruskal {
 	
 	private List<Arista> aristasOrdenadasPorPeso(Grafo grafo) {
         List<Arista> aristas = grafo.obtenerTodasLasAristas(); 
+        
         Collections.sort(aristas);
         return aristas;
     }
 	
-	private List<Arista> elegirAristas(List<Arista> listaDeAristas, Map<Vertice, Integer> mapaVerticePosicion, UnionFind uf) {
-    	
+	private List<Arista> elegirAristas(List<Arista> listaDeAristas, Map<Vertice, Integer> mapaVerticePosicion, UnionFind uf) { 	
         List<Arista> resultado = new ArrayList<>();
+        
         int i = 0;
-        while (i < listaDeAristas.size() && uf.cantidadComponentes() > 1) {
+        while (i < listaDeAristas.size() && uf.getCantidadComponentes() > 1) {
             Arista arista = listaDeAristas.get(i);
-            if (puedeUnirComponentes(arista, mapaVerticePosicion, uf)) {
+            if (validarUnirComponentes(arista, mapaVerticePosicion, uf)) {
                 resultado.add(arista);
             }
             i++;
@@ -43,14 +44,15 @@ public class Kruskal {
         return resultado;
     }
 		
-	private boolean puedeUnirComponentes(Arista arista, Map<Vertice, Integer> indice, UnionFind uf) {
+	private boolean validarUnirComponentes(Arista arista, Map<Vertice, Integer> indice, UnionFind uf) {
         int origen = indice.get(arista.getOrigen());
         int destino = indice.get(arista.getDestino());
         return uf.union(origen, destino);
     }
 
-	private void validarNoNulo(Grafo grafo) {
-        if (grafo == null) throw new IllegalArgumentException("El grafo no puede ser null.");
+	private void validarGrafoNoNull(Grafo grafo) {
+        if (grafo == null)
+        		throw new IllegalArgumentException("El grafo no puede ser null.");
     }
        
     private Map<Vertice, Integer> indexar(List<Vertice> vertices) {
@@ -62,8 +64,7 @@ public class Kruskal {
     }
 
     private void validarConexo(UnionFind uf) {
-        if (uf.cantidadComponentes() > 1) {
-            throw new IllegalArgumentException("El grafo no es conexo: no tiene arbol generador minimo");
-        }
+        if (uf.getCantidadComponentes() > 1)
+        		throw new IllegalArgumentException("El grafo no es conexo: no tiene arbol generador minimo");
     }
 }

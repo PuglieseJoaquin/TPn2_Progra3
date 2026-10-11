@@ -11,13 +11,13 @@ import modelo.*;
 import vista.*;
  
 public class CargarDatosPresentador {
-	private CargarDatosVista vista;
+	private CargarDatosVista _cdVista;
 	private InterfazGestorPantalla gestorInterfaz;
 	private Grafo grafo;
 	private int cantidadRegiones;
     
-	public CargarDatosPresentador(CargarDatosVista vista, InterfazGestorPantalla gestorInterfaz) {
-		this.vista = vista;
+	public CargarDatosPresentador(CargarDatosVista cargarDatosVista, InterfazGestorPantalla gestorInterfaz) {
+		this._cdVista = cargarDatosVista;
 		this.gestorInterfaz = gestorInterfaz;
 		this.grafo = new Grafo();
 		this.cantidadRegiones = 0;
@@ -26,35 +26,32 @@ public class CargarDatosPresentador {
 	public int getCantidadRegiones() {
 		return cantidadRegiones;
 	}
-
 	
 	public Grafo getGrafo() {
 		return grafo;
-	}
-	
+	}	
 	
 	public void manejarClickAgregarVertice(String nombre) {
 		try {String nombreLimpio = validarString(nombre);
 			grafo.agregarVertice(new Vertice(nombreLimpio));
-			vista.agregarVertice(nombreLimpio);
-			vista.limpiarCampoVertice();
+			_cdVista.agregarVertice(nombreLimpio);
+			_cdVista.limpiarCampoVertice();
 	        
 	    } catch (IllegalArgumentException e) {
-	        vista.mostrarMensajeError(e.getMessage());
+	        _cdVista.mostrarMensajeError(e.getMessage());
 	        return;
 	    }
-	}	
-	
+	}		
 	
 	public boolean  manejarClickAgregarVertice(String nombre, double lat, double lon) {
 		try {String nombreLimpio = validarString(nombre);
 			grafo.agregarVertice(new Vertice(nombreLimpio, lat, lon));
-			vista.agregarVertice(nombreLimpio);
-			vista.limpiarCampoVertice();
+			_cdVista.agregarVertice(nombreLimpio);
+			_cdVista.limpiarCampoVertice();
 			return true;
 	        
 	    } catch (IllegalArgumentException e) {
-	        vista.mostrarMensajeError(e.getMessage());
+	        _cdVista.mostrarMensajeError(e.getMessage());
 	        return false;
 	    }
 	}
@@ -79,8 +76,7 @@ public class CargarDatosPresentador {
 		}
 		return false;
 	} 
-	
-	
+		
 	public void manejarClickAgregarArista(String origen, String destino, String peso) {
 		try {
 			Double pesoNumerico = convertirPeso(peso);
@@ -95,7 +91,7 @@ public class CargarDatosPresentador {
 	        dibujarAristaEnPantalla(origen, destino, peso);
 	        
 	    } catch (IllegalArgumentException e) {
-	        vista.mostrarMensajeError(e.getMessage());
+	        _cdVista.mostrarMensajeError(e.getMessage());
 	        return;
 	    }	
 	}
@@ -121,8 +117,7 @@ public class CargarDatosPresentador {
 		if (origen == null || destino == null) {
 			throw new IllegalArgumentException("Agregá al menos dos vértices antes de crear una conexión.");
 		}
-	}	
-	
+	}		
 	
 	public void manejarClickAgregarArista(String origen, String destino, String peso, double[][] coords) {	
 		try {
@@ -138,7 +133,7 @@ public class CargarDatosPresentador {
 	        
 	        dibujarAristaEnPantalla(origen, destino, peso);
 	    } catch (IllegalArgumentException e) {
-	        vista.mostrarMensajeError(e.getMessage());
+	        _cdVista.mostrarMensajeError(e.getMessage());
 	        return;
 	    }
 	}
@@ -153,9 +148,9 @@ public class CargarDatosPresentador {
 	}
 
 	private void dibujarAristaEnPantalla(String origen, String destino, String peso) {
-		vista.dibujarConexion(origen, destino);
-		vista.agregarArista(origen, destino, peso);
-		vista.limpiarCampoPeso();
+		_cdVista.dibujarConexion(origen, destino);
+		_cdVista.agregarArista(origen, destino, peso);
+		_cdVista.limpiarCampoPeso();
 	}
 	
 	private boolean validarDoublePositivo(Double pesoNumerico) {
@@ -175,13 +170,11 @@ public class CargarDatosPresentador {
 		}
 		return vertice;
 	}
-
 	
 	public void manejarClickEliminarArista(String origen, String destino) {
 		grafo.eliminarArista(grafo.getVertice(origen), grafo.getVertice(destino));
-		vista.eliminarArista(origen, destino);
-	}	
-	
+		_cdVista.eliminarArista(origen, destino);
+	}		
 	
 	public void chequearSiBorrarVerticeDibujado(String origen, String destino) {
 	    Vertice vOrigen = grafo.getVertice(origen);
@@ -194,20 +187,18 @@ public class CargarDatosPresentador {
 	    if (grafo.obtenerAristasDe(vDestino).isEmpty()) {
 	        grafo.eliminarVertice(vDestino);
 	    }
-	}
-	
+	}	
 	
 	public void manejarClickEliminarVertice(String nombre) {
 		Vertice vertice = grafo.getVertice(nombre);
  
 		for (Arista arista : grafo.obtenerAristasDe(vertice)) {
-			vista.eliminarArista(arista.getOrigen().getNombre(), arista.getDestino().getNombre());
+			_cdVista.eliminarArista(arista.getOrigen().getNombre(), arista.getDestino().getNombre());
 		}
 
 		grafo.eliminarVertice(vertice);
-		vista.eliminarVertice(nombre);
-	} 
-	
+		_cdVista.eliminarVertice(nombre);
+	} 	
 	
 	public void manejarClickCalcular(int cantidadRegiones, TipoPantallaDeCarga origen) {
 		
@@ -218,7 +209,7 @@ public class CargarDatosPresentador {
 			validarDatosPreSolucion(cantidadRegiones, cantidadVertices);
 			visualizarSolucion(origen);
 		} catch (IllegalArgumentException e){
-			vista.mostrarMensajeError(e.getMessage());
+			_cdVista.mostrarMensajeError(e.getMessage());
 	        return;
 		}
 	}
@@ -243,12 +234,10 @@ public class CargarDatosPresentador {
 		pantallaResultado.setPresentador(resultadoPresentador);
 		resultadoPresentador.calcularSolucion();		
 	}
-	
-	
+		
 	public void manejarClickVolverAlMenu() {
 		gestorInterfaz.crearPantallaInicio();
-	}	
-	
+	}		
 	
 	public Double getLatDeVertice(String nombre) {
 	    Vertice v = grafo.getVertice(nombre);
@@ -256,8 +245,7 @@ public class CargarDatosPresentador {
 	        return (v.getLat());
 	    }
 	    return null;
-	}
-	
+	}	
 	
 	public Double getLonDeVertice(String nombre) {
 	    Vertice v = grafo.getVertice(nombre);
@@ -265,13 +253,11 @@ public class CargarDatosPresentador {
 	        return (v.getLon());
 	    }
 	    return null;
-	}
-	
+	}	
 	
 	public void manejarClickBtnSalir() {
 		System.exit(0);
-	}
-	
+	}	
 	
 	public void cargarJSON(OpcionMapa opcionElegida) {
 	    try {
@@ -287,10 +273,10 @@ public class CargarDatosPresentador {
 	            coords.put(c.getNombre(), new double[]{c.getLat(), c.getLon()});
 	        }
 
-	        vista.cargarCiudades(nombres, coords);
+	        _cdVista.cargarCiudades(nombres, coords);
 
 	    } catch (Exception e) {
-	        vista.mostrarMensajeError("Error al leer JSON: " + e.getMessage());
+	        _cdVista.mostrarMensajeError("Error al leer JSON: " + e.getMessage());
 	    }
 	}
 }

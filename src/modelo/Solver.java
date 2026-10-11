@@ -21,7 +21,7 @@ public class Solver {
     }
     
     public void dividirEnRegiones(int cantidadPartes) {
-        if (aristasAGM == null) throw new IllegalStateException("AGM no calculado");
+        validarAristasAGMNoNull();
         validarCantidadPartes(cantidadPartes);
 
         Grafo arbol = crearGrafoDesdeAristas(aristasAGM);
@@ -32,6 +32,15 @@ public class Solver {
         aristasDeRegiones = arbol.obtenerTodasLasAristas();
     }
 
+	private void validarAristasAGMNoNull() {
+		if (aristasAGM == null) throw new IllegalStateException("AGM no calculado");
+	}
+	
+    private void validarCantidadPartes(int cantidadPartes) {
+        if (cantidadPartes < 1 || cantidadPartes > vertices.size())
+        		throw new IllegalArgumentException("La cantidad de regiones debe estar entre 1 y " + vertices.size() + ".");
+    }
+    
 	private void crearRegiones(int cantidadPartes, Grafo arbol) {
 		List<Arista> ordenadas = arbol.obtenerAristasOrdenadasMayorAMenor();
 
@@ -40,44 +49,46 @@ public class Solver {
             arbol.eliminarArista(masPesada.getOrigen(), masPesada.getDestino());
         }
 	}
-    
-    private void validarCantidadPartes(int cantidadPartes) {
-        if (cantidadPartes < 1 || cantidadPartes > vertices.size())
-            throw new IllegalArgumentException(
-                    "La cantidad de regiones debe estar entre 1 y " + vertices.size() + ".");
-    }
 
     private Grafo crearGrafoDesdeAristas(List<Arista> aristas) {
         Grafo grafo = new Grafo();
-        for (Vertice v : vertices) {
-            grafo.agregarVertice(v);
-        }
         
-        for (Arista a : aristas) {
+        for (Vertice v : vertices) 
+            grafo.agregarVertice(v);
+            
+        for (Arista a : aristas)
             grafo.agregarArista(a.getOrigen(), a.getDestino(), a.getPeso());
-        }
+        
         return grafo;
     }
    
     public List<Set<Vertice>> getRegiones() {
-        if (regiones == null) throw new IllegalStateException("Las regiones no fueron calculadas");
+        vslidarSiHayRegionesCalculadas();
 
         List<Set<Vertice>> copia = new ArrayList<>();
-        for (Set<Vertice> region : regiones) {
+        
+        for (Set<Vertice> region : regiones)
             copia.add(new HashSet<>(region));
-        }
+
         return copia;
     }
+
+	private void vslidarSiHayRegionesCalculadas() {
+		if (regiones == null)
+			throw new IllegalStateException("Las regiones no fueron calculadas");
+	}
     
     public List<Arista> getAristasDeRegiones() {
-        if (aristasDeRegiones == null) throw new IllegalStateException("Las regiones no fueron calculadas");
+        if (aristasDeRegiones == null)
+        		throw new IllegalStateException("Las regiones no fueron calculadas");
+        
         return new ArrayList<>(aristasDeRegiones);
     }
     
     public String resultadoEnString() {
-        if (regiones == null) {
+        if (regiones == null)
             return "No se han calculado las regiones todavía.";
-        }
+ 
         return BFS.componentesToString(regiones);
     }
 }

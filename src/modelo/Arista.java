@@ -25,9 +25,9 @@ public class Arista implements Comparable<Arista> {
     }
     
     public Vertice obtenerOpuesto(Vertice v) {
-    	if (getOrigen().equals(v)) return getDestino();
-    	if (getDestino().equals(v)) return getOrigen();
-    	throw new IllegalArgumentException("El vertice no pertenece a esta arista.");
+	    	if (getOrigen().equals(v)) return getDestino();
+	    	if (getDestino().equals(v)) return getOrigen();
+	    	throw new IllegalArgumentException("El vertice no pertenece a esta arista.");
     }
     
     @Override

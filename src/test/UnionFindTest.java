@@ -32,12 +32,12 @@ public class UnionFindTest {
 
 	@Test
 	public void unionRootVacioTest() {
-		assertEquals(0, new UnionFind(0).cantidadComponentes());
+		assertEquals(0, new UnionFind(0).getCantidadComponentes());
 	}
 
 	@Test
 	public void unVerticeCantidadComponentesTest() {
-		assertEquals(1, new UnionFind(1).cantidadComponentes());
+		assertEquals(1, new UnionFind(1).getCantidadComponentes());
 	}
 
 	@Test
@@ -71,7 +71,7 @@ public class UnionFindTest {
 	public void unionYaConectadosNoCambiaComponentesTest() {
 		uf.union(0, 1);
 		uf.union(0, 1);
-		assertEquals(6, uf.cantidadComponentes());
+		assertEquals(6, uf.getCantidadComponentes());
 	}
 	
 	@Test
@@ -89,13 +89,13 @@ public class UnionFindTest {
 	@Test
 	public void conexoCantidadComponentesTest() {
 		unirConexo();
-		assertEquals(1, uf.cantidadComponentes());
+		assertEquals(1, uf.getCantidadComponentes());
 	}
 	
 	@Test
 	public void inconexoCantidadComponentesTest() {
 		unirInconexo();
-		assertEquals(2, uf.cantidadComponentes());
+		assertEquals(2, uf.getCantidadComponentes());
 	}
 	
 	@Test

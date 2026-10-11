@@ -6,7 +6,7 @@ import modelo.*;
 import vista.*;
 
 public class ResultadoPresentador {
-	private ResultadoVista resultadoVista;
+	private ResultadoVista _rVista;
 	private InterfazGestorPantalla gestorInterfaz;
 	private Grafo grafo;
 	private Solver solver;
@@ -15,23 +15,22 @@ public class ResultadoPresentador {
 
 	public ResultadoPresentador(ResultadoVista resultadoVista, InterfazGestorPantalla gestorInterfaz, Grafo grafo, int cantidadRegiones, TipoPantallaDeCarga origen) {
 		this.gestorInterfaz = gestorInterfaz;
-		this.resultadoVista = resultadoVista;
+		this._rVista = resultadoVista;
 		this.grafo = grafo;
 		this.cantidadRegionesActual = cantidadRegiones;
 		this.origen = origen;
 		this.solver = new Solver();
-	}
-	
+	}	
 	
 	public void calcularSolucion() {
 		try {
 			solver.calcularAGM(grafo);
 		} catch (IllegalArgumentException e) {
-			resultadoVista.mostrarMensajeError(e.getMessage());
+			_rVista.mostrarMensajeError(e.getMessage());
 			return;
 		}
 		
-		resultadoVista.setCantidadRegiones(cantidadRegionesActual);
+		_rVista.setCantidadRegiones(cantidadRegionesActual);
 		dividirYMostrar(cantidadRegionesActual);
 	}
 	
@@ -41,13 +40,13 @@ public class ResultadoPresentador {
 			decidirComoMostrarResultado();
 	        
 		} catch (IllegalArgumentException e) {
-			resultadoVista.mostrarMensajeError(e.getMessage());
-			resultadoVista.setCantidadRegiones(cantidadRegionesActual);
+			_rVista.mostrarMensajeError(e.getMessage());
+			_rVista.setCantidadRegiones(cantidadRegionesActual);
 			return;
 		}
 
 		cantidadRegionesActual = cantidad;
-		resultadoVista.mostrarResultado(solver.resultadoEnString());
+		_rVista.mostrarResultado(solver.resultadoEnString());
 	}
 
 	private void decidirComoMostrarResultado() {
@@ -55,13 +54,14 @@ public class ResultadoPresentador {
 		borrarDibujosEnMapas();
 		dibujarAristasSolucion();
 		dibujarVerticesSolucion();
+		
 		} else {
-			resultadoVista.mostrarDatosSinMapa();
+			_rVista.mostrarDatosSinMapa();
 		}
 	}
 
 	private void borrarDibujosEnMapas() {
-		resultadoVista.borrarDibujosEnMapa();		
+		_rVista.borrarDibujosEnMapa();		
 	}
 
 	private void dibujarAristasSolucion() {
@@ -69,28 +69,25 @@ public class ResultadoPresentador {
 		    Vertice origen = arista.getOrigen();
 		    Vertice destino = arista.getDestino();
 		    
-		    resultadoVista.dibujarConexion(origen.getLat(), origen.getLon(), destino.getLat(), destino.getLon());
+		    _rVista.dibujarConexion(origen.getLat(), origen.getLon(), destino.getLat(), destino.getLon());
 		}
 	}	
 	
 	private void dibujarVerticesSolucion() {
 		for (Set<Vertice> region : solver.getRegiones()) {
 		    for (Vertice v : region) {
-		        resultadoVista.dibujarVertice(v.getNombre(), v.getLat(), v.getLon());
+		        _rVista.dibujarVertice(v.getNombre(), v.getLat(), v.getLon());
 		    }
 		}
 	}
-
 	
 	public void manejarClickRecalcular(int nuevaCantidad) {
 		dividirYMostrar(nuevaCantidad);
 	}
-
 	
 	public void manejarClickVolverAlMenu() {
 		gestorInterfaz.crearPantallaInicio();
 	}
-	
 	
 	public void manejarClickModificarDatos() {
         switch (origen) {
@@ -105,7 +102,6 @@ public class ResultadoPresentador {
             break;
 		}
 	}
-
 	
 	public void manejarClickBtnSalir() {
 		System.exit(0);

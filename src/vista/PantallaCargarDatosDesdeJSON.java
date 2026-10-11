@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import presenter.CargarDatosPresentador;
 import presenter.TipoPantallaDeCarga;
 
-public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements CargarDatosVista{
+public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements CargarDatosVista {
 
     private CargarDatosPresentador cargarDatosPresentador;
     
@@ -71,8 +71,7 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
         panelFondo = new JPanel();
 		panelFondo.setBackground(new Color(30, 41, 59));
 		setContentPane(panelFondo);
-		panelFondo.setLayout(null);
-		
+		panelFondo.setLayout(null);	
 	}
 
 	private void crearLblTitulo() {
@@ -172,6 +171,7 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
 	            };
             
 	            cargarDatosPresentador.manejarClickAgregarArista(origen, destino, textPeso.getText(), coords);
+	            
             } catch (NullPointerException ex){
                 JOptionPane.showMessageDialog(
                         panelFondo,
@@ -334,9 +334,11 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
 			public void mouseClicked(MouseEvent e) {
 				int fila = tablaAristas.rowAtPoint(e.getPoint());
 				int columna = tablaAristas.columnAtPoint(e.getPoint());
+				
 				if (fila >= 0 && columna == tablaAristas.getColumnCount() - 1) {
 					String origen = (String) modeloAristas.getValueAt(fila, 0);
 					String destino = (String) modeloAristas.getValueAt(fila, 1);
+					
 					cargarDatosPresentador.manejarClickEliminarArista(origen, destino);
 					cargarDatosPresentador.chequearSiBorrarVerticeDibujado(origen, destino);
 					eliminarDibujoArista(origen, destino);
@@ -373,12 +375,7 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
 				tabla.setCursor(Cursor.getPredefinedCursor(sobreCruz ? Cursor.HAND_CURSOR : Cursor.DEFAULT_CURSOR));
 			}
 		});
-	}
-
-    public void mostrarError(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-    
+	}    
     
     private void estiloEtiqueta(JLabel label) {
 		label.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -434,16 +431,6 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
         tabla.getColumnModel().getColumn(ultima).setMinWidth(45);
         tabla.getColumnModel().getColumn(ultima).setMaxWidth(45);
     }
-    
-	private void borrarDibujosYDatosDelMapa() {
-	    comboOrigen.removeAllItems();
-	    comboDestino.removeAllItems();
-	    modeloAristas.setRowCount(0);
-	    coordsGuardadas.clear();
-	    lineas.clear();
-	    mapa.getMapMarkerList().clear();
-	    mapa.getMapPolygonList().clear();
-	}
 	
 	@Override
 	public void agregarArista(String origen, String destino, String peso) {
@@ -489,5 +476,15 @@ public class PantallaCargarDatosDesdeJSON extends VistaBaseCompartida implements
 	        comboDestino.addItem(nombre);
 	        mapa.addMapMarker(new MapMarkerDot(nombre, c));
 	    }
+	}
+	
+	private void borrarDibujosYDatosDelMapa() {
+	    comboOrigen.removeAllItems();
+	    comboDestino.removeAllItems();
+	    modeloAristas.setRowCount(0);
+	    coordsGuardadas.clear();
+	    lineas.clear();
+	    mapa.removeAllMapMarkers();
+	    mapa.removeAllMapPolygons();
 	}
 }

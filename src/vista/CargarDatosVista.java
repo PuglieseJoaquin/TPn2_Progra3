@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface CargarDatosVista {
+	
 	void agregarVertice(String nombre);
  
 	void agregarArista(String origen, String destino, String peso);

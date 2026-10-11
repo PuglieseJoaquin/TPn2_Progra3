@@ -10,12 +10,10 @@ import java.util.Set;
 public class BFS {
 	
     public static Set<Vertice> verticesAlcanzablesDesde(Grafo grafo, Vertice origen) {
-    	if (grafo == null)
-    		throw new NullPointerException("El grafo no puede ser null.");
-        if (origen == null || !grafo.contieneVertice(origen))
-        	throw new IllegalArgumentException("El vertice origen no pertenece al grafo.");
+    		validarDatosNoNull(grafo, origen);
+        validarGrafoContieneVertice(grafo, origen);
     	
-    	Set<Vertice> visitados = new HashSet<>();
+        Set<Vertice> visitados = new HashSet<>();
         Queue<Vertice> porVisitar = new LinkedList<>();
 
         porVisitar.add(origen);
@@ -27,7 +25,19 @@ public class BFS {
         }
         return visitados;
     }
-    
+
+	private static void validarGrafoContieneVertice(Grafo grafo, Vertice origen) {
+		if (!grafo.contieneVertice(origen))
+			throw new IllegalArgumentException("El vertice origen no pertenece al grafo.");
+	}
+
+	private static void validarDatosNoNull(Grafo grafo, Vertice origen) {
+		if (grafo == null)
+			throw new NullPointerException("El grafo no puede ser null.");
+		
+		if (origen == null)
+			throw new NullPointerException("El vertice no puede ser null.");
+	}   
     
 	private static void agregarVecinosPendientes(Grafo grafo, Vertice actual, Set<Vertice> visitados, Queue<Vertice> porVisitar) {
 		
@@ -39,35 +49,33 @@ public class BFS {
 		        porVisitar.add(vecino);
 		    }
 		}
-	}
-	
-	
-	public static List<Set<Vertice>> obtenerSeccionesConexas(Grafo grafo) {
-	        List<Set<Vertice>> componentes = new ArrayList<>();
-	        Set<Vertice> noVisitados = new HashSet<>(grafo.obtenerVertices());
-
-	        while (!noVisitados.isEmpty()) {
-	            Vertice origen = noVisitados.iterator().next();
-	            Set<Vertice> componente = BFS.verticesAlcanzablesDesde(grafo, origen);
-
-	            componentes.add(componente);
-	            noVisitados.removeAll(componente);
-	        }
-	        return componentes;    
 	}	
 	
+	public static List<Set<Vertice>> obtenerSeccionesConexas(Grafo grafo) {
+		List<Set<Vertice>> componentes = new ArrayList<>();
+		Set<Vertice> noVisitados = new HashSet<>(grafo.obtenerVertices());
+
+		while (!noVisitados.isEmpty()) {
+			Vertice origen = noVisitados.iterator().next();
+			Set<Vertice> componente = BFS.verticesAlcanzablesDesde(grafo, origen);
+
+			componentes.add(componente);
+			noVisitados.removeAll(componente);
+		}
+		return componentes;
+	}	
 	
 	public static String componentesToString(List<Set<Vertice>> componentes) {
-	    StringBuilder sb = new StringBuilder();
-	    sb.append("Componentes conexas:\n");
+		StringBuilder sb = new StringBuilder();
+		sb.append("Componentes conexas:\n");
 
-	    int i = 1;
-	    for (Set<Vertice> comp : componentes) {
-	        sb.append("Componente ").append(i).append(": ");
-	        sb.append(comp);
-	        sb.append("\n");
-	        i++;
-	    }
-	    return sb.toString();
+		int i = 1;
+		for (Set<Vertice> comp : componentes) {
+			sb.append("Componente ").append(i).append(": ");
+			sb.append(comp);
+			sb.append("\n");
+			i++;
+		}
+		return sb.toString();
 	}
 }

@@ -125,23 +125,22 @@ public class PantallaCargarDatosDesdeMapa extends VistaBaseCompartida implements
 
 	private void resolverEventoSobreLugarNuevo(Coordinate coord) {
 		String nombre = JOptionPane.showInputDialog("Nombre de la provincia:");
-		if (nombre == null) return; //apreto cancelar
+		if (nombre == null) return;
 		
 		nombre = nombre.trim();
-		boolean agregado = cargarDatosPresentador.manejarClickAgregarVertice(
-	            nombre, coord.getLat(), coord.getLon());
+		boolean agregado = cargarDatosPresentador.manejarClickAgregarVertice(nombre, coord.getLat(), coord.getLon());
 				
 		if (agregado) {
 			marcadores.put(nombre, new MapMarkerDot(nombre, coord));
-        dibujarMarcadores();
+			dibujarMarcadores();
         } 	
 	}
 
     private void dibujarMarcadores() {
         mapa.removeAllMapMarkers();
-        for (Map.Entry<String, MapMarkerDot> entry : marcadores.entrySet()) {
+        
+        for (Map.Entry<String, MapMarkerDot> entry : marcadores.entrySet())
             mapa.addMapMarker(entry.getValue());
-        }
     }
     
     private void crearLblOrigen() {

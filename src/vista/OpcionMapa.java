@@ -5,7 +5,7 @@ public enum OpcionMapa {
     AMERICA("/JSONs/paisesAmerica.json"),
     MUNDO("/JSONs/paisesMundo.json");
 
-    private final String path;
+    private String path;
 
     OpcionMapa(String path) {
         this.path = path;

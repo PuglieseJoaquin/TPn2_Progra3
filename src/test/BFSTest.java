@@ -34,9 +34,14 @@ public class BFSTest{
         BFS.verticesAlcanzablesDesde(null, a);
     }
     
+    @Test(expected = NullPointerException.class)
+    public void verticeNullLanzaExcepcionTest() {
+        BFS.verticesAlcanzablesDesde(grafoDeUnVertice(), null);
+    }
+    
     @Test(expected = IllegalArgumentException.class)
     public void origenQueNoPerteneceAlGrafoLanzaExcepcionTest() {
-        BFS.verticesAlcanzablesDesde(unVertice(), b);
+        BFS.verticesAlcanzablesDesde(grafoDeUnVertice(), b);
     }
 
     @Test(expected = NullPointerException.class)
@@ -51,13 +56,13 @@ public class BFSTest{
 
     @Test
     public void unVerticeAisladoSeAlcanzaASiMismoTest() {
-        Set<Vertice> alcanzables = BFS.verticesAlcanzablesDesde(unVertice(), a);
+        Set<Vertice> alcanzables = BFS.verticesAlcanzablesDesde(grafoDeUnVertice(), a);
         assertEquals(1, alcanzables.size());
     }
 
     @Test
     public void unVerticeAisladoContieneAlOrigenTest() {
-        Set<Vertice> alcanzables = BFS.verticesAlcanzablesDesde(unVertice(), a);
+        Set<Vertice> alcanzables = BFS.verticesAlcanzablesDesde(grafoDeUnVertice(), a);
         assertTrue(alcanzables.contains(a));
     }
 
@@ -135,7 +140,7 @@ public class BFSTest{
     
     }
     
-    private Grafo unVertice() {
+    private Grafo grafoDeUnVertice() {
     	Grafo g = new Grafo();
         g.agregarVertice(a);
         return g;
